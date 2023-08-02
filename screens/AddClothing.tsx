@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet, TextInput, ScrollView } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
-import colors from './themes/Colors';
+import colors from '../themes/Colors';
+import ShirtIconWithPlus from './Components/PlusSignShirt';
 
 interface ClothingFormProps {
 }
@@ -103,8 +104,12 @@ const ClothingForm: React.FC<ClothingFormProps> = () => {
             {selectedImage ? (
               <Image source={{ uri: selectedImage }} style={styles.image} />
             ) : (
-              <View style={styles.imagePlaceholder}>
-              </View>
+              <View style={styles.emptyImageContainer}>
+              {/* <Image
+                    source={require('../Icons/shirtIcon.png')}
+                    style={{ width: 200, height: 200 }} resizeMode="contain"/> */}
+                    <ShirtIconWithPlus/>
+                    </View>
             )}
           </TouchableOpacity>
         </View>
@@ -136,7 +141,7 @@ const styles = StyleSheet.create({
   categoryContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    margin: 10,
+    margin: 0,
   },
   rowContainer: {
     flexDirection: 'row',
@@ -147,8 +152,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#000',
     borderRadius: 5,
-    width: '33%',
+    width: '31%',
     backgroundColor: colors.primary,
+    marginVertical:3
   },
   selectedCategory: {
     backgroundColor: colors.secondary,
@@ -167,6 +173,10 @@ const styles = StyleSheet.create({
     marginTop: 6,
     alignItems: 'center',
     marginBottom:38
+  },
+  emptyImageContainer: {
+    borderWidth:2,
+    borderStyle:'dashed'
   },
   image: {
     width: 200,

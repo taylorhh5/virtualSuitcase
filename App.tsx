@@ -1,13 +1,21 @@
-// In App.js in a new project
-
+//React
 import * as React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
+//Screens
+import Home from './screens/Home';
+import AddClothing from './screens/AddClothing'
+import Suitcases from './screens/Suitcases';
+
+//Navigation
 import { NavigationContainer } from '@react-navigation/native';
-import AddClothing from './AddClothing'
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import Home from './Home';
+//Icons
+import HomeIcon from './Icons/HomeIcon';
+
+//colors
+import colors from './themes/Colors';
 
 type RootStackParamList = {
   Home: undefined;
@@ -39,15 +47,30 @@ const App: React.FC = () => {
         screenOptions={({ route }) => ({
           tabBarActiveTintColor: '#E9B384',
           tabBarInactiveTintColor: '#F3EADA',
-          tabBarShowLabel: false,
+          tabBarShowLabel: true,
           headerShown: false,
           tabBarStyle: {
-            backgroundColor: '#4e7e91',
+            backgroundColor: colors.dark,
           },
+          
         })}
       >
-        <Tab.Screen name="Home" component={Home} />
-        <Tab.Screen name="AddClothing" component={AddClothing} />
+        <Tab.Screen name="Home" component={Home} options={{
+          tabBarLabel: 'Home',tabBarIcon: ({ color, size }) => (
+            <HomeIcon  />
+          ),
+          
+        }} />
+        <Tab.Screen name="AddClothing" component={AddClothing}/>
+        <Tab.Screen name="Suitcases" component={Suitcases}  options={{
+          tabBarLabel: 'Suitcases',tabBarIcon: ({ color, size }) => (
+            <Image
+                    source={require('./Icons/TravelerIcon.png')}
+                    style={{ width: 40, height: 40 }} />
+          ),
+          
+        }}/>
+
         {/* <Tab.Screen name="Settings" component={SettingsScreen} /> */}
       </Tab.Navigator>
     </NavigationContainer>
