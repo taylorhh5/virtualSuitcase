@@ -1,24 +1,28 @@
-import { StyleSheet, Text, View, FlatList, Image } from 'react-native'
+import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react';
 import colors from '../themes/Colors';
-import HomeIcon from '../Icons/HomeIcon';
-import { waitForDebugger } from 'inspector';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
 
 type SuitcasesScreenProps = {
+    navigation: NativeStackNavigationProp<LuggageStackParamList, 'Home'>;
 
 }
 
-const Suitcases: React.FC<SuitcasesScreenProps> = () => {
+const Suitcases: React.FC<SuitcasesScreenProps> = ({navigation}) => {
     const [suitcases, setSuitcases] = useState<string[]>(['Montana', 'Beach', 'Roadtrip']); // State for the suitcases
+    const navigateToSuitCase = () => {
+        navigation.navigate('InsideSuitcase')
+        }
 
     const suitCase = ({ item }: { item: string }) => {
         return (
-            <View style={styles.suitcaseContainer}>
+            <TouchableOpacity style={styles.suitcaseContainer} onPress={navigateToSuitCase}>
                 <Image
                     source={require('../Icons/SuitcaseIcon.png')}
                     style={{ width: 100, height: 100 }} />
                 <Text style={styles.suitcaseText}>{item} 🧳</Text>
-            </View>
+            </TouchableOpacity>
         );
     };
 
