@@ -41,9 +41,9 @@ const Suitcases: React.FC<SuitcasesScreenProps> = ({navigation}) => {
                     data={suitcases}
                     renderItem={suitCase}
                     keyExtractor={(item) => item}
-                    numColumns={2} // Set the number of columns to 2
-                    columnWrapperStyle={styles.row} // Apply style to wrap items as rows
-                    contentContainerStyle={styles.contentContainer} // Apply padding to the container
+                    numColumns={2} 
+                    columnWrapperStyle={styles.row} 
+                    contentContainerStyle={styles.contentContainer} 
 
                 />
             </View></View>

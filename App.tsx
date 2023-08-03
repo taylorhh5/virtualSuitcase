@@ -4,7 +4,6 @@ import { View, Text, TouchableOpacity, Image } from 'react-native';
 //Screens
 import Home from './screens/Home';
 import AddClothing from './screens/AddClothing'
-import Suitcases from './screens/Suitcases';
 import LuggageStackNavigator from './Navigation/LuggageStackNavigator';
 
 //Navigation
@@ -35,7 +34,7 @@ const App: React.FC = () => {
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarActiveTintColor: '#E9B384',
-          tabBarInactiveTintColor: '#F3EADA',
+          tabBarInactiveTintColor: 'black',
           tabBarShowLabel: true,
           headerShown: false,
           tabBarStyle: {
@@ -45,22 +44,21 @@ const App: React.FC = () => {
         })}
       >
         <Tab.Screen name="Home" component={Home} options={{
-          tabBarLabel: 'Home', tabBarIcon: ({ color, size }) => (
-            <HomeIcon style={{ width: 46, height: 46 }} />
+          tabBarLabel: 'Home', tabBarIcon: ({ color }) => (
+            <HomeIcon style={{ width: 46, height: 46 }} color={color} />
           ),
-
         }} />
         <Tab.Screen name="AddClothing" component={AddClothing}
           options={{
-            tabBarLabel: 'Add', tabBarIcon: ({ color, size }) => (
-              <PlusSignSVG style={{ width: 30, height: 30, marginTop: 2 }} />
+            tabBarLabel: 'Add', tabBarIcon: ({ color, }) => (
+              <PlusSignSVG style={{ width: 30, height: 30, marginTop: 2 }} color={color} />
             ),
 
           }} />
-        <Tab.Screen name="Suitcases" component={LuggageStackNavigator}
+        <Tab.Screen name="LuggageStackNavigator" component={LuggageStackNavigator}
           options={{
-            tabBarLabel: 'Suitcases', tabBarIcon: ({ color, size }) => (
-              <SuitcaseSVG style={{ width: 40, height: 40, marginTop: 2 }} />
+            tabBarLabel: 'Suitcases', tabBarIcon: ({ color, }) => (
+              <SuitcaseSVG style={{ width: 40, height: 40, marginTop: 2 }} color={color} />
             ),
 
           }} />
