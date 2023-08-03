@@ -2,7 +2,13 @@ import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react
 import React, { useState } from 'react';
 import colors from '../themes/Colors';
 import OutfitBox from './Components/OutfitBox';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
+
+type OutfitsScreenProps = {
+  navigation: NativeStackNavigationProp<LuggageStackParamList, 'Outfits'>;
+
+}
 
 type ClothingItem = {
   category: string;
@@ -14,7 +20,7 @@ type Outfit = {
   items: ClothingItem[];
 };
 
-const Outfits: React.FC = () => {
+const Outfits: React.FC <OutfitsScreenProps> = ({navigation}) => {
   const [outfits, setOutfits] = useState<Outfit[]>([
     {
       items: [
@@ -34,13 +40,18 @@ const Outfits: React.FC = () => {
     }
   ]);
 
-  const navigateToOutfit = () => {
-    console.log('InsideOutfit');
+  const navigateToAddOutfit = () => {
+   navigation.navigate('CreateOutfit')
   };
 
 
   return (
     <View style={styles.container}>
+      <View style={styles.topView}>
+        <TouchableOpacity style={styles.addOutfitContainer} onPress={()=> navigateToAddOutfit()}>
+          <Text style={styles.addOutfitText}>Add outfit +</Text>
+        </TouchableOpacity>
+      </View>
       {!outfits.length ? <Text style={styles.outfitHeader}>You have no outfits</Text> : <Text style={styles.outfitHeader}>Your outfits</Text>}
       <FlatList
         data={outfits}
@@ -56,8 +67,21 @@ const Outfits: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 10,
     backgroundColor: colors.background,
+  },
+  topView: {
+    alignItems: 'flex-end'
+  },
+  addOutfitContainer: {
+    borderWidth: 1,
+    backgroundColor: colors.button,
+    padding: 6,
+    borderRadius: 28
+  },
+  addOutfitText: {
+    fontSize: 18,
+
   },
   outfitContainer: {
     paddingHorizontal: 18,

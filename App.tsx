@@ -22,7 +22,8 @@ import colors from './themes/Colors';
 type RootStackParamList = {
   Home: undefined;
   Details: undefined;
-  AddClothing: undefined
+  AddClothing: undefined;
+  LuggageStackNavigator: undefined
 };
 
 const Tab = createBottomTabNavigator();

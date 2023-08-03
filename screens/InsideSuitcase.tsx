@@ -10,7 +10,7 @@ enum ActiveScreen {
     Outfits,
 }
 
-const InsideSuitcase = () => {
+const InsideSuitcase = (props) => {
     const [activeScreen, setActiveScreen] = useState<ActiveScreen>(ActiveScreen.Luggage);
 
     const changeScreen = (screen: ActiveScreen) => {
@@ -40,7 +40,7 @@ const InsideSuitcase = () => {
                 </TouchableOpacity>
             </View>
             <View style={styles.screenContentContainer}>
-                {activeScreen === ActiveScreen.Luggage ? <SuitcaseItems /> : <Outfits />}
+                {activeScreen === ActiveScreen.Luggage ? <SuitcaseItems /> : <Outfits navigation={props.navigation}/>}
             </View>
         </View>
     );
