@@ -27,6 +27,7 @@ const OutfitBox: React.FC<OutfitBoxProps> = (props) => {
     <View style={styles.outfitBox}>
     <FlatList
       data={items}
+      
       keyExtractor={(clothingItem, index) => index.toString()} 
       renderItem={({ item }) => (
         <Image
@@ -34,8 +35,9 @@ const OutfitBox: React.FC<OutfitBoxProps> = (props) => {
           style={styles.outfitImage}
         />
       )}
-      horizontal 
-      showsHorizontalScrollIndicator={false}
+      numColumns={3}
+      // horizontal 
+      // showsHorizontalScrollIndicator={false}
     />
   </View>
   </View>
@@ -45,24 +47,28 @@ const OutfitBox: React.FC<OutfitBoxProps> = (props) => {
 const styles = StyleSheet.create({
   container: {
     marginTop:14,
-    backgroundColor:colors.background
+    paddingTop:8
   },
   outfitBox: {
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection:'row',
     padding: 10,
-    borderWidth:1,
-    flex:1,
-    borderRadius:4
+    borderWidth:0.4,
+    borderRadius:4,
+    backgroundColor:'lightgrey',    
+    justifyContent:'center'
   },
   outfitImage: {
     width: 100,
     height: 100,
     resizeMode: 'cover',
     borderRadius: 10,
+    margin:3
   },
   outfitTitle:{
     textAlign:'center',
+    fontSize:16,
+    fontWeight:'500',
+    marginBottom:2
   },
 });
 

@@ -6,12 +6,12 @@ import SuitcaseItems from './SuitcaseItems';
 import Outfits from './Outfits';
 
 enum ActiveScreen {
-    Luggage,
+    Items,
     Outfits,
 }
 
 const InsideSuitcase = (props) => {
-    const [activeScreen, setActiveScreen] = useState<ActiveScreen>(ActiveScreen.Luggage);
+    const [activeScreen, setActiveScreen] = useState<ActiveScreen>(ActiveScreen.Items);
 
     const changeScreen = (screen: ActiveScreen) => {
         setActiveScreen(screen);
@@ -23,11 +23,11 @@ const InsideSuitcase = (props) => {
                 <TouchableOpacity
                     style={[
                         styles.button,
-                        activeScreen === ActiveScreen.Luggage && styles.activeButton,
+                        activeScreen === ActiveScreen.Items && styles.activeButton,
                     ]}
-                    onPress={() => changeScreen(ActiveScreen.Luggage)}
+                    onPress={() => changeScreen(ActiveScreen.Items)}
                 >
-                    <Text>Luggage</Text>
+                    <Text>Items</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[
@@ -39,9 +39,9 @@ const InsideSuitcase = (props) => {
                     <Text>Outfits</Text>
                 </TouchableOpacity>
             </View>
-            <View>{activeScreen === ActiveScreen.Luggage ? <Text>Here's whats in your suitcase</Text> : <Text>Here's your outfits</Text>}</View>
+            <View>{activeScreen === ActiveScreen.Items ? <Text>Here's whats in your suitcase</Text> : <Text>Here's your outfits</Text>}</View>
             <View style={styles.screenContentContainer}>
-                {activeScreen === ActiveScreen.Luggage ? <SuitcaseItems /> : <Outfits navigation={props.navigation}/>}
+                {activeScreen === ActiveScreen.Items ? <SuitcaseItems /> : <Outfits navigation={props.navigation}/>}
             </View>
         </View>
     );

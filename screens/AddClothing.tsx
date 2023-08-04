@@ -114,7 +114,7 @@ const ClothingForm: React.FC<ClothingFormProps> = () => {
           />
         </View> */}
         <TouchableOpacity>
-          <View style={styles.addButtonContainer}><Text style={styles.addButtonText}>Add To Suitcase</Text></View>
+          <View style={styles.addButtonContainer}><Text style={styles.addButtonText}>Add Toa Suitcase</Text></View>
         </TouchableOpacity>
       </ScrollView>
     </View>

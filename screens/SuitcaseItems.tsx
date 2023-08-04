@@ -202,6 +202,7 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = () => {
             {Object.entries(categorizedItems).map(([category, items]) => (
                 <View key={category} style={styles.categoryContainer}>
                     <Text style={styles.categoryTitle}>{CategoryMapper[category]} ({items.length} items)</Text>
+                    <View style={styles.flatListContainer}>
                     <FlatList
                         data={items}
                         renderItem={clothingItem}
@@ -209,6 +210,7 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = () => {
                         horizontal
                         showsHorizontalScrollIndicator={false}
                     />
+                    </View>
                 </View>
             ))}
             <Modal visible={isModalVisible} animationType="slide" transparent={true}
@@ -259,14 +261,20 @@ const styles = StyleSheet.create({
     },
     categoryContainer: {
         marginBottom: 20,
+      
     },
     categoryTitle: {
         fontSize: 16,
         marginBottom: 8,
+        fontWeight:'400'
+    },
+    flatListContainer:{
     },
     itemContainer: {
         marginRight: 16,
         alignItems: 'center',
+        borderWidth:0.3,
+        padding:1
     },
     itemName: {
         marginTop: 8,
