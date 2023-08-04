@@ -39,6 +39,7 @@ const InsideSuitcase = (props) => {
                     <Text>Outfits</Text>
                 </TouchableOpacity>
             </View>
+            <View>{activeScreen === ActiveScreen.Luggage ? <Text>Here's whats in your suitcase</Text> : <Text>Here's your outfits</Text>}</View>
             <View style={styles.screenContentContainer}>
                 {activeScreen === ActiveScreen.Luggage ? <SuitcaseItems /> : <Outfits navigation={props.navigation}/>}
             </View>
@@ -49,10 +50,8 @@ const InsideSuitcase = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
         backgroundColor: colors.background,
-        paddingTop: 30,
+        paddingTop: 10,
     },
     screenButtonContainer: {
         flexDirection: 'row',

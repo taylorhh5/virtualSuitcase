@@ -50,6 +50,11 @@ const CreateOutfit: React.FC<CreateOutfitProps> = () => {
         }
     };
 
+    //Clear slectedItems
+    const clearSelected = () => {
+        setSelectedOutfitItems([])
+    }
+
     // Render individual items with 'Added' text if selected
     const renderItem = ({ item }: { item: ClothingItem }) => {
         // Check if the item is already selected
@@ -62,13 +67,14 @@ const CreateOutfit: React.FC<CreateOutfitProps> = () => {
                     onPress={() => handleItemPress(item)}
                 >
                     <View>
+                        {isSelected ? <Text style={styles.addedText}>Added</Text> : <Text> </Text>}
                         <Image
                             source={{ uri: item.image }}
                             style={{ width: 100, height: 100 }}
                             onError={(e) => console.log('Error loading image:', e.nativeEvent.error)}
                         />
                         <Text style={styles.itemName}>
-                            {item.name} {isSelected ? '- Added' : ''}
+                            {item.name}
                         </Text>
                     </View>
                 </TouchableHighlight>
@@ -78,37 +84,39 @@ const CreateOutfit: React.FC<CreateOutfitProps> = () => {
 
     // Return the JSX content of the component
     return (
-        <ScrollView style={styles.container}>
+        <View style={styles.container}>
             {/* Header */}
-            <View style={styles.header}>
-                <Text style={styles.headerText}>Your Outfit</Text>
+            <View style={styles.headerContainer}>
+                <TouchableOpacity style={styles.buttonContainer} onPress={() => clearSelected()}><Text style={styles.headerText}>Clear selected</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.buttonContainer}><Text style={styles.headerText}>Add outfit</Text></TouchableOpacity>
             </View>
-
             {/* Display selected items */}
-            <View style={styles.selectedItems}>
-                {selectedOutfitItems.map(item => (
-                    <Image
-                        key={item.name}
-                        source={{ uri: item.image }}
-                        style={styles.selectedItemImage}
-                    />
+            <ScrollView style={styles.selectedScrollview} >
+                <View style={styles.selectedItems}>
+                    {selectedOutfitItems.map(item => (
+                        <Image
+                            key={item.name}
+                            source={{ uri: item.image }}
+                            style={styles.selectedItemImage}
+                        />
+                    ))}</View>
+            </ScrollView>
+            <ScrollView>
+                {/* Render categorized items */}
+                {Object.entries(categorizedItems).map(([category, items]) => (
+                    <View key={category} style={styles.categoryContainer}>
+                        <Text style={styles.categoryTitle}>{category}</Text>
+                        <FlatList
+                            data={items}
+                            renderItem={renderItem}
+                            keyExtractor={item => item.name}
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                        />
+                    </View>
                 ))}
-            </View>
-
-            {/* Render categorized items */}
-            {Object.entries(categorizedItems).map(([category, items]) => (
-                <View key={category} style={styles.categoryContainer}>
-                    <Text style={styles.categoryTitle}>{category}</Text>
-                    <FlatList
-                        data={items}
-                        renderItem={renderItem}
-                        keyExtractor={item => item.name}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                    />
-                </View>
-            ))}
-        </ScrollView>
+            </ScrollView>
+        </View>
     );
 };
 
@@ -116,29 +124,44 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: colors.background,
-        padding: 10,
+        paddingTop: 4,
+        paddingHorizontal: 8
     },
-    header: {
-        paddingVertical: 10,
-        paddingHorizontal: 16,
+    headerContainer: {
+        paddingVertical: 4,
+        paddingHorizontal: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 4
     },
     headerText: {
         fontSize: 18,
-        fontWeight: 'bold',
+        fontWeight: '600',
+    },
+    selectedScrollview: {
+        height: '60%',
+        paddingVertical: 1,
+        borderBottomWidth: 1,
+
     },
     selectedItems: {
         flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingVertical: 10,
+        flexWrap: 'wrap',
+        paddingVertical: 8,
+        justifyContent: 'space-evenly',
+        alignItems: 'flex-end',
+        gap: 4,
+        paddingHorizontal: 40
     },
     selectedItemImage: {
-        width: 60,
-        height: 60,
-        marginHorizontal: 10,
+        width: 80,
+        height: 80,
+        borderWidth: 1,
+        borderRadius: 40
     },
     categoryContainer: {
         marginBottom: 20,
+        marginTop: 10
     },
     categoryTitle: {
         fontSize: 16,
@@ -150,6 +173,16 @@ const styles = StyleSheet.create({
     },
     itemName: {
         marginTop: 8,
+        textAlign: 'center',
+    },
+    buttonContainer: {
+        backgroundColor: colors.primary,
+        borderWidth: 1,
+        borderRadius: 20,
+        padding: 6
+    },
+    addedText: {
+        color: colors.primary,
         textAlign: 'center',
     },
 });

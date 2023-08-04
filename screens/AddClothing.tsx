@@ -43,6 +43,9 @@ const ClothingForm: React.FC<ClothingFormProps> = () => {
     { key: 'bottom', label: 'Bottom' },
     { key: 'toiletries', label: 'Toiletries' },
     { key: 'miscellaneous', label: 'Misc' },
+    { key: 'underwear', label: 'Underwear' },
+    { key: 'socks', label: 'Socks' },
+    { key: 'makeup', label: 'Makeup' }
 
 
   ];
@@ -54,6 +57,9 @@ const ClothingForm: React.FC<ClothingFormProps> = () => {
     bottom: '👖',
     toiletries: '🪥',
     miscellaneous: '🔧',
+    underwear: '🩲',
+    socks: '🧦',
+    makeup: '💄'
   };
 
   return (
@@ -64,7 +70,7 @@ const ClothingForm: React.FC<ClothingFormProps> = () => {
           <Text style={styles.selectText}>Select Category:</Text>
           <View style={styles.rowContainer}>
             {/* First Row of Categories*/}
-            {categories.slice(0, 3).map((item) => (
+            {categories.map((item) => (
               <TouchableOpacity
                 key={item.key}
                 style={[
@@ -79,23 +85,7 @@ const ClothingForm: React.FC<ClothingFormProps> = () => {
               </TouchableOpacity>
             ))}
           </View>
-          <View style={styles.rowContainer}>
-            {/* Second Row of Categories */}
-            {categories.slice(3, 6).map((item) => (
-              <TouchableOpacity
-                key={item.key}
-                style={[
-                  styles.categoryButton,
-                  category === item.key && styles.selectedCategory,
-                ]}
-                onPress={() =>
-                  category !== item.key ? handleCategorySelection(item.key) : handleCategorySelection('')
-                }>
-                <Text style={styles.categoryIcon}>{categoryEmojis[item.key]}</Text>
-                <Text style={styles.categoryText}>{item.label}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+     
         </View>
         {/* Image Upload */}
         <View style={styles.selectContainer}>
@@ -145,6 +135,7 @@ const styles = StyleSheet.create({
   },
   rowContainer: {
     flexDirection: 'row',
+    flexWrap:'wrap',
     justifyContent: 'space-between',
   },
   categoryButton: {

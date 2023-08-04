@@ -58,7 +58,6 @@ const Outfits: React.FC <OutfitsScreenProps> = ({navigation}) => {
         renderItem={({ item, index }) => (
           <OutfitBox item={item} index={index} />
         )} keyExtractor={(item, index) => index.toString()}
-        showsHorizontalScrollIndicator={false}
       />
     </View>
   );
@@ -69,6 +68,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     backgroundColor: colors.background,
+    borderWidth:2,
   },
   topView: {
     alignItems: 'flex-end'

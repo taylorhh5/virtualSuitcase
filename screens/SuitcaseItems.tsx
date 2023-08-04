@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, Image, TouchableHighlight, ScrollView, Modal, TouchableOpacity, Button } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Image, TouchableHighlight, ScrollView, Modal, TouchableOpacity, Button, TextInput } from 'react-native';
 import React, { useState } from 'react';
 import colors from '../themes/Colors';
 
@@ -28,6 +28,9 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedItemForEdit, setSelectedItemForEdit] = useState<ClothingItem | null>(null);
     const [isMultiDeleteMode, setIsMultiDeleteMode] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState<string>('');
+
 
     const CategoryMapper: { [key: string]: string } = {
         hat: 'Hats',
@@ -50,10 +53,7 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = () => {
         setIsModalVisible(true);
     };
 
-    const handleEdit = () => {
-        console.log('edit name');
-        setIsModalVisible(false);
-    };
+
 
     const handleModalDelete = () => {
         console.log('delete');
@@ -100,6 +100,94 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = () => {
             </TouchableHighlight>
         </View>
     );
+    //
+
+    const handleSave = () => {
+        if (selectedItemForEdit) {
+            // Update the category of the selected item
+            const updatedItem = { ...selectedItemForEdit, category: selectedCategory };
+            // Update the suitcases array with the updated item
+            setSuitcases(prevSuitcases =>
+                prevSuitcases.map(item =>
+                    item === selectedItemForEdit ? updatedItem : item
+                )
+            );
+        }
+        setIsEdit(false);
+        setIsModalVisible(false);
+    };
+
+
+    const handleEdit = () => {
+        console.log('edit name');
+        setIsEdit(true);
+    };
+
+    // Define the category mapping
+    const categories = [
+        { key: 'hat', label: 'Hat' },
+        { key: 'shoes', label: 'Shoes' },
+        { key: 'top', label: 'Top' },
+        { key: 'bottom', label: 'Bottom' },
+        { key: 'toiletries', label: 'Toiletries' },
+        { key: 'miscellaneous', label: 'Misc' },
+        { key: 'underwear', label: 'Underwear' },
+        { key: 'socks', label: 'Socks' },
+        { key: 'makeup', label: 'Makeup' }
+
+
+    ];
+
+    const renderEditForm = () => {
+        if (!selectedItemForEdit) return null;
+
+        return (
+            <View style={styles.editContainer}>
+                {/* ... other edit form components */}
+                <Text>Edit Item</Text>
+                <Image
+                    source={{ uri: selectedItemForEdit.image }}
+                    style={{ width: 100, height: 100 }}
+                    onError={(e) => console.log('Error loading image:', e.nativeEvent.error)}
+                />
+                <Text>Category: {selectedCategory ? selectedCategory : selectedItemForEdit.category}</Text>
+                <FlatList
+                    data={categories}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity
+                            style={[
+                                styles.categoryButton,
+                                selectedCategory === item.key && styles.selectedCategory,
+                            ]}
+                            onPress={() => setSelectedCategory(item.key)}
+                        >
+                            <Text style={styles.categoryText}>{item.label}</Text>
+                        </TouchableOpacity>
+                    )}
+                    keyExtractor={item => item.key}
+                />
+                <TextInput
+                    style={styles.input}
+                    value={selectedItemForEdit.name}
+                    onChangeText={(text) =>
+                        setSelectedItemForEdit(prevItem =>
+                            prevItem
+                                ? {
+                                    ...prevItem,
+                                    name: text,
+                                }
+                                : prevItem
+                        )
+                    }
+                />
+                <Button title="Save" onPress={() => { handleSave(); setIsEdit(false); setSelectedCategory(''); setIsModalVisible(false); }} />
+                <Button title="Cancel" onPress={() => { setIsEdit(false); setSelectedCategory(''); setIsModalVisible(false); }} />
+            </View>
+        );
+    };
+
 
     return (
         <ScrollView style={styles.luggageContainer}>
@@ -126,15 +214,23 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = () => {
             <Modal visible={isModalVisible} animationType="slide" transparent={true}
             >
                 <View style={styles.modalContainer}>
-                    <Text>Edit or Delete?</Text>
-                    <TouchableOpacity onPress={handleEdit}>
-                        <Text>Edit</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={handleModalDelete}>
-                        <Text>Delete</Text>
-                    </TouchableOpacity>
-                    <Button title="Close" onPress={() => setIsModalVisible(false)} />
+                    {!isEdit ?
+                        <View>
+                            <Text>Edit or Delete?</Text>
+                            <TouchableOpacity onPress={handleEdit}>
+                                <Text>Edit</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={handleModalDelete}>
+                                <Text>Delete</Text>
+                            </TouchableOpacity>
+                            <Button title="Close" onPress={() => setIsModalVisible(false)} />
+
+                        </View>
+                        :
+                        renderEditForm()
+                    }
                 </View>
+
             </Modal>
 
         </ScrollView>
@@ -188,6 +284,11 @@ const styles = StyleSheet.create({
         marginVertical: 200,
         marginHorizontal: 70
 
+    },
+    editContainer: {
+        backgroundColor: 'yellow',
+        alignItems: 'center',
+        borderWidth: 1,
     },
 });
 export default SuitcaseItems;
