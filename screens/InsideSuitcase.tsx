@@ -17,6 +17,11 @@ const InsideSuitcase = (props) => {
         setActiveScreen(screen);
     };
 
+    const navigateToAddOutfit = () => {
+        props.navigation.navigate('CreateOutfit')
+    };
+    console.log(props.route, 'params')
+
     return (
         <View style={styles.container}>
             <View style={styles.screenButtonContainer}>
@@ -39,9 +44,24 @@ const InsideSuitcase = (props) => {
                     <Text>Outfits</Text>
                 </TouchableOpacity>
             </View>
-            <View>{activeScreen === ActiveScreen.Items ? <Text>Here's whats in your suitcase</Text> : <Text>Here's your outfits</Text>}</View>
+            {activeScreen === ActiveScreen.Items ? (
+                <View style={styles.headerContainer}>
+                    <Text style={styles.headerText}>You have 17 items</Text>
+                    <TouchableOpacity style={styles.addOutfitContainer} onPress={() => navigateToAddOutfit()}>
+                        <Text style={styles.addOutfitText}>Add item +</Text>
+                    </TouchableOpacity>
+                </View>
+            ) : (
+                <View style={styles.headerContainer}>
+                    <Text style={styles.headerText}>You have 3 outfits</Text>
+                    <TouchableOpacity style={styles.addOutfitContainer} onPress={() => navigateToAddOutfit()}>
+                        <Text style={styles.addOutfitText}>Add outfit +</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
+
             <View style={styles.screenContentContainer}>
-                {activeScreen === ActiveScreen.Items ? <SuitcaseItems /> : <Outfits navigation={props.navigation}/>}
+                {activeScreen === ActiveScreen.Items ? <SuitcaseItems /> : <Outfits navigation={props.navigation} />}
             </View>
         </View>
     );
@@ -61,7 +81,7 @@ const styles = StyleSheet.create({
         borderColor: colors.primary,
         overflow: 'hidden', // Clip child views to the container's rounded corners
         marginHorizontal: 40,
-        marginBottom: 10
+        marginBottom: 30
     },
     button: {
         flex: 1,
@@ -75,6 +95,26 @@ const styles = StyleSheet.create({
     screenContentContainer: {
         flex: 1,
         borderTopWidth: 1
+    },
+    headerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 12
+    },
+    headerText: {
+        alignSelf: 'flex-end',
+        color: colors.dark
+    },
+    addOutfitContainer: {
+        // borderWidth: 1,
+        // backgroundColor: colors.button,
+        // padding: 6,
+        // borderRadius: 28
+    },
+    addOutfitText: {
+        fontSize: 18,
+        color: colors.button,
+        fontWeight: '800'
     },
 });
 

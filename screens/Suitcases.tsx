@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Modal, TextInput, Button } from 'react-native'
 import React, { useState } from 'react';
 import colors from '../themes/Colors';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -9,15 +9,37 @@ type SuitcasesScreenProps = {
 
 }
 
-const Suitcases: React.FC<SuitcasesScreenProps> = ({navigation}) => {
+const Suitcases: React.FC<SuitcasesScreenProps> = ({ navigation }) => {
     const [suitcases, setSuitcases] = useState<string[]>(['Montana', 'Beach', 'Roadtrip']); // State for the suitcases
-    const navigateToSuitCase = () => {
-        navigation.navigate('InsideSuitcase')
+    const [isNewSuitcaseModalVisible, setNewSuitcaseModalVisible] = useState(false); // State for modal visibility
+    const [newSuitcaseName, setNewSuitcaseName] = useState('');
+
+    const navigateToSuitCase = (name: string) => {
+        navigation.navigate('InsideSuitcase', {
+            name: name,
+        });
+    };
+
+    const openNewSuitcaseModal = () => {
+        setNewSuitcaseModalVisible(true);
+    };
+
+    const closeNewSuitcaseModal = () => {
+        setNewSuitcaseModalVisible(false);
+        setNewSuitcaseName(''); // Clear input when modal is closed
+    };
+
+    const createNewSuitcase = () => {
+        if (newSuitcaseName.trim() !== '') {
+            setSuitcases([...suitcases, newSuitcaseName]);
+            closeNewSuitcaseModal();
         }
+    };
+
 
     const suitCase = ({ item }: { item: string }) => {
         return (
-            <TouchableOpacity style={styles.suitcaseContainer} onPress={navigateToSuitCase}>
+            <TouchableOpacity style={styles.suitcaseContainer} onPress={() => navigateToSuitCase(item)}>
                 <Image
                     source={require('../Icons/SuitcaseIcon.png')}
                     style={{ width: 100, height: 100 }} />
@@ -28,25 +50,43 @@ const Suitcases: React.FC<SuitcasesScreenProps> = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-            <Text>Suitcases</Text>
-            <View style={styles.newSuitcaseContainer}>
-                <Image
-                    source={require('../Icons/BasicSuitcaseIcon.png')}
-                    style={{ width: 120, height: 120 }} />
-                <Text style={styles.suitcaseText}>Create new suitcase</Text>
+            <View style={styles.topContainer}>
+                <TouchableOpacity style={styles.newSuitcaseContainer} onPress={openNewSuitcaseModal}>
+                    <Image
+                        source={require('../Icons/BasicSuitcaseIcon.png')}
+                        style={{ width: 70, height: 70 }} />
+                    <Text style={styles.suitcaseText}>Create new suitcase</Text>
+                </TouchableOpacity>
+                <View style={styles.topRightSection}>
+                    <Text style={styles.listHeaderText}>Welcome!</Text>
+                    {!suitcases.length ? <Text style={styles.topRightSectionText}>Add a suitcase to get started!</Text> : <Text style={styles.topRightSectionText}>You have {suitcases.length} suitcases.</Text>}
+                </View>
             </View>
-            {!suitcases.length ? <Text>Add a suitcase to get started</Text> : <Text>Your suitcases</Text> }
-            <View>
+            < View style={styles.suitcaseListContainer}>
                 <FlatList
                     data={suitcases}
                     renderItem={suitCase}
                     keyExtractor={(item) => item}
-                    numColumns={2} 
-                    columnWrapperStyle={styles.row} 
-                    contentContainerStyle={styles.contentContainer} 
-
+                    numColumns={2}
+                    columnWrapperStyle={styles.row}
+                    contentContainerStyle={styles.contentContainer}
                 />
-            </View></View>
+            </View>
+            <Modal visible={isNewSuitcaseModalVisible} animationType="slide" transparent={true}>
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalHeaderText}>Create New Suitcase</Text>
+                        <TextInput
+                            placeholder="Enter suitcase name"
+                            value={newSuitcaseName}
+                            onChangeText={setNewSuitcaseName}
+                            style={styles.input}
+                        />
+                        <Button title="Create Suitcase" onPress={createNewSuitcase} />
+                        <Button title="Cancel" onPress={closeNewSuitcaseModal} />
+                    </View>
+                </View>
+            </Modal></View>
     )
 }
 
@@ -55,8 +95,25 @@ export default Suitcases
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding:20,
+        paddingHorizontal: 20,
+        paddingVertical: 8,
         backgroundColor: colors.background,
+    },
+    topContainer: {
+        flexDirection: 'row',
+        justifyContent:'space-between',
+        borderBottomWidth:1,
+        paddingBottom:8
+    },
+    topRightSection: {
+        alignSelf:'center',
+        alignItems: 'center',
+        width:'50%'
+    },
+    topRightSectionText: {
+        fontSize: 16,
+        marginHorizontal:4,
+        textAlign:'center'
     },
     contentContainer: {
         padding: 6,
@@ -66,25 +123,53 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     newSuitcaseContainer: {
-        paddingHorizontal: 18,
-        borderWidth: 2,
+        paddingHorizontal: 10,
         backgroundColor: colors.primary,
-        width:'50%',
-        marginBottom:'12%',
-        marginTop:10,
+        width: '40%',
+        alignItems: 'center',
     },
     suitcaseContainer: {
         paddingHorizontal: 18,
         borderWidth: 2,
         backgroundColor: colors.primary,
-        marginTop:16,
-        borderRadius:20
-
-
+        marginTop: 16,
+        borderRadius: 20
     },
     suitcaseText: {
         fontSize: 18,
         textAlign: 'center',
         marginBottom: 10
+    },
+    suitcaseListContainer: {
+        flex: 1,
+        paddingVertical: 8
+    },
+    listHeaderText: {
+        fontSize: 16,
+        marginTop: 2
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: colors.background,
+        padding: 20,
+        borderRadius: 10,
+        elevation: 5,
+    },
+    modalHeaderText: {
+        fontSize: 20,
+        fontWeight: '400'
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: 'gray',
+        padding: 8,
+        marginBottom: 10,
+        marginTop: 16,
+        borderRadius: 5,
     },
 })

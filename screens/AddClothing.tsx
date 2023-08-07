@@ -104,7 +104,7 @@ const ClothingForm: React.FC<ClothingFormProps> = () => {
           </TouchableOpacity>
         </View>
         {/* Name input */}
-        {/* <View style={styles.selectContainer}>
+        <View style={styles.selectContainer}>
           <Text style={styles.selectText}>Add Name: (Optional)</Text>
           <TextInput
             style={styles.nameInput}
@@ -112,9 +112,9 @@ const ClothingForm: React.FC<ClothingFormProps> = () => {
             value={name}
             onChangeText={(text) => setName(text)}
           />
-        </View> */}
+        </View>
         <TouchableOpacity>
-          <View style={styles.addButtonContainer}><Text style={styles.addButtonText}>Add Toa Suitcase</Text></View>
+          <View style={styles.addButtonContainer}><Text style={styles.addButtonText}>Add To Suitcase</Text></View>
         </TouchableOpacity>
       </ScrollView>
     </View>
@@ -125,8 +125,9 @@ const ClothingForm: React.FC<ClothingFormProps> = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
-    backgroundColor: colors.background
+    paddingHorizontal: 10,
+    paddingTop:20,
+    backgroundColor: colors.background,
   },
   categoryContainer: {
     flexDirection: 'row',
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     marginTop: 6,
     alignItems: 'center',
-    marginBottom:38
+    marginBottom:2
   },
   emptyImageContainer: {
     borderWidth:2,
@@ -192,14 +193,15 @@ const styles = StyleSheet.create({
     marginTop: 30
   },
   selectContainer: {
-    marginBottom: 20,
+    marginBottom: 2,
   },
   addButtonContainer: {
     alignItems: 'center',
     borderWidth: 1,
     marginHorizontal: 40,
     borderRadius: 6,
-    backgroundColor: colors.button
+    backgroundColor: colors.button,
+    marginTop:18
   },
   addButtonText: {
     fontSize: 20

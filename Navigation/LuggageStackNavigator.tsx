@@ -13,7 +13,7 @@ import colors from '../themes/Colors';
 
 type LuggageStackParamList = {
   Suitcases: undefined;
-  InsideSuitcase: { userId: string };
+  InsideSuitcase: { name: string };
   Outfits: undefined;
   CreateOutfit: undefined;
 };
@@ -32,9 +32,9 @@ function LuggageStackNavigator() {
       },
     }}>
       <LuggageStack.Screen name="Suitcases" component={Suitcases} />
-      <LuggageStack.Screen name="InsideSuitcase" component={InsideSuitcase} options={{
-        title: 'Suitcase',
-      }}
+      <LuggageStack.Screen name="InsideSuitcase" component={InsideSuitcase} options={({ route }) => ({
+        title: route.params.name,
+      })}
       />
       <LuggageStack.Screen name="Outfits" component={Outfits} />
       <LuggageStack.Screen name="CreateOutfit" component={CreateOutfit} />

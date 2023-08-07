@@ -52,12 +52,7 @@ const Outfits: React.FC <OutfitsScreenProps> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.topView}>
-        <TouchableOpacity style={styles.addOutfitContainer} onPress={()=> navigateToAddOutfit()}>
-          <Text style={styles.addOutfitText}>Add outfit +</Text>
-        </TouchableOpacity>
-      </View>
-      {!outfits.length ? <Text style={styles.outfitHeader}>You have no outfits</Text> : <Text style={styles.outfitHeader}>Your outfits</Text>}
+      {!outfits.length ? <Text style={styles.outfitHeader}>You have no outfits</Text> : null}
       <FlatList
         data={outfits}
         renderItem={({ item, index }) => (
@@ -73,7 +68,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     backgroundColor: colors.background,
-    borderWidth:2,
   },
   topView: {
     alignItems: 'flex-end'
@@ -86,7 +80,6 @@ const styles = StyleSheet.create({
   },
   addOutfitText: {
     fontSize: 18,
-
   },
   outfitContainer: {
     paddingHorizontal: 18,
