@@ -4,10 +4,10 @@ import ImagePicker from 'react-native-image-crop-picker';
 import colors from '../themes/Colors';
 import ShirtIconWithPlus from './Components/PlusSignShirt';
 
-interface ClothingFormProps {
+interface AddItemFormProps {
 }
 
-const ClothingForm: React.FC<ClothingFormProps> = () => {
+const AddItemForm: React.FC<AddItemFormProps> = () => {
   const [category, setCategory] = useState<string>(''); //State for category
   const [selectedImage, setSelectedImage] = useState<string>(''); //State for image selection
   const [name, setName] = useState<string>(''); // State for the "Name" input
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 40,
     borderRadius: 6,
     backgroundColor: colors.button,
-    marginTop:18
+    marginVertical:18
   },
   addButtonText: {
     fontSize: 20
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
 });
 
 
-export default ClothingForm;
+export default AddItemForm;
 
 
 

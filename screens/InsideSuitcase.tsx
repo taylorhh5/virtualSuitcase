@@ -20,6 +20,10 @@ const InsideSuitcase = (props) => {
     const navigateToAddOutfit = () => {
         props.navigation.navigate('CreateOutfit')
     };
+
+    const navigateToItem = () => {
+        props.navigation.navigate('AddItemForm')
+    };
     console.log(props.route, 'params')
 
     return (
@@ -47,7 +51,7 @@ const InsideSuitcase = (props) => {
             {activeScreen === ActiveScreen.Items ? (
                 <View style={styles.headerContainer}>
                     <Text style={styles.headerText}>You have 17 items</Text>
-                    <TouchableOpacity style={styles.addOutfitContainer} onPress={() => navigateToAddOutfit()}>
+                    <TouchableOpacity style={styles.addOutfitContainer} onPress={() => navigateToItem()}>
                         <Text style={styles.addOutfitText}>Add item +</Text>
                     </TouchableOpacity>
                 </View>
