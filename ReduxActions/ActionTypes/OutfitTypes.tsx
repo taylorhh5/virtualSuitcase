@@ -1,7 +1,11 @@
+type ClothingItem = {
+  category: string;
+  name: string;
+  image: string;
+};
 export interface Outfit {
-    id: string;
-    name: string;
-    items: string[];
+  id: string,
+  items: ClothingItem[];
   }
   
   export const ADD_OUTFIT = 'ADD_OUTFIT';

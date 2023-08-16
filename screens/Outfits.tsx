@@ -1,54 +1,30 @@
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import colors from '../themes/Colors';
 import OutfitBox from './Components/OutfitBox';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
+import { RootState } from '../Reducers/RootReducer';
+import { Outfit } from '../ReduxActions/ActionTypes/OutfitTypes';
 
 type OutfitsScreenProps = {
   navigation: NativeStackNavigationProp<LuggageStackParamList, 'Outfits'>;
-
+  outfitState: Outfit[];
 }
 
-type ClothingItem = {
-  category: string;
-  name: string;
-  image: string;
-};
 
-type Outfit = {
-  items: ClothingItem[];
-};
 
-const Outfits: React.FC <OutfitsScreenProps> = ({navigation}) => {
-  const [outfits, setOutfits] = useState<Outfit[]>([
-    {
-      items: [
-        { category: "top", name: "T-shirt", image: "https://www.mrporter.com/variants/images/3633577411310824/in/w2000_q60.jpg" },
-        { category: "bottom", name: "Jeans", image: "https://images.boardriders.com/global/dcshoes-products/all/default/medium/adydp03056_dcshoes,f_bsnw_frt1.jpg" },
-        { category: "shoes", name: "Chucks", image: "https://images.journeys.com/images/products/1_5122_ZM_THERO.JPG" }
-      ]
-    },
-    {
-      items: [
-        { category: "top", name: "Jacket", image: "https://www.stormtechusa.com/cdn/shop/products/QX-1_FRONT_AzureBlue_2faa399c-44af-4a43-9fd8-4be87ff5fc41_2000x.jpg?v=1687562304" },
-        { category: "bottom", name: "Shorts", image: "https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2Feb%2Fd3%2Febd33c012f0cfb070719a4a4c9d920d38c360522.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BDESCRIPTIVESTILLLIFE%5D%2Cres%5Bm%5D%2Chmver%5B2%5D&call=url[file:/product/main]" },
-        { category: "shoes", name: "Chucks", image: "https://images.journeys.com/images/products/1_5122_ZM_THERO.JPG" },
-        { category: "bottosm", name: "Jeans", image: "https://images.boardriders.com/global/dcshoes-products/all/default/medium/adydp03056_dcshoes,f_bsnw_frt1.jpg" },
-
-        { category: "bottoam", name: "Jeans", image: "https://images.boardriders.com/global/dcshoes-products/all/default/medium/adydp03056_dcshoes,f_bsnw_frt1.jpg" },
-        { category: "bottom", name: "Jeans", image: "https://images.boardriders.com/global/dcshoes-products/all/default/medium/adydp03056_dcshoes,f_bsnw_frt1.jpg" },
-
-        { category: "bottom", name: "Jeans", image: "https://images.boardriders.com/global/dcshoes-products/all/default/medium/adydp03056_dcshoes,f_bsnw_frt1.jpg" },
-
-      ]
-    }
-  ]);
+const Outfits: React.FC <OutfitsScreenProps> = ({navigation, outfitState }) => {
+  const [outfits, setOutfits] = useState<Outfit[]>([]);
 
   const navigateToAddOutfit = () => {
    navigation.navigate('CreateOutfit')
   };
 
+  useEffect(() => {
+    setOutfits(outfitState)
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -62,6 +38,22 @@ const Outfits: React.FC <OutfitsScreenProps> = ({navigation}) => {
     </View>
   );
 };
+
+const mapStateToProps = (state: RootState) => ({
+  outfitState: state.outfits.outfits,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) =>
+  bindActionCreators(
+    {
+      // addSuitcase,
+      // fetchSuitcases,
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(Outfits);
+
 
 const styles = StyleSheet.create({
   container: {
@@ -105,4 +97,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Outfits;

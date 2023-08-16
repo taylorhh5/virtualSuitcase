@@ -44,7 +44,7 @@ console.log(suitcases, 'suitcases')
 
     const suitCase = ({ item }: { item: Suitcase }) => {
         return (
-            <TouchableOpacity style={styles.suitcaseContainer} onPress={() => navigateToSuitCase(item)}>
+            <TouchableOpacity style={styles.suitcaseContainer} onPress={() => navigateToSuitCase(item.name)}>
                 <Image
                     source={require('../Icons/SuitcaseIcon.png')}
                     style={{ width: 100, height: 100 }} />
@@ -74,7 +74,7 @@ console.log(suitcases, 'suitcases')
                 <FlatList
                     data={suitcase}
                     renderItem={suitCase}
-                    keyExtractor={(item) => item}
+                    keyExtractor={(item) => item.id}
                     numColumns={2}
                     columnWrapperStyle={styles.row}
                     contentContainerStyle={styles.contentContainer}
