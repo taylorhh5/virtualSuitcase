@@ -1,19 +1,24 @@
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Modal, TextInput, Button } from 'react-native'
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import colors from '../themes/Colors';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
+import { RootState } from '../Reducers/RootReducer';
+import { Suitcase } from '../ReduxActions/ActionTypes/SuitcaseActionTypes';
 
 type SuitcasesScreenProps = {
     navigation: NativeStackNavigationProp<LuggageStackParamList, 'Home'>;
+    suitcases: Suitcase[];
+    // addSuitcase: typeof addSuitcase;
+    // fetchSuitcases: typeof fetchSuitcases;
+  }
 
-}
-
-const Suitcases: React.FC<SuitcasesScreenProps> = ({ navigation }) => {
-    const [suitcases, setSuitcases] = useState<string[]>(['Montana', 'Beach', 'Roadtrip']); // State for the suitcases
+const Suitcases: React.FC<SuitcasesScreenProps> = ({ navigation, suitcases }) => {
+    const [suitcase, setSuitcase] = useState<Suitcase[]>([{id:'1', name:'Montana'}]); // State for the suitcase
     const [isNewSuitcaseModalVisible, setNewSuitcaseModalVisible] = useState(false); // State for modal visibility
     const [newSuitcaseName, setNewSuitcaseName] = useState('');
-
+console.log(suitcases, 'suitcases')
     const navigateToSuitCase = (name: string) => {
         navigation.navigate('InsideSuitcase', {
             name: name,
@@ -31,23 +36,26 @@ const Suitcases: React.FC<SuitcasesScreenProps> = ({ navigation }) => {
 
     const createNewSuitcase = () => {
         if (newSuitcaseName.trim() !== '') {
-            setSuitcases([...suitcases, newSuitcaseName]);
+            setSuitcase([...suitcase, newSuitcaseName]);
             closeNewSuitcaseModal();
         }
     };
 
 
-    const suitCase = ({ item }: { item: string }) => {
+    const suitCase = ({ item }: { item: Suitcase }) => {
         return (
             <TouchableOpacity style={styles.suitcaseContainer} onPress={() => navigateToSuitCase(item)}>
                 <Image
                     source={require('../Icons/SuitcaseIcon.png')}
                     style={{ width: 100, height: 100 }} />
-                <Text style={styles.suitcaseText}>{item} 🧳</Text>
+                <Text style={styles.suitcaseText}>{item.name} 🧳</Text>
             </TouchableOpacity>
         );
     };
 
+    useEffect(() => {
+        setSuitcase(suitcases)
+      }, []);
     return (
         <View style={styles.container}>
             <View style={styles.topContainer}>
@@ -59,12 +67,12 @@ const Suitcases: React.FC<SuitcasesScreenProps> = ({ navigation }) => {
                 </TouchableOpacity>
                 <View style={styles.topRightSection}>
                     <Text style={styles.listHeaderText}>Welcome!</Text>
-                    {!suitcases.length ? <Text style={styles.topRightSectionText}>Add a suitcase to get started!</Text> : <Text style={styles.topRightSectionText}>You have {suitcases.length} suitcases.</Text>}
+                    {!suitcase.length ? <Text style={styles.topRightSectionText}>Add a suitcase to get started!</Text> : <Text style={styles.topRightSectionText}>You have {suitcase.length} suitcase.</Text>}
                 </View>
             </View>
             < View style={styles.suitcaseListContainer}>
                 <FlatList
-                    data={suitcases}
+                    data={suitcase}
                     renderItem={suitCase}
                     keyExtractor={(item) => item}
                     numColumns={2}
@@ -90,7 +98,20 @@ const Suitcases: React.FC<SuitcasesScreenProps> = ({ navigation }) => {
     )
 }
 
-export default Suitcases
+const mapStateToProps = (state: RootState) => ({
+    suitcases: state.suitcases.suitcases,
+  });
+  
+  const mapDispatchToProps = (dispatch: Dispatch) =>
+    bindActionCreators(
+      {
+        // addSuitcase,
+        // fetchSuitcases,
+      },
+      dispatch
+    );
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(Suitcases);
 
 const styles = StyleSheet.create({
     container: {
