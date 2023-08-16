@@ -1,15 +1,20 @@
 import { StyleSheet, Text, View, FlatList, Image, TouchableHighlight, ScrollView, Modal, TouchableOpacity, Button } from 'react-native';
 import React, { useState } from 'react';
 import colors from '../../themes/Colors';
-type CreateOutfitProps = {};
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
+import { RootState } from '../../Reducers/RootReducer';
+import { addOutfit } from '../../ReduxActions/OutfitActions';
+import { ClothingItem } from '../../ReduxActions/ActionTypes/OutfitTypes';
 
-interface ClothingItem {
-    category: string;
-    name: string;
-    image: string;
-}
+type CreateOutfitProps = {
+    addOutfit: (suitcase: ClothingItem) => void;
 
-const CreateOutfit: React.FC<CreateOutfitProps> = () => {
+};
+
+
+const CreateOutfit: React.FC<CreateOutfitProps> = ({addOutfit}) => {
+
     const [suitcases, setSuitcases] = useState<ClothingItem[]>([
         { category: "top", name: "T-shirt", image: "https://www.mrporter.com/variants/images/3633577411310824/in/w2000_q60.jpg" },
         { category: "bottom", name: "Jeans", image: "https://images.boardriders.com/global/dcshoes-products/all/default/medium/adydp03056_dcshoes,f_bsnw_frt1.jpg" },
@@ -55,6 +60,13 @@ const CreateOutfit: React.FC<CreateOutfitProps> = () => {
         setSelectedOutfitItems([])
     }
 
+    //Clear slectedItems
+    const handleAddOutfit = () => {
+        console.log('here')
+        addOutfit(selectedOutfitItems)
+    }
+
+
     // Render individual items with 'Added' text if selected
     const renderItem = ({ item }: { item: ClothingItem }) => {
         // Check if the item is already selected
@@ -88,7 +100,7 @@ const CreateOutfit: React.FC<CreateOutfitProps> = () => {
             {/* Header */}
             <View style={styles.headerContainer}>
                 <TouchableOpacity style={styles.buttonContainer} onPress={() => clearSelected()}><Text style={styles.headerText}>Clear selected</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.buttonContainer}><Text style={styles.headerText}>Add outfit</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.buttonContainer} onPress={ handleAddOutfit}><Text style={styles.headerText}>Add outfit</Text></TouchableOpacity>
             </View>
             {/* Display selected items */}
             <ScrollView style={styles.selectedScrollview} >
@@ -119,6 +131,20 @@ const CreateOutfit: React.FC<CreateOutfitProps> = () => {
         </View>
     );
 };
+
+const mapStateToProps = (state: RootState) => ({
+    luggageState: state.luggage.luggage,
+  });
+  
+  const mapDispatchToProps = (dispatch: Dispatch) =>
+    bindActionCreators(
+      {
+        addOutfit
+      },
+      dispatch
+    );
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(CreateOutfit);
 
 const styles = StyleSheet.create({
     container: {
@@ -187,4 +213,3 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CreateOutfit;

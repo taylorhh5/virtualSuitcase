@@ -3,11 +3,17 @@ import { View, Text, TouchableOpacity, Image, StyleSheet, TextInput, ScrollView 
 import ImagePicker from 'react-native-image-crop-picker';
 import colors from '../themes/Colors';
 import ShirtIconWithPlus from './Components/PlusSignShirt';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
+import { RootState } from '../Reducers/RootReducer';
+import { Item } from '../ReduxActions/ActionTypes/LuggageActionTypes';
+import { addItem } from '../ReduxActions/LuggageActions';
 
 interface AddItemFormProps {
+  addItem: (suitcase: Item) => void;
 }
 
-const AddItemForm: React.FC<AddItemFormProps> = () => {
+const AddItemForm: React.FC<AddItemFormProps> = ({addItem}) => {
   const [category, setCategory] = useState<string>(''); //State for category
   const [selectedImage, setSelectedImage] = useState<string>(''); //State for image selection
   const [name, setName] = useState<string>(''); // State for the "Name" input
@@ -62,6 +68,12 @@ const AddItemForm: React.FC<AddItemFormProps> = () => {
     makeup: '💄'
   };
 
+  const handleAddItem = () => {
+    //error handling check
+    addItem({name:name, image:selectedImage, category:category })
+};
+
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -113,7 +125,7 @@ const AddItemForm: React.FC<AddItemFormProps> = () => {
             onChangeText={(text) => setName(text)}
           />
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleAddItem}>
           <View style={styles.addButtonContainer}><Text style={styles.addButtonText}>Add To Suitcase</Text></View>
         </TouchableOpacity>
       </ScrollView>
@@ -121,6 +133,18 @@ const AddItemForm: React.FC<AddItemFormProps> = () => {
   );
 };
 
+const mapStateToProps = (state: RootState) => ({
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) =>
+  bindActionCreators(
+    {
+      addItem,
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddItemForm);
 
 const styles = StyleSheet.create({
   container: {
@@ -209,7 +233,6 @@ const styles = StyleSheet.create({
 });
 
 
-export default AddItemForm;
 
 
 

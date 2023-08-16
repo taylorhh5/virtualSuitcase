@@ -11,7 +11,7 @@ import rootReducer from "../Reducers/RootReducer";
 // Configuration for Redux Persist
 const persistConfig = {
   key: "root",
-  whitelist: [], // List of reducers to persist
+  whitelist: ['suitcases'], // List of reducers to persist
   storage: AsyncStorage,   // Storage method (AsyncStorage in this case)
 };
 

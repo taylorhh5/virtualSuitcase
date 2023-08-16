@@ -6,15 +6,18 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { RootState } from '../Reducers/RootReducer';
 import { Suitcase } from '../ReduxActions/ActionTypes/SuitcaseActionTypes';
+import { addSuitcase } from '../ReduxActions/SuitcaseActions';
 
 type SuitcasesScreenProps = {
     navigation: NativeStackNavigationProp<LuggageStackParamList, 'Home'>;
     suitcases: Suitcase[];
+    addSuitcase: (suitcase: Suitcase) => void;
+    loading: boolean,
     // addSuitcase: typeof addSuitcase;
     // fetchSuitcases: typeof fetchSuitcases;
   }
 
-const Suitcases: React.FC<SuitcasesScreenProps> = ({ navigation, suitcases }) => {
+const Suitcases: React.FC<SuitcasesScreenProps> = ({ navigation, suitcases, addSuitcase, loading }) => {
     const [suitcase, setSuitcase] = useState<Suitcase[]>([{id:'1', name:'Montana'}]); // State for the suitcase
     const [isNewSuitcaseModalVisible, setNewSuitcaseModalVisible] = useState(false); // State for modal visibility
     const [newSuitcaseName, setNewSuitcaseName] = useState('');
@@ -36,8 +39,10 @@ console.log(suitcases, 'suitcases')
 
     const createNewSuitcase = () => {
         if (newSuitcaseName.trim() !== '') {
-            setSuitcase([...suitcase, newSuitcaseName]);
+            // setSuitcase([...suitcase, newSuitcaseName]);
+            addSuitcase({id:'5', name:newSuitcaseName, })
             closeNewSuitcaseModal();
+
         }
     };
 
@@ -55,7 +60,7 @@ console.log(suitcases, 'suitcases')
 
     useEffect(() => {
         setSuitcase(suitcases)
-      }, []);
+      }, [loading]);
     return (
         <View style={styles.container}>
             <View style={styles.topContainer}>
@@ -100,13 +105,14 @@ console.log(suitcases, 'suitcases')
 
 const mapStateToProps = (state: RootState) => ({
     suitcases: state.suitcases.suitcases,
+    loading: state.suitcases.loading,
+
   });
   
   const mapDispatchToProps = (dispatch: Dispatch) =>
     bindActionCreators(
       {
-        // addSuitcase,
-        // fetchSuitcases,
+        addSuitcase        
       },
       dispatch
     );

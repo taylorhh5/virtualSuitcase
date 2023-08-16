@@ -9,17 +9,17 @@ import {
   FETCH_SUITCASE_BY_ID_FAILURE,
 } from './/ActionTypes/SuitcaseActionTypes';
 import { Suitcase } from './/ActionTypes/SuitcaseActionTypes';
-import { db } from '../firebase'; 
+// import { db } from '../firebase'; 
 
 export const addSuitcase = (suitcase: Suitcase) => (dispatch: Dispatch) => {
-  db.collection('suitcases')
-    .add(suitcase)
-    .then((addedSuitcase) => {
-      dispatch({ type: ADD_SUITCASE, payload: { id: addedSuitcase.id, ...suitcase } });
-    })
-    .catch((error) => {
-      console.error('Error adding suitcase:', error);
-    });
+  console.log('add')
+    // .then((addedSuitcase) => {
+      dispatch({ type: ADD_SUITCASE, payload: { ...suitcase } });
+    // })
+    // .catch((error) => {
+    //   console.error('Error adding suitcase:', error);
+    // });
+  // .log('Add suitcase in action', suitcase)
 };
 
 export const editSuitcase = (id: string, updatedSuitcase: Partial<Suitcase>) => (dispatch: Dispatch) => {

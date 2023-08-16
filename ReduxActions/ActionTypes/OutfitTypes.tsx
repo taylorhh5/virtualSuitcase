@@ -1,4 +1,4 @@
-type ClothingItem = {
+export type ClothingItem = {
   category: string;
   name: string;
   image: string;

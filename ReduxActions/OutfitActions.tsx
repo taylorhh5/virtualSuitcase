@@ -9,17 +9,18 @@ import {
   FETCH_OUTFIT_BY_ID_FAILURE,
 } from './ActionTypes/OutfitTypes';
 import { Outfit } from './ActionTypes/OutfitTypes';
-import { db } from '../firebase'; 
+// import { db } from '../firebase'; 
 
 export const addOutfit = (outfit: Outfit) => (dispatch: Dispatch) => {
-  db.collection('outfits')
-    .add(outfit)
-    .then((addedOutfit) => {
-      dispatch({ type: ADD_OUTFIT, payload: { id: addedOutfit.id, ...outfit } });
-    })
-    .catch((error) => {
-      console.error('Error adding outfit:', error);
-    });
+  // db.collection('outfits')
+  //   .add(outfit)
+  //   .then((addedOutfit) => {
+  //     dispatch({ type: ADD_OUTFIT, payload: { id: addedOutfit.id, ...outfit } });
+  //   })
+  //   .catch((error) => {
+  //     console.error('Error adding outfit:', error);
+  //   });
+  console.log('Outfit added', outfit)
 };
 
 export const editOutfit = (id: string, updatedOutfit: Partial<Outfit>) => (dispatch: Dispatch) => {

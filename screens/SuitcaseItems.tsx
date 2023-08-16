@@ -5,9 +5,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { RootState } from '../Reducers/RootReducer';
 import { Item } from '../ReduxActions/ActionTypes/LuggageActionTypes';
-
+import { addItem, deleteItem, editItem } from '../ReduxActions/LuggageActions';
 type SuitcaseItemsProps = {
     luggageState: Item[];
+    deleteItem: (id: string) => void;
+    editItem:  (id:string, item:Item | null) => void;
 };
 
 const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
@@ -44,8 +46,9 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
 
 
 
-    const handleModalDelete = () => {
+    const handleModalDelete = (id:string) => {
         console.log('delete');
+        props.deleteItem(id)
         setIsModalVisible(false);
     };
 
@@ -175,7 +178,7 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
                         )
                     }
                 />
-                <Button title="Save" onPress={() => { handleSave(); setIsEdit(false); setSelectedCategory(''); setIsModalVisible(false); }} />
+                <Button title="Save" onPress={() => { handleSave(); setIsEdit(false); setSelectedCategory(''); setIsModalVisible(false); props.editItem(selectedItemForEdit.id, {...selectedItemForEdit, category:selectedCategory}) }} />
                 <Button title="Cancel" onPress={() => { setIsEdit(false); setSelectedCategory(''); setIsModalVisible(false); }} />
             </View>
         );
@@ -214,7 +217,7 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
                             <TouchableOpacity onPress={handleEdit}>
                                 <Text>Edit</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={handleModalDelete}>
+                            <TouchableOpacity onPress={()=>handleModalDelete(selectedItemForEdit.id)}>
                                 <Text>Delete</Text>
                             </TouchableOpacity>
                             <Button title="Close" onPress={() => setIsModalVisible(false)} />
@@ -238,8 +241,9 @@ const mapStateToProps = (state: RootState) => ({
   const mapDispatchToProps = (dispatch: Dispatch) =>
     bindActionCreators(
       {
-        // addSuitcase,
-        // fetchSuitcases,
+        addItem,
+        deleteItem,
+        editItem,
       },
       dispatch
     );
