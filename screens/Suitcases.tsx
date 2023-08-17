@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Modal, TextInput, Button } from 'react-native'
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import colors from '../themes/Colors';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { connect } from 'react-redux';
@@ -7,22 +7,22 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { RootState } from '../Reducers/RootReducer';
 import { Suitcase } from '../ReduxActions/ActionTypes/SuitcaseActionTypes';
 import { addSuitcase } from '../ReduxActions/SuitcaseActions';
-
-type SuitcasesScreenProps = {
+import ConfirmDelete from './Components/ConfimDelete';
+type SuitcasesProps = {
     navigation: NativeStackNavigationProp<LuggageStackParamList, 'Home'>;
     suitcases: Suitcase[];
     addSuitcase: (suitcase: Suitcase) => void;
-    loading: boolean,
-    // addSuitcase: typeof addSuitcase;
-    // fetchSuitcases: typeof fetchSuitcases;
-  }
+    loading: boolean;
+}
 
-const Suitcases: React.FC<SuitcasesScreenProps> = ({ navigation, suitcases, addSuitcase, loading }) => {
-    const [suitcase, setSuitcase] = useState<Suitcase[]>([{id:'1', name:'Montana'}]); // State for the suitcase
-    const [isNewSuitcaseModalVisible, setNewSuitcaseModalVisible] = useState(false); // State for modal visibility
+const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcase, loading }) => {
+    const [suitcaseList, setSuitcaseList] = useState<Suitcase[]>([{ id: '1', name: 'Montana' }]);
+    const [isNewSuitcaseModalVisible, setNewSuitcaseModalVisible] = useState(false);
     const [newSuitcaseName, setNewSuitcaseName] = useState('');
+    const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+    const [isEditModalVisible, setIsEditModalVisible] = useState(false);
 
-    const navigateToSuitCase = (name: string) => {
+    const navigateToInsideSuitcase = (name: string) => {
         navigation.navigate('InsideSuitcase', {
             name: name,
         });
@@ -32,96 +32,135 @@ const Suitcases: React.FC<SuitcasesScreenProps> = ({ navigation, suitcases, addS
         setNewSuitcaseModalVisible(true);
     };
 
-    const closeNewSuitcaseModal = () => {
+    const openEditSuitcaseModal = (name: string) => {
+        setIsEditModalVisible(true);
+        setNewSuitcaseName(name);
+    };
+
+    const closeModal = () => {
         setNewSuitcaseModalVisible(false);
-        setNewSuitcaseName(''); // Clear input when modal is closed
+        setIsEditModalVisible(false);
+        setIsDeleteModalVisible(false);
+        setNewSuitcaseName('');
     };
 
     const createNewSuitcase = () => {
         if (newSuitcaseName.trim() !== '') {
-            // setSuitcase([...suitcase, newSuitcaseName]);
-            addSuitcase({id:'5', name:newSuitcaseName, })
-            closeNewSuitcaseModal();
-
+            addSuitcase({ id: '5', name: newSuitcaseName });
+            closeModal();
         }
     };
 
-    const suitCase = ({ item }: { item: Suitcase }) => {
+    const handleEditSuitcase = () => {
+        console.log('edit');
+        closeModal();
+    };
+
+    const renderItem = ({ item }: { item: Suitcase }) => {
         return (
-            <View style={styles.suitcaseContainer} >
-               <TouchableOpacity onPress={() => navigateToSuitCase(item.name)}>
-                <Text style={styles.suitcaseText}>...</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigateToSuitCase(item.name)}>
-                <Image
-                    source={require('../Icons/SuitcaseIcon.png')}
-                    style={{ width: 100, height: 100 }} />
-                <Text style={styles.suitcaseText}>{item.name} 🧳</Text>
-            </TouchableOpacity>
+            <View style={styles.suitcaseContainer}>
+                <TouchableOpacity onPress={() => openEditSuitcaseModal(item.name)}>
+                    <Text style={styles.suitcaseText}>...</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigateToInsideSuitcase(item.name)}>
+                    <Image source={require('../Icons/SuitcaseIcon.png')} style={{ width: 100, height: 100 }} />
+                    <Text style={styles.suitcaseText}>{item.name} 🧳</Text>
+                </TouchableOpacity>
             </View>
         );
     };
 
+    const showDeleteModal = () => {
+        setIsDeleteModalVisible(true);
+    };
+
+    const renderDeleteForm = () => {
+        return (
+            <ConfirmDelete text={newSuitcaseName} onCancel={() => setIsDeleteModalVisible(false)} />
+        );
+    };
+
     useEffect(() => {
-        setSuitcase(suitcases)
-      }, [loading]);
+        setSuitcaseList(suitcases);
+    }, [loading]);
+
     return (
         <View style={styles.container}>
             <View style={styles.topContainer}>
                 <TouchableOpacity style={styles.newSuitcaseContainer} onPress={openNewSuitcaseModal}>
-                    <Image
-                        source={require('../Icons/BasicSuitcaseIcon.png')}
-                        style={{ width: 70, height: 70 }} />
+                    <Image source={require('../Icons/BasicSuitcaseIcon.png')} style={{ width: 70, height: 70 }} />
                     <Text style={styles.suitcaseText}>Create new suitcase</Text>
                 </TouchableOpacity>
                 <View style={styles.topRightSection}>
                     <Text style={styles.listHeaderText}>Welcome!</Text>
-                    {!suitcase.length ? <Text style={styles.topRightSectionText}>Add a suitcase to get started!</Text> : <Text style={styles.topRightSectionText}>You have {suitcase.length} suitcase.</Text>}
+                    {!suitcaseList.length ? (
+                        <Text style={styles.topRightSectionText}>Add a suitcase to get started!</Text>
+                    ) : (
+                        <Text style={styles.topRightSectionText}>You have {suitcaseList.length} suitcase.</Text>
+                    )}
                 </View>
             </View>
-            < View style={styles.suitcaseListContainer}>
+            <View style={styles.suitcaseListContainer}>
                 <FlatList
-                    data={suitcase}
-                    renderItem={suitCase}
+                    data={suitcaseList}
+                    renderItem={renderItem}
                     keyExtractor={(item) => item.id}
                     numColumns={2}
                     columnWrapperStyle={styles.row}
                     contentContainerStyle={styles.contentContainer}
                 />
             </View>
-            <Modal visible={isNewSuitcaseModalVisible} animationType="slide" transparent={true}>
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.modalHeaderText}>Create New Suitcase</Text>
-                        <TextInput
-                            placeholder="Enter suitcase name"
-                            value={newSuitcaseName}
-                            onChangeText={setNewSuitcaseName}
-                            style={styles.input}
-                        />
-                        <Button title="Create Suitcase" onPress={createNewSuitcase} />
-                        <Button title="Cancel" onPress={closeNewSuitcaseModal} />
+            <Modal visible={isNewSuitcaseModalVisible || isEditModalVisible} animationType="slide" transparent={true}>
+                {!isEditModalVisible ? (
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalHeaderText}>Create New Suitcase</Text>
+                            <TextInput
+                                placeholder="Enter suitcase name"
+                                value={newSuitcaseName}
+                                onChangeText={setNewSuitcaseName}
+                                style={styles.input}
+                            />
+                            <Button title="Create Suitcase" onPress={createNewSuitcase} />
+                            <Button title="Cancel" onPress={closeModal} />
+                        </View>
                     </View>
-                </View>
-            </Modal></View>
-    )
-}
+                ) : (
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalHeaderText}>Edit Suitcase</Text>
+                            <TextInput
+                                placeholder={newSuitcaseName}
+                                value={newSuitcaseName}
+                                onChangeText={setNewSuitcaseName}
+                                style={styles.input}
+                            />
+                            <Button title="Edit Suitcase" onPress={handleEditSuitcase} />
+                            <Button title="Cancel" onPress={closeModal} />
+                            <Button title="Delete Suitcase" onPress={showDeleteModal} />
+                        </View>
+                    </View>
+                )}
+            </Modal>
+            {isDeleteModalVisible && renderDeleteForm()}
+        </View>
+    );
+};
 
 const mapStateToProps = (state: RootState) => ({
     suitcases: state.suitcases.suitcases,
     loading: state.suitcases.loading,
+});
 
-  });
-  
-  const mapDispatchToProps = (dispatch: Dispatch) =>
+const mapDispatchToProps = (dispatch: Dispatch) =>
     bindActionCreators(
-      {
-        addSuitcase        
-      },
-      dispatch
+        {
+            addSuitcase,
+        },
+        dispatch
     );
-  
-  export default connect(mapStateToProps, mapDispatchToProps)(Suitcases);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Suitcases);
 
 const styles = StyleSheet.create({
     container: {
@@ -132,19 +171,19 @@ const styles = StyleSheet.create({
     },
     topContainer: {
         flexDirection: 'row',
-        justifyContent:'space-between',
-        borderBottomWidth:1,
-        paddingBottom:8
+        justifyContent: 'space-between',
+        borderBottomWidth: 1,
+        paddingBottom: 8
     },
     topRightSection: {
-        alignSelf:'center',
+        alignSelf: 'center',
         alignItems: 'center',
-        width:'50%'
+        width: '50%'
     },
     topRightSectionText: {
         fontSize: 16,
-        marginHorizontal:4,
-        textAlign:'center'
+        marginHorizontal: 4,
+        textAlign: 'center'
     },
     contentContainer: {
         padding: 6,
