@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Button, Modal, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import colors from '../themes/Colors';
 import OutfitBox from './Components/OutfitBox';
@@ -13,14 +13,8 @@ type OutfitsScreenProps = {
   outfitState: Outfit[];
 }
 
-
-
 const Outfits: React.FC <OutfitsScreenProps> = ({navigation, outfitState }) => {
   const [outfits, setOutfits] = useState<Outfit[]>([]);
-
-  const navigateToAddOutfit = () => {
-   navigation.navigate('CreateOutfit')
-  };
 
   useEffect(() => {
     setOutfits(outfitState)
@@ -32,9 +26,11 @@ const Outfits: React.FC <OutfitsScreenProps> = ({navigation, outfitState }) => {
       <FlatList
         data={outfits}
         renderItem={({ item, index }) => (
-          <OutfitBox item={item} index={index} />
+     
+          <OutfitBox item={item} index={index} navigation={navigation}/>
         )} keyExtractor={(item, index) => index.toString()}
       />
+
     </View>
   );
 };
@@ -95,5 +91,13 @@ const styles = StyleSheet.create({
   outfitHeader: {
     textAlign: 'center',
   },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: colors.background,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 200,
+    marginHorizontal: 70
+},
 });
 

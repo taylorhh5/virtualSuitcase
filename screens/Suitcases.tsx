@@ -21,7 +21,7 @@ const Suitcases: React.FC<SuitcasesScreenProps> = ({ navigation, suitcases, addS
     const [suitcase, setSuitcase] = useState<Suitcase[]>([{id:'1', name:'Montana'}]); // State for the suitcase
     const [isNewSuitcaseModalVisible, setNewSuitcaseModalVisible] = useState(false); // State for modal visibility
     const [newSuitcaseName, setNewSuitcaseName] = useState('');
-console.log(suitcases, 'suitcases')
+
     const navigateToSuitCase = (name: string) => {
         navigation.navigate('InsideSuitcase', {
             name: name,
@@ -46,15 +46,19 @@ console.log(suitcases, 'suitcases')
         }
     };
 
-
     const suitCase = ({ item }: { item: Suitcase }) => {
         return (
-            <TouchableOpacity style={styles.suitcaseContainer} onPress={() => navigateToSuitCase(item.name)}>
+            <View style={styles.suitcaseContainer} >
+               <TouchableOpacity onPress={() => navigateToSuitCase(item.name)}>
+                <Text style={styles.suitcaseText}>...</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigateToSuitCase(item.name)}>
                 <Image
                     source={require('../Icons/SuitcaseIcon.png')}
                     style={{ width: 100, height: 100 }} />
                 <Text style={styles.suitcaseText}>{item.name} 🧳</Text>
             </TouchableOpacity>
+            </View>
         );
     };
 
