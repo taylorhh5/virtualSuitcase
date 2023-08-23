@@ -91,9 +91,13 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
         );
     };
 
+    const onDelete = () => {
+        console.log('deleted')
+    }
+
     const renderDeleteForm = () => {
         return (
-            <ConfirmDelete text={selectedItemForEdit.name} onCancel={() => setIsDelete(false)}/>        );
+            <ConfirmDelete text={selectedItemForEdit.name} onCancel={() => setIsDelete(false)} onConfirm={onDelete} />);
     };
 
     return (

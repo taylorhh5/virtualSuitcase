@@ -56,11 +56,15 @@ const OutfitBox: React.FC<OutfitBoxProps> = (props) => {
     });
   };
 
+  const onDelete = () => {
+    console.log('deleted')
+  }
+
   const renderDeleteForm = () => {
     return (
-        <ConfirmDelete text={selectedItemForEdit.name} onCancel={() => setIsDelete(false)} />
+      <ConfirmDelete text={selectedItemForEdit.name} onCancel={() => setIsDelete(false)} onConfirm={onDelete} />
     );
-};
+  };
 
 
   return (
@@ -70,19 +74,19 @@ const OutfitBox: React.FC<OutfitBoxProps> = (props) => {
         <View>
           <TouchableOpacity onPress={() => handleItemPress(props.item.id)}>
             {!isEditing ?
-            <Text>...</Text>
-            :
-          <View style={styles.editTextContainer}><TouchableOpacity onPress={() => cancelEdit()}>
-            <Text style={styles.optionText}>Cancel</Text>
-          </TouchableOpacity>
-            <Text>Select Items to delete</Text>
-            <TouchableOpacity onPress={() => console.log('delete', selectedItems)}>
-              <Text style={styles.optionText}>Delete Selected</Text>
-            </TouchableOpacity></View>}
+              <Text>...</Text>
+              :
+              <View style={styles.editTextContainer}><TouchableOpacity onPress={() => cancelEdit()}>
+                <Text style={styles.optionText}>Cancel</Text>
+              </TouchableOpacity>
+                <Text>Select Items to delete</Text>
+                <TouchableOpacity onPress={() => console.log('delete', selectedItems)}>
+                  <Text style={styles.optionText}>Delete Selected</Text>
+                </TouchableOpacity></View>}
           </TouchableOpacity>
           {isModalVisible ? (
             <>
-             <TouchableOpacity onPress={() => handleNavigateToCreateOutfit()}>
+              <TouchableOpacity onPress={() => handleNavigateToCreateOutfit()}>
                 <Text style={styles.optionText}>Edit Outfit</Text>
               </TouchableOpacity>
               {/* <TouchableOpacity onPress={() => handleSelectEdit()}>
@@ -95,7 +99,7 @@ const OutfitBox: React.FC<OutfitBoxProps> = (props) => {
           ) : (
             null
           )}</View>
-    
+
         <FlatList
           data={items}
           keyExtractor={(index) => index.toString()}
@@ -165,7 +169,7 @@ const styles = StyleSheet.create({
   },
   editTextContainer: {
     flexDirection: 'row',
-    justifyContent:'space-between'
+    justifyContent: 'space-between'
   }
 });
 

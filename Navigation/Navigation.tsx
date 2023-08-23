@@ -1,27 +1,19 @@
 //React
 import * as React from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
 //Screens
-import Home from '../screens/Home';
-import AddItemForm from '../screens/AddItemForm';
 import LuggageStackNavigator from './LuggageStackNavigator';
-
+import { useSelector } from 'react-redux';
 //Navigation
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
-
-
-type RootStackParamList = {
-  Home: undefined;
-  Details: undefined;
-  AddItemForm: undefined;
-  LuggageStackNavigator: undefined
-};
+import AuthStackNavigator from './AuthStackNavigator';
+import { RootState } from '../Reducers/RootReducer';
 
 const Stack = createNativeStackNavigator();
 
 const Navigation: React.FC = () => {
-  const isLoggedIn = true; 
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+
 
   return (
     <NavigationContainer>
@@ -35,7 +27,9 @@ const Navigation: React.FC = () => {
         ) : (
           <Stack.Screen
             name="AuthStack"
-            component={AuthStackNavigator} 
+            component={AuthStackNavigator}
+            options={{ headerShown: false }}
+
           />
         )}
       </Stack.Navigator>

@@ -60,7 +60,7 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
         return (
             <View style={styles.suitcaseContainer}>
                 <TouchableOpacity onPress={() => openEditSuitcaseModal(item.name)}>
-                    <Text style={styles.suitcaseText}>...</Text>
+                    <Text style={styles.suitcaseTextDots}>...</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigateToInsideSuitcase(item.name)}>
                     <Image source={require('../Icons/SuitcaseIcon.png')} style={{ width: 100, height: 100 }} />
@@ -71,12 +71,19 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
     };
 
     const showDeleteModal = () => {
+        setNewSuitcaseModalVisible(false);
+        setIsEditModalVisible(false);
         setIsDeleteModalVisible(true);
     };
 
+    const onDelete = () => {
+        console.log('deleted')
+    }
+
     const renderDeleteForm = () => {
+        console.log('this ran')
         return (
-            <ConfirmDelete text={newSuitcaseName} onCancel={() => setIsDeleteModalVisible(false)} />
+            <ConfirmDelete text={newSuitcaseName} onCancel={() => setIsDeleteModalVisible(false)} onConfirm={onDelete} />
         );
     };
 
@@ -209,6 +216,11 @@ const styles = StyleSheet.create({
         fontSize: 18,
         textAlign: 'center',
         marginBottom: 10
+    },
+    suitcaseTextDots: {
+        fontSize: 18,
+        textAlign: 'center',
+        fontWeight: '800',
     },
     suitcaseListContainer: {
         flex: 1,
