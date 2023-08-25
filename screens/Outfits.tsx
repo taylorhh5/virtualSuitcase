@@ -23,7 +23,7 @@ const Outfits: React.FC<OutfitsScreenProps> = ({ navigation, outfitState, fetchO
 
   return (
     <View style={styles.container}>
-      {outfitState ? <Text style={styles.outfitHeader}>You have haven't added any outfits.</Text> :
+      {!outfitState ? <Text style={styles.outfitHeader}>You have haven't added any outfits.</Text> :
         <FlatList
           data={outfitState}
           renderItem={({ item, index }) => (
@@ -90,10 +90,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   outfitHeader: {
-    fontSize:18,
-    textAlign:'center',
-    marginTop:4
-    },
+    fontSize: 18,
+    textAlign: 'center',
+    marginTop: 4
+  },
 
   modalContainer: {
     flex: 1,

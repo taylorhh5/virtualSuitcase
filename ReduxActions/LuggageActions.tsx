@@ -1,17 +1,16 @@
 // itemActions.ts
 import { Dispatch } from 'redux';
-import { ADD_ITEM, EDIT_ITEM, DELETE_ITEM, FETCH_LUGGAGE_ITEMS_SUCCESS, FETCH_LUGGAGE_ITEMS_FAILURE, FETCH_LUGGAGE_ITEMS_START } from './ActionTypes/LuggageActionTypes';
+import { ADD_ITEM, EDIT_ITEM, DELETE_ITEM, FETCH_LUGGAGE_ITEMS_SUCCESS, FETCH_LUGGAGE_ITEMS_FAILURE, FETCH_LUGGAGE_ITEMS_START, FETCH_ITEM_BY_ID_START, FETCH_ITEM_BY_ID_SUCCESS, FETCH_ITEM_BY_ID_FAILURE } from './ActionTypes/LuggageActionTypes';
 import { Item } from './ActionTypes/LuggageActionTypes';
 import { NavigationProp } from '@react-navigation/native';
 //firebase
-import { collection, addDoc, doc, query, where, onSnapshot, deleteDoc, updateDoc } from 'firebase/firestore'         
+import { collection, addDoc, doc, query, where, onSnapshot, deleteDoc, updateDoc, getDoc } from 'firebase/firestore'         
 import { db } from '../firebase/config';
 import { LuggageStackParamList } from '../Navigation/LuggageStackNavigator';
 
 
 export const fetchItemsInSuitcase = (suitcaseId) => {
   return (dispatch: Dispatch) => {
-    console.log('fetching luggage items');
     dispatch({ type: FETCH_LUGGAGE_ITEMS_START });
 
     const luggageItemsRef = query(
@@ -69,26 +68,24 @@ export const deleteItem = (itemId: string) => {
   };
 };
 
-  // export const getLuggageItemById = (itemId: string) => {
-  //   return (dispatch: Dispatch) => {
-  //     // dispatch({ type: GET_LUGGAGE_ITEM_BY_ID_START });
-  
-  //     const luggageItemRef = doc(db, 'luggageItems', itemId);
-  
-  //     onSnapshot(
-  //       luggageItemRef,
-  //       snapshot => {
-  //         if (snapshot.exists) {
-  //           const luggageItem = snapshot.data();
-  //           dispatch({ type: GET_LUGGAGE_ITEM_BY_ID_SUCCESS, payload: luggageItem });
-  //         } else {
-  //           dispatch({ type: GET_LUGGAGE_ITEM_BY_ID_FAILURE, payload: 'Luggage item not found' });
-  //         }
-  //       },
-  //       error => {
-  //         console.error('Error fetching luggage item by ID:', error);
-  //         dispatch({ type: GET_LUGGAGE_ITEM_BY_ID_FAILURE, payload: error });
-  //       }
-  //     );
-  //   };
-  // };
+export const fetchItemById = (itemId: string) => {
+  return (dispatch: Dispatch) => {
+    const itemDocRef = doc(db, 'luggageItems', itemId);
+    dispatch({ type: FETCH_ITEM_BY_ID_START });
+
+    getDoc(itemDocRef)
+      .then(itemDoc => {
+        if (itemDoc.exists()) {
+          const itemData = itemDoc.data() as Item;
+          dispatch({ type: FETCH_ITEM_BY_ID_SUCCESS, payload: itemData });
+        } else {
+          console.error('Error fetching item by ID: does not exist');
+          dispatch({ type: FETCH_ITEM_BY_ID_FAILURE, payload: 'Item not found' });
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching item by ID:', error);
+        dispatch({ type: FETCH_ITEM_BY_ID_FAILURE, payload: error });
+      });
+  };
+};

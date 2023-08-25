@@ -28,7 +28,8 @@ interface OutfitBoxProps {
 }
 
 const OutfitBox: React.FC<OutfitBoxProps> = (props) => {
-  const { items } = props.item;
+  const luggageItems = props.item.luggageItems || [];
+  console.log(luggageItems, 'ITEMS DATA')
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [selectedItemForEdit, setSelectedItemForEdit] = useState<Item | null>(null);
@@ -62,7 +63,7 @@ const OutfitBox: React.FC<OutfitBoxProps> = (props) => {
 
   const handleNavigateToCreateOutfit = () => {
     props.navigation.navigate('CreateOutfit', {
-      selectedOutfitItems: items, 
+      selectedOutfitItems: items,
     });
   };
 
@@ -111,7 +112,7 @@ const OutfitBox: React.FC<OutfitBoxProps> = (props) => {
           )}</View>
 
         <FlatList
-          data={items}
+          data={luggageItems}
           keyExtractor={(index) => index.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity
