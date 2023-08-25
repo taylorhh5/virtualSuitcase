@@ -16,7 +16,6 @@ type OutfitsScreenProps = {
 }
 
 const Outfits: React.FC<OutfitsScreenProps> = ({ navigation, outfitState, fetchOutfits }) => {
-  const [outfits, setOutfits] = useState<Outfit[]>([]);
 
   useEffect(() => {
     fetchOutfits()
@@ -24,15 +23,14 @@ const Outfits: React.FC<OutfitsScreenProps> = ({ navigation, outfitState, fetchO
 
   return (
     <View style={styles.container}>
-      {!outfitState ? <Text style={styles.outfitHeader}>You have no outfits</Text> : null}
-      <FlatList
-        data={outfitState}
-        renderItem={({ item, index }) => (
-
-          <OutfitBox item={item} index={index} navigation={navigation} />
-        )} keyExtractor={(item, index) => index.toString()}
-      />
-
+      {outfitState ? <Text style={styles.outfitHeader}>You have haven't added any outfits.</Text> :
+        <FlatList
+          data={outfitState}
+          renderItem={({ item, index }) => (
+            <OutfitBox item={item} index={index} navigation={navigation} />
+          )} keyExtractor={(item, index) => index.toString()}
+        />
+      }
     </View>
   );
 };
@@ -92,8 +90,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   outfitHeader: {
-    textAlign: 'center',
-  },
+    fontSize:18,
+    textAlign:'center',
+    marginTop:4
+    },
+
   modalContainer: {
     flex: 1,
     backgroundColor: colors.background,

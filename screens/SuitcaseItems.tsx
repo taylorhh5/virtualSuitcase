@@ -40,10 +40,9 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
         setIsModalVisible(true);
     };
 
-    const handleModalDelete = (id: string) => {
-        console.log('delete');
+    const onDelete = (id: string) => {
         props.deleteItem(selectedItemForEdit.id)
-        setIsModalVisible(false);
+        setIsDelete(false)
 
     };
 
@@ -94,14 +93,13 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
         );
     };
 
-    const onDelete = () => {
-        console.log('deleted')
-    }
-
+   
     const renderDeleteForm = () => {
         return (
             <ConfirmDelete text={selectedItemForEdit.name} onCancel={() => setIsDelete(false)} onConfirm={onDelete} />);
     };
+
+    if (props.luggageState.length === 0) return (<Text style={styles.noItemsMessage}>You haven't added any luggage items.</Text> )
 
     return (
         <ScrollView style={styles.luggageContainer}>
@@ -221,4 +219,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: 1,
     },
+    noItemsMessage:{
+        fontSize:18,
+        textAlign:'center',
+        marginTop:16
+    }
 });

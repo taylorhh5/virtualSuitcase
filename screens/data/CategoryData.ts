@@ -11,8 +11,13 @@
 ];
 
 export const CategoryMapper: { [key: string]: string } = {
-    hat: 'Hats',
-    shoes: 'Shoes',
-    top: 'Tops',
-    bottom: 'Bottoms',
+  hat: 'Hats',
+  shoes: 'Shoes',
+  top: 'Tops',
+  bottom: 'Bottoms',
+  toiletries: 'Toiletries',
+  miscellaneous: 'Miscellaneous',
+  underwear: 'Underwear',
+  socks: 'Socks',
+  makeup: 'Makeup'
 };

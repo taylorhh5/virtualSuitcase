@@ -35,10 +35,7 @@ const luggageReducer = (state = initialState, action: ItemActionTypes): LuggageS
         luggage: action.payload,
       };
     case ADD_ITEM:
-      return {
-        ...state,
-        luggage: [...state.luggage, action.payload],
-      };
+      return state;
     case EDIT_ITEM:
       return state;
     case DELETE_ITEM:

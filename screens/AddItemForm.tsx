@@ -8,17 +8,20 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { RootState } from '../Reducers/RootReducer';
 import { Item } from '../ReduxActions/ActionTypes/LuggageActionTypes';
 import { addItem } from '../ReduxActions/LuggageActions';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { LuggageStackParamList } from '../Navigation/LuggageStackNavigator';
 
 interface AddItemFormProps {
   addItem: (suitcase: Item) => void;
+  navigation: NativeStackNavigationProp<LuggageStackParamList, 'AddItemForm'>;
+
 }
 
-const AddItemForm: React.FC<AddItemFormProps> = ({addItem}) => {
+const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation }) => {
   const [category, setCategory] = useState<string>(''); //State for category
   const [selectedImage, setSelectedImage] = useState<string>(''); //State for image selection
   const [name, setName] = useState<string>(''); // State for the "Name" input
-  const [suitcase, setSuitcase] = useState<string>(''); // State for the suitcase dropdown
-
+  
   const handleImagePicker = async () => {
     try {
       const image = await ImagePicker.openPicker({
@@ -36,10 +39,6 @@ const AddItemForm: React.FC<AddItemFormProps> = ({addItem}) => {
   const handleCategorySelection = (selectedCategory: string) => {
     setCategory(selectedCategory);
   };
-
-  // Define the list of suitcases. Will change to API data
-  const suitcases = ['Beach', 'Vegas', 'Hiking'];
-
 
   // Define the category mapping
   const categories = [
@@ -70,8 +69,8 @@ const AddItemForm: React.FC<AddItemFormProps> = ({addItem}) => {
 
   const handleAddItem = () => {
     //error handling check
-    addItem({name:name, image:selectedImage, category:category })
-};
+    addItem({ name: name, image: selectedImage, category: category, suitcaseId: 'rBPi3msspFXpCaECKSDfaX8lCEE3', userId: 'rBPi3msspFXpCaECKSDfaX8lCEE3' }, navigation)
+  };
 
 
   return (
@@ -97,7 +96,7 @@ const AddItemForm: React.FC<AddItemFormProps> = ({addItem}) => {
               </TouchableOpacity>
             ))}
           </View>
-     
+
         </View>
         {/* Image Upload */}
         <View style={styles.selectContainer}>
@@ -107,11 +106,11 @@ const AddItemForm: React.FC<AddItemFormProps> = ({addItem}) => {
               <Image source={{ uri: selectedImage }} style={styles.image} />
             ) : (
               <View style={styles.emptyImageContainer}>
-              {/* <Image
+                {/* <Image
                     source={require('../Icons/shirtIcon.png')}
                     style={{ width: 200, height: 200 }} resizeMode="contain"/> */}
-                    <ShirtIconWithPlus/>
-                    </View>
+                <ShirtIconWithPlus />
+              </View>
             )}
           </TouchableOpacity>
         </View>
@@ -150,7 +149,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 10,
-    paddingTop:20,
+    paddingTop: 20,
     backgroundColor: colors.background,
   },
   categoryContainer: {
@@ -160,7 +159,7 @@ const styles = StyleSheet.create({
   },
   rowContainer: {
     flexDirection: 'row',
-    flexWrap:'wrap',
+    flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
   categoryButton: {
@@ -170,7 +169,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: '31%',
     backgroundColor: colors.primary,
-    marginVertical:3
+    marginVertical: 3
   },
   selectedCategory: {
     backgroundColor: colors.secondary,
@@ -188,11 +187,11 @@ const styles = StyleSheet.create({
   imageContainer: {
     marginTop: 6,
     alignItems: 'center',
-    marginBottom:2
+    marginBottom: 2
   },
   emptyImageContainer: {
-    borderWidth:2,
-    borderStyle:'dashed'
+    borderWidth: 2,
+    borderStyle: 'dashed'
   },
   image: {
     width: 200,
@@ -225,7 +224,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 40,
     borderRadius: 6,
     backgroundColor: colors.button,
-    marginVertical:18
+    marginVertical: 18
   },
   addButtonText: {
     fontSize: 20
