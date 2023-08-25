@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { RootState } from '../Reducers/RootReducer';
 import { Suitcase } from '../ReduxActions/ActionTypes/SuitcaseActionTypes';
-import { addSuitcase, fetchSuitcases } from '../ReduxActions/SuitcaseActions';
+import { addSuitcase, fetchSuitcases, editSuitcaseName, deleteSuitcase } from '../ReduxActions/SuitcaseActions';
 import ConfirmDelete from './Components/ConfimDelete';
 type SuitcasesProps = {
     navigation: NativeStackNavigationProp<LuggageStackParamList, 'Home'>;
@@ -14,15 +14,17 @@ type SuitcasesProps = {
     addSuitcase: (suitcase: Suitcase) => void;
     loading: boolean;
     fetchSuitcases: () => void;
+    editSuitcaseName: (id: string, name: string) => void;
+    deleteSuitcase: (id: string) => void;
 }
 
-const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcase, loading, fetchSuitcases }) => {
+const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcase, loading, fetchSuitcases, editSuitcaseName, deleteSuitcase }) => {
     const [isNewSuitcaseModalVisible, setNewSuitcaseModalVisible] = useState(false);
     const [newSuitcaseName, setNewSuitcaseName] = useState('');
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-
-    const navigateToInsideSuitcase = (item: object) => {
+    const [suitcaseToEditId, setSuitcaseToEditId] = useState('');
+    const navigateToInsideSuitcase = (item: Suitcase) => {
         navigation.navigate('InsideSuitcase', {
             name: item.name,
             suitcaseId: item.id
@@ -33,9 +35,10 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
         setNewSuitcaseModalVisible(true);
     };
 
-    const openEditSuitcaseModal = (name: string) => {
+    const openEditSuitcaseModal = (name: string, id: string) => {
         setIsEditModalVisible(true);
         setNewSuitcaseName(name);
+        setSuitcaseToEditId(id);
     };
 
     const closeModal = () => {
@@ -47,20 +50,32 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
 
     const createNewSuitcase = () => {
         if (newSuitcaseName.trim() !== '') {
-            addSuitcase({ id: '5', name: newSuitcaseName });
+            addSuitcase(newSuitcaseName, 'rBPi3msspFXpCaECKSDfaX8lCEE3');
             closeModal();
         }
     };
 
     const handleEditSuitcase = () => {
-        console.log('edit', newSuitcaseName);
+        editSuitcaseName(suitcaseToEditId, newSuitcaseName);
         closeModal();
+        setSuitcaseToEditId('');
     };
 
-    const renderItem = ({ item }: { item: Suitcase }) => {
+    const showDeleteModal = () => {
+        setIsEditModalVisible(false);
+        setIsDeleteModalVisible(true);
+    };
+
+    const onDelete = () => {
+        deleteSuitcase(suitcaseToEditId)
+        setSuitcaseToEditId('');
+        setIsDeleteModalVisible(false);
+    }
+
+    const renderSuitcase = ({ item }: { item: Suitcase }) => {
         return (
             <View style={styles.suitcaseContainer}>
-                <TouchableOpacity onPress={() => openEditSuitcaseModal(item.name)}>
+                <TouchableOpacity onPress={() => openEditSuitcaseModal(item.name, item.id)}>
                     <Text style={styles.suitcaseTextDots}>...</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigateToInsideSuitcase(item)}>
@@ -71,16 +86,6 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
         );
     };
 
-    const showDeleteModal = () => {
-        setNewSuitcaseModalVisible(false);
-        setIsEditModalVisible(false);
-        setIsDeleteModalVisible(true);
-    };
-
-    const onDelete = () => {
-        console.log('deleted')
-    }
-
     const renderDeleteForm = () => {
         console.log('this ran')
         return (
@@ -89,7 +94,7 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
     };
 
     useEffect(() => {
-        fetchSuitcases()
+        fetchSuitcases('rBPi3msspFXpCaECKSDfaX8lCEE3')
     }, []);
 
     return (
@@ -111,7 +116,7 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
             <View style={styles.suitcaseListContainer}>
                 <FlatList
                     data={suitcases}
-                    renderItem={renderItem}
+                    renderItem={renderSuitcase}
                     keyExtractor={(item) => item.id}
                     numColumns={2}
                     columnWrapperStyle={styles.row}
@@ -165,6 +170,8 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
         {
             addSuitcase,
             fetchSuitcases,
+            editSuitcaseName,
+            deleteSuitcase,
         },
         dispatch
     );

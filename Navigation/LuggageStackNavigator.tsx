@@ -12,12 +12,14 @@ import CreateOutfit from '../screens/Components/CreateOutfit';
 import colors from '../themes/Colors';
 import AddItemForm from '../screens/AddItemForm';
 
-type LuggageStackParamList = {
+export type LuggageStackParamList = {
   Suitcases: undefined;
   InsideSuitcase: { name: string };
   Outfits: undefined;
-  CreateOutfit: undefined;
-  AddItemForm: undefined
+  CreateOutfit: {
+    selectedOutfitItems: string[]; 
+  };  AddItemForm: undefined;
+  OutfitBox: undefined
 };
 
 const LuggageStack = createNativeStackNavigator<LuggageStackParamList>();

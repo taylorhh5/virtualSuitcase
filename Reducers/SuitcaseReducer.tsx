@@ -18,12 +18,7 @@ const initialState: SuitcasesState = {
 const suitcasesReducer = (state = initialState, action: SuitcaseActionTypes): SuitcasesState => {
   switch (action.type) {
     case ADD_SUITCASE:
-      console.log('reducer')
-      return {
-        ...state,
-        suitcases: [...state.suitcases, action.payload],
-        // loading:!state.loading
-      };
+      return state;
     case EDIT_SUITCASE:
       return state;
     case DELETE_SUITCASE:

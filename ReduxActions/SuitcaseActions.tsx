@@ -9,53 +9,63 @@ import {
   FETCH_SUITCASE_BY_ID_FAILURE,
   FETCH_SUITCASES_START
 } from './/ActionTypes/SuitcaseActionTypes';
-import { Suitcase } from './/ActionTypes/SuitcaseActionTypes';
 //firebase
-import { collection, addDoc, doc, query, where, onSnapshot, deleteDoc, updateDoc } from 'firebase/firestore'
+import { collection, addDoc, doc, query, where, onSnapshot, deleteDoc, updateDoc, getDoc } from 'firebase/firestore'
 import { db } from '../firebase/config';
 
-export const addSuitcase = (suitcase: Suitcase) => (dispatch: Dispatch) => {
-  console.log('add')
-    // .then((addedSuitcase) => {
-      dispatch({ type: ADD_SUITCASE, payload: { ...suitcase } });
-    // })
-    // .catch((error) => {
-    //   console.error('Error adding suitcase:', error);
-    // });
-  // .log('Add suitcase in action', suitcase)
+
+export const addSuitcase = (name: string, userId: string) => {
+  return (dispatch: Dispatch) => {
+    // dispatch({ type: ADD_SUITCASE_START });
+    addDoc(collection(db, 'suitcases'), {
+      name: name,
+      userId: userId,
+    })
+      .then((suitcaseDocRef) => {
+        dispatch({ type: ADD_SUITCASE, payload: suitcaseDocRef.id });
+      })
+      .catch((error) => {
+        console.error('Error adding suitcase:', error);
+        // dispatch({ type: ADD_SUITCASE_FAILURE, payload: error });
+      });
+  };
 };
 
-export const editSuitcase = (id: string, updatedSuitcase: Partial<Suitcase>) => (dispatch: Dispatch) => {
-  db.collection('suitcases')
-    .doc(id)
-    .update(updatedSuitcase)
-    .then(() => {
-      dispatch({ type: EDIT_SUITCASE, payload: { id, updatedData: updatedSuitcase } });
-    })
-    .catch((error) => {
-      console.error('Error editing suitcase:', error);
-    });
+export const editSuitcaseName = (suitcaseId: string, newName: string) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      // dispatch({ type: EDIT_SUITCASE_NAME_START });
+      await updateDoc(doc(db, 'suitcases', suitcaseId), {
+        name: newName,
+      });
+
+      dispatch({ type: EDIT_SUITCASE, payload: { id: suitcaseId, newName } });
+    } catch (error) {
+      console.error('Error editing suitcase name:', error);
+      // dispatch({ type: EDIT_SUITCASE_NAME_FAILURE, payload: error });
+    }
+  };
 };
 
-export const deleteSuitcase = (id: string) => (dispatch: Dispatch) => {
-  db.collection('suitcases')
-    .doc(id)
-    .delete()
-    .then(() => {
-      dispatch({ type: DELETE_SUITCASE, payload: id });
-    })
-    .catch((error) => {
+export const deleteSuitcase = (suitcaseId: string) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      // dispatch({ type: DELETE_SUITCASE_START });
+      await deleteDoc(doc(db, 'suitcases', suitcaseId));
+      dispatch({ type: DELETE_SUITCASE, payload: suitcaseId });
+    } catch (error) {
       console.error('Error deleting suitcase:', error);
-    });
+      // dispatch({ type: DELETE_SUITCASE_FAILURE, payload: error });
+    }
+  };
 };
 
-
-export const fetchSuitcases = () => {
-  return (dispatch: Dispatch) => { 
+export const fetchSuitcases = (userId: string) => {
+  return (dispatch: Dispatch) => {
     console.log('fetching suitcases');
     dispatch({ type: FETCH_SUITCASES_START });
 
-    const suitcasesRef = query(collection(db, 'suitcases'));
+    const suitcasesRef = query(collection(db, 'suitcases'), where('userId', '==', userId));
 
     onSnapshot(
       suitcasesRef,
@@ -64,27 +74,31 @@ export const fetchSuitcases = () => {
         dispatch({ type: FETCH_SUITCASES_SUCCESS, payload: suitcases });
       },
       error => {
-        console.error('Error fetching suitcases:', error); 
+        console.error('Error fetching suitcases:', error);
         dispatch({ type: FETCH_SUITCASES_FAILURE, payload: error });
       }
     );
   };
 };
 
-export const fetchSuitcaseById = (suitcaseId: string) => (dispatch: Dispatch) => {
-  db.collection('suitcases')
-    .doc(suitcaseId)
-    .get()
-    .then((suitcaseDoc) => {
-      if (suitcaseDoc.exists) {
-        const suitcaseData = suitcaseDoc.data() as Suitcase;
-        dispatch({ type: FETCH_SUITCASE_BY_ID_SUCCESS, payload: { id: suitcaseDoc.id, ...suitcaseData } });
+export const fetchSuitcaseById = (suitcaseId: string) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      // dispatch({ type: FETCH_SUITCASE_BY_ID_START });
+
+      const suitcaseDocRef = doc(db, 'suitcases', suitcaseId);
+      const suitcaseDoc = await getDoc(suitcaseDocRef);
+
+      if (suitcaseDoc.exists()) {
+        const suitcaseData = suitcaseDoc.data();
+        dispatch({ type: FETCH_SUITCASE_BY_ID_SUCCESS, payload: suitcaseData });
       } else {
-        dispatch({ type: FETCH_SUITCASE_BY_ID_FAILURE, payload: new Error('Suitcase not found') });
+        dispatch({ type: FETCH_SUITCASE_BY_ID_FAILURE, payload: 'Suitcase not found' });
       }
-    })
-    .catch((error) => {
+    } catch (error) {
       console.error('Error fetching suitcase by ID:', error);
       dispatch({ type: FETCH_SUITCASE_BY_ID_FAILURE, payload: error });
-    });
+    }
+  };
 };
+

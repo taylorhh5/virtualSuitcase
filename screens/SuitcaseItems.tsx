@@ -12,6 +12,7 @@ import LuggageItem from './Components/LuggageItem';
 import ConfirmDelete from './Components/ConfimDelete';
 
 type SuitcaseItemsProps = {
+    suitcaseId: string;
     luggageState: Item[];
     deleteItem: (id: string) => void;
     editItem: (id: string, updatedItem: Partial<Item>) => (dispatch: Dispatch<AnyAction>) => void,

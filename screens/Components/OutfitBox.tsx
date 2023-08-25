@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Image, Text, FlatList, TouchableOpacity } from 'react-native';
 import ConfirmDelete from './ConfimDelete';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { LuggageStackParamList } from '../../Navigation/LuggageStackNavigator';
+import { Item } from '../../ReduxActions/ActionTypes/LuggageActionTypes';
+
 interface ClothingItem {
   category: string;
   name: string;
@@ -13,8 +17,14 @@ interface Outfit {
 }
 
 interface OutfitBoxProps {
-  item: Outfit;
+  navigation: NativeStackNavigationProp<LuggageStackParamList, 'OutfitBox'>;
   index: number;
+  item: {
+    id: string;
+    items: string[];
+    suitcaseId: string;
+    userId: string;
+  };
 }
 
 const OutfitBox: React.FC<OutfitBoxProps> = (props) => {
@@ -52,7 +62,7 @@ const OutfitBox: React.FC<OutfitBoxProps> = (props) => {
 
   const handleNavigateToCreateOutfit = () => {
     props.navigation.navigate('CreateOutfit', {
-      selectedOutfitItems: items, // Pass the selected outfit items
+      selectedOutfitItems: items, 
     });
   };
 

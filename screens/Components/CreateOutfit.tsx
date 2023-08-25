@@ -6,9 +6,13 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { RootState } from '../../Reducers/RootReducer';
 import { addOutfit } from '../../ReduxActions/OutfitActions';
 import { ClothingItem } from '../../ReduxActions/ActionTypes/OutfitTypes';
+import { RouteProp } from '@react-navigation/native';
+import { LuggageStackParamList } from '../../Navigation/LuggageStackNavigator';
 
 type CreateOutfitProps = {
-    addOutfit: (suitcase: ClothingItem) => void;
+    addOutfit: (suitcase: ClothingItem[]) => void;
+    route: RouteProp<LuggageStackParamList, 'CreateOutfit'>;
+
 
 };
 
@@ -66,8 +70,11 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, route }) => {
 
 
     useEffect(() => {
-        if (route?.params?.selectedOutfitItems) { setSelectedOutfitItems(route.params?.selectedOutfitItems) || [] }
-    }, []);
+    if (route?.params?.selectedOutfitItems) {
+        setSelectedOutfitItems(route.params.selectedOutfitItems);
+    }
+}, []);
+
 
     // Render individual items with 'Added' text if selected
     const renderItem = ({ item }: { item: ClothingItem }) => {
