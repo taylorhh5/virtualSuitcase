@@ -7,27 +7,29 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { RootState } from '../Reducers/RootReducer';
 import { Outfit } from '../ReduxActions/ActionTypes/OutfitTypes';
+import { fetchOutfits } from '../ReduxActions/OutfitActions';
 
 type OutfitsScreenProps = {
   navigation: NativeStackNavigationProp<LuggageStackParamList, 'Outfits'>;
   outfitState: Outfit[];
+  fetchOutfits: () => void;
 }
 
-const Outfits: React.FC <OutfitsScreenProps> = ({navigation, outfitState }) => {
+const Outfits: React.FC<OutfitsScreenProps> = ({ navigation, outfitState, fetchOutfits }) => {
   const [outfits, setOutfits] = useState<Outfit[]>([]);
 
   useEffect(() => {
-    setOutfits(outfitState)
+    fetchOutfits()
   }, []);
 
   return (
     <View style={styles.container}>
-      {!outfits.length ? <Text style={styles.outfitHeader}>You have no outfits</Text> : null}
+      {!outfitState ? <Text style={styles.outfitHeader}>You have no outfits</Text> : null}
       <FlatList
-        data={outfits}
+        data={outfitState}
         renderItem={({ item, index }) => (
-     
-          <OutfitBox item={item} index={index} navigation={navigation}/>
+
+          <OutfitBox item={item} index={index} navigation={navigation} />
         )} keyExtractor={(item, index) => index.toString()}
       />
 
@@ -42,6 +44,7 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(
     {
+      fetchOutfits,
       // addSuitcase,
       // fetchSuitcases,
     },
@@ -98,6 +101,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 200,
     marginHorizontal: 70
-},
+  },
 });
 

@@ -6,25 +6,26 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { RootState } from '../Reducers/RootReducer';
 import { Suitcase } from '../ReduxActions/ActionTypes/SuitcaseActionTypes';
-import { addSuitcase } from '../ReduxActions/SuitcaseActions';
+import { addSuitcase, fetchSuitcases } from '../ReduxActions/SuitcaseActions';
 import ConfirmDelete from './Components/ConfimDelete';
 type SuitcasesProps = {
     navigation: NativeStackNavigationProp<LuggageStackParamList, 'Home'>;
     suitcases: Suitcase[];
     addSuitcase: (suitcase: Suitcase) => void;
     loading: boolean;
+    fetchSuitcases: () => void;
 }
 
-const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcase, loading }) => {
-    const [suitcaseList, setSuitcaseList] = useState<Suitcase[]>([{ id: '1', name: 'Montana' }]);
+const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcase, loading, fetchSuitcases }) => {
     const [isNewSuitcaseModalVisible, setNewSuitcaseModalVisible] = useState(false);
     const [newSuitcaseName, setNewSuitcaseName] = useState('');
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
 
-    const navigateToInsideSuitcase = (name: string) => {
+    const navigateToInsideSuitcase = (item: object) => {
         navigation.navigate('InsideSuitcase', {
-            name: name,
+            name: item.name,
+            suitcaseId: item.id
         });
     };
 
@@ -52,7 +53,7 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
     };
 
     const handleEditSuitcase = () => {
-        console.log('edit');
+        console.log('edit', newSuitcaseName);
         closeModal();
     };
 
@@ -62,7 +63,7 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
                 <TouchableOpacity onPress={() => openEditSuitcaseModal(item.name)}>
                     <Text style={styles.suitcaseTextDots}>...</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigateToInsideSuitcase(item.name)}>
+                <TouchableOpacity onPress={() => navigateToInsideSuitcase(item)}>
                     <Image source={require('../Icons/SuitcaseIcon.png')} style={{ width: 100, height: 100 }} />
                     <Text style={styles.suitcaseText}>{item.name} 🧳</Text>
                 </TouchableOpacity>
@@ -88,8 +89,8 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
     };
 
     useEffect(() => {
-        setSuitcaseList(suitcases);
-    }, [loading]);
+        fetchSuitcases()
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -100,16 +101,16 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
                 </TouchableOpacity>
                 <View style={styles.topRightSection}>
                     <Text style={styles.listHeaderText}>Welcome!</Text>
-                    {!suitcaseList.length ? (
+                    {!suitcases.length ? (
                         <Text style={styles.topRightSectionText}>Add a suitcase to get started!</Text>
                     ) : (
-                        <Text style={styles.topRightSectionText}>You have {suitcaseList.length} suitcase.</Text>
+                        <Text style={styles.topRightSectionText}>You have {suitcases.length} suitcase.</Text>
                     )}
                 </View>
             </View>
             <View style={styles.suitcaseListContainer}>
                 <FlatList
-                    data={suitcaseList}
+                    data={suitcases}
                     renderItem={renderItem}
                     keyExtractor={(item) => item.id}
                     numColumns={2}
@@ -163,6 +164,7 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
     bindActionCreators(
         {
             addSuitcase,
+            fetchSuitcases,
         },
         dispatch
     );

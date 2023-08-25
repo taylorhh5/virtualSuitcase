@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch, AnyAction } from 'redux';
 import { RootState } from '../Reducers/RootReducer';
 import { Item } from '../ReduxActions/ActionTypes/LuggageActionTypes';
-import { addItem, deleteItem, editItem } from '../ReduxActions/LuggageActions';
+import { addItem, deleteItem, editItem, fetchItemsInSuitcase } from '../ReduxActions/LuggageActions';
 import EditLuggageForm from './Components/EditLuggageForm';
 import { categories, CategoryMapper } from './data/CategoryData';
 import LuggageItem from './Components/LuggageItem';
@@ -15,6 +15,7 @@ type SuitcaseItemsProps = {
     luggageState: Item[];
     deleteItem: (id: string) => void;
     editItem: (id: string, updatedItem: Partial<Item>) => (dispatch: Dispatch<AnyAction>) => void,
+    fetchItemsInSuitcase: (id: string) => void;
 };
 
 const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
@@ -25,8 +26,8 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
     const [isDelete, setIsDelete] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState<string>('');
     const categorizedItems: { [category: string]: Item[] } = {};
-
-    luggage.forEach(item => {
+    
+    props.luggageState.forEach(item => {
         if (!categorizedItems[item.category]) {
             categorizedItems[item.category] = [];
         }
@@ -46,7 +47,8 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
     };
 
     useEffect(() => {
-        setLuggage(props.luggageState)
+        console.log('useeffect')
+        props.fetchItemsInSuitcase(props.suitcaseId)
     }, []);
 
     const handleSave = () => {
@@ -153,6 +155,7 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
             addItem,
             deleteItem,
             editItem,
+            fetchItemsInSuitcase,
         },
         dispatch
     );

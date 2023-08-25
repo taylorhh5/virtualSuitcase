@@ -12,6 +12,7 @@ enum ActiveScreen {
 
 const InsideSuitcase = (props) => {
     const [activeScreen, setActiveScreen] = useState<ActiveScreen>(ActiveScreen.Items);
+    const suitcaseId = props.route.params.suitcaseId 
 
     const changeScreen = (screen: ActiveScreen) => {
         setActiveScreen(screen);
@@ -65,7 +66,7 @@ const InsideSuitcase = (props) => {
             )}
 
             <View style={styles.screenContentContainer}>
-                {activeScreen === ActiveScreen.Items ? <SuitcaseItems /> : <Outfits navigation={props.navigation} />}
+                {activeScreen === ActiveScreen.Items ? <SuitcaseItems suitcaseId={suitcaseId}/> : <Outfits navigation={props.navigation} suitcaseId={suitcaseId}/>}
             </View>
         </View>
     );

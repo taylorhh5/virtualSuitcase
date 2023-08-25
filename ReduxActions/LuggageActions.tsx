@@ -1,28 +1,63 @@
 // itemActions.ts
 import { Dispatch } from 'redux';
-import { ADD_ITEM, EDIT_ITEM, DELETE_ITEM, FETCH_ITEMS_IN_SUITCASE_SUCCESS, FETCH_ITEMS_IN_SUITCASE_FAILURE } from './ActionTypes/LuggageActionTypes';
+import { ADD_ITEM, EDIT_ITEM, DELETE_ITEM, FETCH_LUGGAGE_ITEMS_SUCCESS, FETCH_LUGGAGE_ITEMS_FAILURE, FETCH_LUGGAGE_ITEMS_START } from './ActionTypes/LuggageActionTypes';
 import { Item } from './ActionTypes/LuggageActionTypes';
-// import { db } from '../firebase'; 
+//firebase
+import { collection, addDoc, doc, query, where, onSnapshot, deleteDoc, updateDoc } from 'firebase/firestore'
+
+import { db } from '../firebase/config';
 
 
 
-export const fetchItemsInSuitcase = (suitcaseId: string) => (dispatch: Dispatch) => {
-    db.collection('suitcases')
-      .doc(suitcaseId)
-      .collection('items')
-      .get()
-      .then((querySnapshot) => {
-        const items: Item[] = [];
-        querySnapshot.forEach((doc) => {
-          items.push({ id: doc.id, ...doc.data() } as Item);
-        });
-        dispatch({ type: FETCH_ITEMS_IN_SUITCASE_SUCCESS, payload: items });
-      })
-      .catch((error) => {
-        console.error('Error fetching items in suitcase:', error);
-        dispatch({ type: FETCH_ITEMS_IN_SUITCASE_FAILURE, payload: error });
-      });
+export const fetchItemsInSuitcase = (suitcaseId) => {
+  return (dispatch: Dispatch) => {
+    console.log('fetching luggage items');
+    dispatch({ type: FETCH_LUGGAGE_ITEMS_START });
+
+    const luggageItemsRef = query(
+      collection(db, 'luggageItems'),
+      where('suitcaseId', '==', suitcaseId)  
+    );
+
+    onSnapshot(
+      luggageItemsRef,
+      snapshot => {
+        const luggageItems = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        dispatch({ type: FETCH_LUGGAGE_ITEMS_SUCCESS, payload: luggageItems });
+      },
+      error => {
+        console.error('Error fetching luggageItems:', error); 
+        dispatch({ type: FETCH_LUGGAGE_ITEMS_FAILURE, payload: error });
+      }
+    );
   };
+};
+  export const getLuggageItemById = (id: string) => {
+    return (dispatch: Dispatch) => {
+      console.log('getting luggage item by ID', id);
+      dispatch({ type: GET_LUGGAGE_ITEM_BY_ID_START });
+  
+      const luggageItemsRef = query(collection(db, 'luggageItems'));
+      const luggageItemRef = luggageItemsRef.doc(id);
+  
+      onSnapshot(
+        luggageItemRef,
+        snapshot => {
+          if (snapshot.exists) {
+            const luggageItem = snapshot.data();
+            dispatch({ type: GET_LUGGAGE_ITEM_BY_ID_SUCCESS, payload: luggageItem });
+          } else {
+            dispatch({ type: GET_LUGGAGE_ITEM_BY_ID_FAILURE, payload: 'Luggage item not found' });
+          }
+        },
+        error => {
+          console.error('Error fetching luggage item by ID:', error);
+          dispatch({ type: GET_LUGGAGE_ITEM_BY_ID_FAILURE, payload: error });
+        }
+      );
+    };
+  };
+  
 
 export const addItem = (item: Item) => (dispatch: Dispatch) => {
     // db.collection('items')

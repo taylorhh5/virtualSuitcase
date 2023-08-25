@@ -7,9 +7,12 @@ import {
   FETCH_SUITCASES_FAILURE,
   FETCH_SUITCASE_BY_ID_SUCCESS,
   FETCH_SUITCASE_BY_ID_FAILURE,
+  FETCH_SUITCASES_START
 } from './/ActionTypes/SuitcaseActionTypes';
 import { Suitcase } from './/ActionTypes/SuitcaseActionTypes';
-// import { db } from '../firebase'; 
+//firebase
+import { collection, addDoc, doc, query, where, onSnapshot, deleteDoc, updateDoc } from 'firebase/firestore'
+import { db } from '../firebase/config';
 
 export const addSuitcase = (suitcase: Suitcase) => (dispatch: Dispatch) => {
   console.log('add')
@@ -46,20 +49,26 @@ export const deleteSuitcase = (id: string) => (dispatch: Dispatch) => {
     });
 };
 
-export const fetchSuitcases = () => (dispatch: Dispatch) => {
-  db.collection('suitcases')
-    .get()
-    .then((querySnapshot) => {
-      const suitcases: Suitcase[] = [];
-      querySnapshot.forEach((doc) => {
-        suitcases.push({ id: doc.id, ...doc.data() } as Suitcase);
-      });
-      dispatch({ type: FETCH_SUITCASES_SUCCESS, payload: suitcases });
-    })
-    .catch((error) => {
-      console.error('Error fetching suitcases:', error);
-      dispatch({ type: FETCH_SUITCASES_FAILURE, payload: error });
-    });
+
+export const fetchSuitcases = () => {
+  return (dispatch: Dispatch) => { 
+    console.log('fetching suitcases');
+    dispatch({ type: FETCH_SUITCASES_START });
+
+    const suitcasesRef = query(collection(db, 'suitcases'));
+
+    onSnapshot(
+      suitcasesRef,
+      snapshot => {
+        const suitcases = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        dispatch({ type: FETCH_SUITCASES_SUCCESS, payload: suitcases });
+      },
+      error => {
+        console.error('Error fetching suitcases:', error); 
+        dispatch({ type: FETCH_SUITCASES_FAILURE, payload: error });
+      }
+    );
+  };
 };
 
 export const fetchSuitcaseById = (suitcaseId: string) => (dispatch: Dispatch) => {

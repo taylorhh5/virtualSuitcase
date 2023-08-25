@@ -19,7 +19,7 @@ const initialState: AuthState = {
     user: null,
     error: null,
     loading: false,
-    isLoggedIn: false
+    isLoggedIn: true
 };
 
 const authReducer = (state = initialState, action: AuthActionTypes): AuthState => {

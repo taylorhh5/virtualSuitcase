@@ -8,6 +8,7 @@ export interface Suitcase {
   export const EDIT_SUITCASE = 'EDIT_SUITCASE';
   export const DELETE_SUITCASE = 'DELETE_SUITCASE';
   export const FETCH_SUITCASES_SUCCESS = 'FETCH_SUITCASES_SUCCESS';
+  export const FETCH_SUITCASES_START = 'FETCH_SUITCASES_START';
   export const FETCH_SUITCASES_FAILURE = 'FETCH_SUITCASES_FAILURE';
   export const FETCH_SUITCASE_BY_ID_SUCCESS = 'FETCH_SUITCASE_BY_ID_SUCCESS';
   export const FETCH_SUITCASE_BY_ID_FAILURE = 'FETCH_SUITCASE_BY_ID_FAILURE';
@@ -34,6 +35,12 @@ export interface Suitcase {
     type: typeof FETCH_SUITCASES_SUCCESS;
     payload: Suitcase[];
   }
+
+  interface FetchSuitcasesStartAction {
+    type: typeof FETCH_SUITCASES_START;
+    payload: Suitcase[];
+  }
+  
   
   interface FetchSuitcasesFailureAction {
     type: typeof FETCH_SUITCASES_FAILURE;
@@ -55,6 +62,7 @@ export interface Suitcase {
     | EditSuitcaseAction
     | DeleteSuitcaseAction
     | FetchSuitcasesSuccessAction
+    | FetchSuitcasesStartAction
     | FetchSuitcasesFailureAction
     | FetchSuitcaseByIdSuccessAction
     | FetchSuitcaseByIdFailureAction;

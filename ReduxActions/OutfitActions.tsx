@@ -7,10 +7,12 @@ import {
   FETCH_OUTFITS_FAILURE,
   FETCH_OUTFIT_BY_ID_SUCCESS,
   FETCH_OUTFIT_BY_ID_FAILURE,
+  FETCH_OUTFITS_START
 } from './ActionTypes/OutfitTypes';
 import { Outfit } from './ActionTypes/OutfitTypes';
-// import { db } from '../firebase'; 
+import { collection, addDoc, doc, query, where, onSnapshot, deleteDoc, updateDoc } from 'firebase/firestore'
 
+import { db } from '../firebase/config';
 export const addOutfit = (outfit: Outfit) => (dispatch: Dispatch) => {
   // db.collection('outfits')
   //   .add(outfit)
@@ -47,21 +49,29 @@ export const deleteOutfit = (id: string) => (dispatch: Dispatch) => {
     });
 };
 
-export const fetchOutfits = () => (dispatch: Dispatch) => {
-  db.collection('outfits')
-    .get()
-    .then((querySnapshot) => {
-      const outfits: Outfit[] = [];
-      querySnapshot.forEach((doc) => {
-        outfits.push({ id: doc.id, ...doc.data() } as Outfit);
-      });
-      dispatch({ type: FETCH_OUTFITS_SUCCESS, payload: outfits });
-    })
-    .catch((error) => {
-      console.error('Error fetching outfits:', error);
-      dispatch({ type: FETCH_OUTFITS_FAILURE, payload: error });
-    });
+
+export const fetchOutfits = () => {
+  return (dispatch: Dispatch) => { 
+    console.log('fetching luggage items');
+    dispatch({ type: FETCH_OUTFITS_START });
+
+    const outfitsRef = query(collection(db, 'outfits'));
+    // const outfitsRef = query(collection(db, 'outfits'), where('userId', '==', '123'));
+    onSnapshot(
+      outfitsRef,
+      snapshot => {
+        const outfits = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        console.log(outfits, 'outfits data')
+        dispatch({ type: FETCH_OUTFITS_SUCCESS, payload: outfits });
+      },
+      error => {
+        console.error('Error fetching outfits:', error); 
+        dispatch({ type: FETCH_OUTFITS_FAILURE, payload: error });
+      }
+    );
+  };
 };
+
 
 export const fetchOutfitById = (outfitId: string) => (dispatch: Dispatch) => {
   db.collection('outfits')

@@ -1,8 +1,8 @@
-import { Suitcase, SuitcaseActionTypes, ADD_SUITCASE, EDIT_SUITCASE, DELETE_SUITCASE, FETCH_SUITCASES_SUCCESS } from '../ReduxActions/ActionTypes/SuitcaseActionTypes';
+import { Suitcase, SuitcaseActionTypes, ADD_SUITCASE, EDIT_SUITCASE, DELETE_SUITCASE, FETCH_SUITCASES_SUCCESS, FETCH_SUITCASES_START } from '../ReduxActions/ActionTypes/SuitcaseActionTypes';
 
 export interface SuitcasesState {
   suitcases: Suitcase[];
-  loading:boolean
+  loading: boolean
 }
 
 const defaultSuitcase: Suitcase = {
@@ -11,14 +11,8 @@ const defaultSuitcase: Suitcase = {
 };
 
 const initialState: SuitcasesState = {
-  suitcases: [{
-    id: '1',
-    name: 'Beach',
-  }, {
-    id: '2',
-    name: 'Montana',
-  }],
-  loading:false
+  suitcases: [],
+  loading: false
 };
 
 const suitcasesReducer = (state = initialState, action: SuitcaseActionTypes): SuitcasesState => {
@@ -28,15 +22,21 @@ const suitcasesReducer = (state = initialState, action: SuitcaseActionTypes): Su
       return {
         ...state,
         suitcases: [...state.suitcases, action.payload],
-        loading:!state.loading
+        // loading:!state.loading
       };
     case EDIT_SUITCASE:
       return state;
     case DELETE_SUITCASE:
       return state;
+    case FETCH_SUITCASES_START:
+      return {
+        ...state,
+        loading: true,
+      };
     case FETCH_SUITCASES_SUCCESS:
       return {
         ...state,
+        loading: false,
         suitcases: action.payload,
       };
     default:

@@ -13,6 +13,7 @@ export interface Outfit {
   export const DELETE_OUTFIT = 'DELETE_OUTFIT';
   export const FETCH_OUTFITS_SUCCESS = 'FETCH_OUTFITS_SUCCESS';
   export const FETCH_OUTFITS_FAILURE = 'FETCH_OUTFITS_FAILURE';
+  export const FETCH_OUTFITS_START = 'FETCH_OUTFITS_START';
   export const FETCH_OUTFIT_BY_ID_SUCCESS = 'FETCH_OUTFIT_BY_ID_SUCCESS';
   export const FETCH_OUTFIT_BY_ID_FAILURE = 'FETCH_OUTFIT_BY_ID_FAILURE';
   
@@ -43,6 +44,12 @@ export interface Outfit {
     type: typeof FETCH_OUTFITS_FAILURE;
     payload: Error;
   }
+
+  interface FetchOutfitsStartAction {
+    type: typeof FETCH_OUTFITS_START;
+    payload: Outfit[];
+  }
+  
   
   interface FetchOutfitByIdSuccessAction {
     type: typeof FETCH_OUTFIT_BY_ID_SUCCESS;
@@ -61,5 +68,6 @@ export interface Outfit {
     | FetchOutfitsSuccessAction
     | FetchOutfitsFailureAction
     | FetchOutfitByIdSuccessAction
-    | FetchOutfitByIdFailureAction;
+    | FetchOutfitByIdFailureAction
+    | FetchOutfitsStartAction;
   
