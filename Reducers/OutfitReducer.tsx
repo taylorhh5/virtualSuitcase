@@ -48,24 +48,11 @@ const initialState: OutfitState = {
 const outfitsReducer = (state = initialState, action: OutfitActionTypes): OutfitState => {
   switch (action.type) {
     case ADD_OUTFIT:
-      return {
-        ...state,
-        outfits: [...state.outfits, action.payload],
-      };
+      return state;
     case EDIT_OUTFIT:
-      const updatedOutfits = state.outfits.map((outfit) =>
-        outfit.id === action.payload.id ? { ...outfit, ...action.payload.updatedData } : outfit
-      );
-      return {
-        ...state,
-        outfits: updatedOutfits,
-      };
+      return state;
     case DELETE_OUTFIT:
-      const filteredOutfits = state.outfits.filter((outfit) => outfit.id !== action.payload);
-      return {
-        ...state,
-        outfits: filteredOutfits,
-      };
+      return state;
       case FETCH_OUTFITS_START:
       return {
         ...state,

@@ -20,6 +20,7 @@ export const addSuitcase = (name: string, userId: string) => {
     addDoc(collection(db, 'suitcases'), {
       name: name,
       userId: userId,
+      timestamp: new Date(),
     })
       .then((suitcaseDocRef) => {
         dispatch({ type: ADD_SUITCASE, payload: suitcaseDocRef.id });

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, Button, Modal, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, FlatList, } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import colors from '../themes/Colors';
 import OutfitBox from './Components/OutfitBox';

@@ -69,7 +69,7 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation }) => {
 
   const handleAddItem = () => {
     //error handling check
-    addItem({ name: name, image: selectedImage, category: category, suitcaseId: 'rBPi3msspFXpCaECKSDfaX8lCEE3', userId: 'rBPi3msspFXpCaECKSDfaX8lCEE3' }, navigation)
+    addItem({ name: name, image: selectedImage, category: category, suitcaseId: '6OVpqtWacMeue6i1LnoM', userId: 'rBPi3msspFXpCaECKSDfaX8lCEE3' }, navigation)
   };
 
 

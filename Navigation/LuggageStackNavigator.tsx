@@ -17,7 +17,8 @@ export type LuggageStackParamList = {
   InsideSuitcase: { name: string };
   Outfits: undefined;
   CreateOutfit: {
-    selectedOutfitItems: string[]; 
+    selectedOutfitItems: string[];
+    edit: boolean; 
   };  AddItemForm: undefined;
   OutfitBox: undefined
 };

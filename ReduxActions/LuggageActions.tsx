@@ -33,7 +33,13 @@ export const fetchItemsInSuitcase = (suitcaseId) => {
 
 export const addItem = (item: Item, navigation: NavigationProp<LuggageStackParamList, 'AddItemForm'>) => {
   return (dispatch: Dispatch) => {
-    addDoc(collection(db, 'luggageItems'), item)
+
+    const itemWithTimestamp = {
+      ...item,
+      timestamp: new Date(),
+    };
+
+    addDoc(collection(db, 'luggageItems'), itemWithTimestamp)
       .then((itemDocRef) => {
         dispatch({ type: ADD_ITEM, payload: { item } });
         navigation.goBack();

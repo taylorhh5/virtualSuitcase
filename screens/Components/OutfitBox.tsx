@@ -4,6 +4,8 @@ import ConfirmDelete from './ConfimDelete';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { LuggageStackParamList } from '../../Navigation/LuggageStackNavigator';
 import { Item } from '../../ReduxActions/ActionTypes/LuggageActionTypes';
+import { useDispatch } from 'react-redux';
+import { deleteOutfit } from '../../ReduxActions/OutfitActions';
 
 interface ClothingItem {
   category: string;
@@ -29,13 +31,14 @@ interface OutfitBoxProps {
 
 const OutfitBox: React.FC<OutfitBoxProps> = (props) => {
   const luggageItems = props.item.luggageItems || [];
-  console.log(luggageItems, 'ITEMS DATA')
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [selectedItemForEdit, setSelectedItemForEdit] = useState<Item | null>(null);
   const [isDelete, setIsDelete] = useState(false);
-
   const [isEditing, setIsEditing] = useState(false);
+  
+  const dispatch = useDispatch();
+
 
   const handleItemPress = (item: Item) => {
     setSelectedItemForEdit(item);
@@ -56,20 +59,19 @@ const OutfitBox: React.FC<OutfitBoxProps> = (props) => {
     setSelectedItems([])
   }
 
-  const handleSelectEdit = () => {
-    setIsEditing(true)
-    setIsModalVisible(false)
-  }
-
-  const handleNavigateToCreateOutfit = () => {
+  const handleNavigateToEditOutfit = () => {
     props.navigation.navigate('CreateOutfit', {
-      selectedOutfitItems: items,
+      selectedOutfitItems: luggageItems,
+      edit:true,
+      id:props.item.id
     });
   };
-
+ 
   const onDelete = () => {
-    console.log('deleted')
-  }
+    dispatch(deleteOutfit(props.item.id))
+    setIsDelete(false)
+    setIsModalVisible(false)
+      }
 
   const renderDeleteForm = () => {
     return (
@@ -97,7 +99,7 @@ const OutfitBox: React.FC<OutfitBoxProps> = (props) => {
           </TouchableOpacity>
           {isModalVisible ? (
             <>
-              <TouchableOpacity onPress={() => handleNavigateToCreateOutfit()}>
+              <TouchableOpacity onPress={() => handleNavigateToEditOutfit()}>
                 <Text style={styles.optionText}>Edit Outfit</Text>
               </TouchableOpacity>
               {/* <TouchableOpacity onPress={() => handleSelectEdit()}>
@@ -113,16 +115,16 @@ const OutfitBox: React.FC<OutfitBoxProps> = (props) => {
 
         <FlatList
           data={luggageItems}
-          keyExtractor={(index) => index.toString()}
+          keyExtractor={(item) => item?.id.toString()} 
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={isEditing ? () => toggleSelection(item.image) : undefined}
               style={[
                 styles.outfitImageContainer,
-                selectedItems.includes(item.image) && styles.selectedImageContainer,
+                selectedItems.includes(item?.image) && styles.selectedImageContainer,
               ]}
             >
-              <Image source={{ uri: item.image }} style={styles.outfitImage} />
+              <Image source={{ uri: item?.image }} style={styles.outfitImage} />
             </TouchableOpacity>
           )}
           numColumns={3}

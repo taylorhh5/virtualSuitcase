@@ -47,7 +47,6 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
     };
 
     useEffect(() => {
-        console.log('useeffect')
         props.fetchItemsInSuitcase(props.suitcaseId)
     }, []);
 
@@ -68,6 +67,7 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
 
     const showEditForm = () => {
         setIsEdit(true);
+        setSelectedCategory(selectedItemForEdit.category)
     };
 
     const showDeleteForm = () => {
@@ -111,7 +111,7 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
                             data={items}
                             renderItem={({ item }) => (
                                 <LuggageItem item={item} handleItemPress={handleItemPress} />
-                            )} keyExtractor={item => item.name}
+                            )} keyExtractor={item => item?.id}
                             horizontal
                             showsHorizontalScrollIndicator={false}
                         />

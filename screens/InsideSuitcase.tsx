@@ -19,7 +19,9 @@ const InsideSuitcase = (props) => {
     };
 
     const navigateToAddOutfit = () => {
-        props.navigation.navigate('CreateOutfit')
+        props.navigation.navigate('CreateOutfit', {
+        edit:false
+    });
     };
 
     const navigateToAddItem = () => {
