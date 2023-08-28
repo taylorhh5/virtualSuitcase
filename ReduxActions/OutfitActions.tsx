@@ -44,12 +44,13 @@ export const editOutfit = (outfitId: string, updatedItems: number[], navigation:
     });
 };
 
-export const fetchOutfits = () => {
+export const fetchOutfits = (suitcaseId) => {
   return (dispatch: Dispatch) => {
-    console.log('fetching outfits and luggage items');
     dispatch({ type: FETCH_OUTFITS_START });
 
-    const outfitsRef = query(collection(db, 'outfits'), orderBy('timestamp', 'desc'));
+    // const outfitsRef = query(collection(db, 'outfits'), where('suitcaseId', '==', suitcaseId));
+    const outfitsRef = query(collection(db, 'outfits'), where('suitcaseId', '==', suitcaseId),  
+    orderBy('timestamp', 'desc'));
 
     const unsubscribe = onSnapshot(
       outfitsRef,

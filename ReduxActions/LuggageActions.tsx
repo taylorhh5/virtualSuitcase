@@ -4,7 +4,7 @@ import { ADD_ITEM, EDIT_ITEM, DELETE_ITEM, FETCH_LUGGAGE_ITEMS_SUCCESS, FETCH_LU
 import { Item } from './ActionTypes/LuggageActionTypes';
 import { NavigationProp } from '@react-navigation/native';
 //firebase
-import { collection, addDoc, doc, query, where, onSnapshot, deleteDoc, updateDoc, getDoc } from 'firebase/firestore'         
+import { collection, addDoc, doc, query, where, onSnapshot, deleteDoc, updateDoc, getDoc, orderBy } from 'firebase/firestore'         
 import { db } from '../firebase/config';
 import { LuggageStackParamList } from '../Navigation/LuggageStackNavigator';
 
@@ -15,7 +15,8 @@ export const fetchItemsInSuitcase = (suitcaseId) => {
 
     const luggageItemsRef = query(
       collection(db, 'luggageItems'),
-      where('suitcaseId', '==', suitcaseId)  
+      where('suitcaseId', '==', suitcaseId),
+      orderBy('timestamp', 'desc')  
     );
     onSnapshot(
       luggageItemsRef,

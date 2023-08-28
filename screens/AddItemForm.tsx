@@ -10,14 +10,15 @@ import { Item } from '../ReduxActions/ActionTypes/LuggageActionTypes';
 import { addItem } from '../ReduxActions/LuggageActions';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { LuggageStackParamList } from '../Navigation/LuggageStackNavigator';
-
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '../firebase/config';
 interface AddItemFormProps {
   addItem: (suitcase: Item) => void;
   navigation: NativeStackNavigationProp<LuggageStackParamList, 'AddItemForm'>;
 
 }
 
-const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation }) => {
+const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route }) => {
   const [category, setCategory] = useState<string>(''); //State for category
   const [selectedImage, setSelectedImage] = useState<string>(''); //State for image selection
   const [name, setName] = useState<string>(''); // State for the "Name" input
@@ -28,13 +29,24 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation }) => {
         width: 200,
         height: 200,
         cropping: true,
-        includeBase64: true,
       });
-      setSelectedImage(image.path);
+  
+      const response = await fetch(image.path);
+      const blob = await response.blob();
+  
+      // Upload the image as bytes
+      const storageRef = ref(storage, `images/${Date.now()}`);
+      await uploadBytes(storageRef, blob);
+  
+      // Get the download URL of the uploaded image
+      const imageUrl = await getDownloadURL(storageRef);
+  
+      setSelectedImage(imageUrl);
     } catch (error) {
       console.log('ImagePicker Error: ', error);
     }
   };
+  
 
   const handleCategorySelection = (selectedCategory: string) => {
     setCategory(selectedCategory);
@@ -68,10 +80,16 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation }) => {
   };
 
   const handleAddItem = () => {
-    //error handling check
-    addItem({ name: name, image: selectedImage, category: category, suitcaseId: '6OVpqtWacMeue6i1LnoM', userId: 'rBPi3msspFXpCaECKSDfaX8lCEE3' }, navigation)
+    const newItem = {
+      name: name,
+      image: selectedImage, // Store the Firebase Storage URL
+      category: category,
+      suitcaseId: route?.params?.suitcaseId,
+      userId: 'rBPi3msspFXpCaECKSDfaX8lCEE3',
+    };
+  
+    addItem(newItem, navigation);
   };
-
 
   return (
     <View style={styles.container}>

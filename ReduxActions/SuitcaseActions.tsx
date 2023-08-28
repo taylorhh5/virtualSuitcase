@@ -10,7 +10,7 @@ import {
   FETCH_SUITCASES_START
 } from './/ActionTypes/SuitcaseActionTypes';
 //firebase
-import { collection, addDoc, doc, query, where, onSnapshot, deleteDoc, updateDoc, getDoc } from 'firebase/firestore'
+import { collection, addDoc, doc, query, where, onSnapshot, deleteDoc, updateDoc, getDoc, orderBy } from 'firebase/firestore'
 import { db } from '../firebase/config';
 
 
@@ -66,7 +66,7 @@ export const fetchSuitcases = (userId: string) => {
     console.log('fetching suitcases');
     dispatch({ type: FETCH_SUITCASES_START });
 
-    const suitcasesRef = query(collection(db, 'suitcases'), where('userId', '==', userId));
+    const suitcasesRef = query(collection(db, 'suitcases'), where('userId', '==', userId), orderBy('timestamp', 'desc'));
 
     onSnapshot(
       suitcasesRef,

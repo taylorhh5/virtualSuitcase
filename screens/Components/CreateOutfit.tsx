@@ -18,7 +18,7 @@ type CreateOutfitProps = {
 
 };
 
-const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, route, luggageState, navigation }) => {
+const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, route, luggageState, navigation, }) => {
 
 
     // Initialize the selectedOutfitItems array using useState
@@ -58,7 +58,7 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
 
 
     const handleAddOutfit = () => {
-        addOutfit('rBPi3msspFXpCaECKSDfaX8lCEE3', '6OVpqtWacMeue6i1LnoM', selectedIds, navigation)
+        addOutfit('rBPi3msspFXpCaECKSDfaX8lCEE3', route?.params?.suitcaseId, selectedIds, navigation)
     }
 
     const handleEditOutfit = () => {

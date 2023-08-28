@@ -20,12 +20,15 @@ const InsideSuitcase = (props) => {
 
     const navigateToAddOutfit = () => {
         props.navigation.navigate('CreateOutfit', {
-        edit:false
+        edit:false,
+        suitcaseId: suitcaseId
     });
     };
 
     const navigateToAddItem = () => {
-        props.navigation.navigate('AddItemForm')
+        props.navigation.navigate('AddItemForm', {        
+            suitcaseId: suitcaseId
+        })
     };
     console.log(props.route, 'params')
 

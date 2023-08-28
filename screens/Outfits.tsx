@@ -15,10 +15,10 @@ type OutfitsScreenProps = {
   fetchOutfits: () => void;
 }
 
-const Outfits: React.FC<OutfitsScreenProps> = ({ navigation, outfitState, fetchOutfits }) => {
+const Outfits: React.FC<OutfitsScreenProps> = ({ navigation, outfitState, fetchOutfits, suitcaseId }) => {
 
   useEffect(() => {
-    fetchOutfits()
+    fetchOutfits(suitcaseId)
   }, []);
 
   return (
