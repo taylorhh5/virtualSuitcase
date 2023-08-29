@@ -8,6 +8,7 @@ import { RootState } from '../Reducers/RootReducer';
 import { Suitcase } from '../ReduxActions/ActionTypes/SuitcaseActionTypes';
 import { addSuitcase, fetchSuitcases, editSuitcaseName, deleteSuitcase } from '../ReduxActions/SuitcaseActions';
 import ConfirmDelete from './Components/ConfimDelete';
+import { logout } from '../ReduxActions/AuthActions';
 type SuitcasesProps = {
     navigation: NativeStackNavigationProp<LuggageStackParamList, 'Home'>;
     suitcases: Suitcase[];
@@ -18,7 +19,7 @@ type SuitcasesProps = {
     deleteSuitcase: (id: string) => void;
 }
 
-const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcase, loading, fetchSuitcases, editSuitcaseName, deleteSuitcase }) => {
+const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcase, logout, auth, fetchSuitcases, editSuitcaseName, deleteSuitcase }) => {
     const [isNewSuitcaseModalVisible, setNewSuitcaseModalVisible] = useState(false);
     const [newSuitcaseName, setNewSuitcaseName] = useState('');
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
@@ -30,7 +31,6 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
             suitcaseId: item.id
         });
     };
-
     const openNewSuitcaseModal = () => {
         setNewSuitcaseModalVisible(true);
     };
@@ -50,7 +50,7 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
 
     const createNewSuitcase = () => {
         if (newSuitcaseName.trim() !== '') {
-            addSuitcase(newSuitcaseName, 'rBPi3msspFXpCaECKSDfaX8lCEE3');
+            addSuitcase(newSuitcaseName, auth.uid);
             closeModal();
         }
     };
@@ -93,8 +93,12 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
         );
     };
 
+    const handleLogout = () => {
+        logout()
+    };
+
     useEffect(() => {
-        fetchSuitcases('rBPi3msspFXpCaECKSDfaX8lCEE3')
+        fetchSuitcases(auth.uid)
     }, []);
 
     return (
@@ -105,11 +109,16 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
                     <Text style={styles.suitcaseText}>Create new suitcase</Text>
                 </TouchableOpacity>
                 <View style={styles.topRightSection}>
-                    <Text style={styles.listHeaderText}>Welcome!</Text>
+                    <TouchableOpacity style={styles.logoutContainer} onPress={() => handleLogout()}>
+                        <Text style={styles.logoutText}>Logout 👋</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.welcomeText}>Hello, <Text style={styles.emailText}>{auth.email}.</Text></Text>
                     {!suitcases.length ? (
                         <Text style={styles.topRightSectionText}>Add a suitcase to get started!</Text>
                     ) : (
-                        <Text style={styles.topRightSectionText}>You have {suitcases.length} suitcase.</Text>
+                        <Text style={styles.topRightSectionText}>
+                            You have {suitcases.length} {suitcases.length === 1 ? 'suitcase' : 'suitcases'}.
+                        </Text>
                     )}
                 </View>
             </View>
@@ -162,7 +171,8 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
 
 const mapStateToProps = (state: RootState) => ({
     suitcases: state.suitcases.suitcases,
-    loading: state.suitcases.loading,
+    auth: state.auth.user,
+
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
@@ -172,6 +182,7 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
             fetchSuitcases,
             editSuitcaseName,
             deleteSuitcase,
+            logout
         },
         dispatch
     );
@@ -194,12 +205,24 @@ const styles = StyleSheet.create({
     topRightSection: {
         alignSelf: 'center',
         alignItems: 'center',
-        width: '50%'
+        width: '50%',
+        flex: 1
+    },
+    logoutContainer: {
+        alignSelf: 'flex-end',
+        borderWidth: 1,
+        borderRadius: 4,
+        backgroundColor: colors.primary,
+        padding: 5
+    },
+    logoutText: {
+        fontSize: 16,
+        fontWeight:'500'
     },
     topRightSectionText: {
         fontSize: 16,
         marginHorizontal: 4,
-        textAlign: 'center'
+        textAlign: 'center',
     },
     contentContainer: {
         padding: 6,
@@ -235,9 +258,14 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingVertical: 8
     },
-    listHeaderText: {
+    welcomeText: {
         fontSize: 16,
-        marginTop: 2
+        marginBottom: 2,
+        marginTop: 30,
+        textAlign: 'center'
+    },
+    emailText: {
+        fontWeight: '600'
     },
     modalContainer: {
         flex: 1,

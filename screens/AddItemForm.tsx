@@ -19,7 +19,7 @@ interface AddItemFormProps {
 
 }
 
-const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route }) => {
+const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route, auth }) => {
   const [category, setCategory] = useState<string>('');
   const [selectedImageData, setSelectedImageData] = useState<Blob | null>(null);
   const [name, setName] = useState<string>('');
@@ -64,7 +64,7 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route })
         image: imageUrl,
         category: category,
         suitcaseId: route?.params?.suitcaseId,
-        userId: 'rBPi3msspFXpCaECKSDfaX8lCEE3',
+        userId: auth.uid,
       };
 
       addItem(newItem, navigation);
@@ -145,6 +145,7 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route })
 };
 
 const mapStateToProps = (state: RootState) => ({
+  auth: state.auth.user,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) =>

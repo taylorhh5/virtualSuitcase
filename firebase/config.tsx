@@ -3,6 +3,7 @@ import { getAuth } from "firebase/auth";
 import { getFirestore, } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage';
 
+
 const firebaseConfig = {
     apiKey: "AIzaSyBF5bSxy_R-JTcGkpR-yxPWgtwlhC0b0ZQ",
     authDomain: "virtual-suitcase-backend.firebaseapp.com",
@@ -20,7 +21,7 @@ initializeApp(firebaseConfig)
 export const db = getFirestore()
 
 //auth
-// export const auth = getAuth();
+export const auth = getAuth();
 
 //storage
 export const storage = getStorage();

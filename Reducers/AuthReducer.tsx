@@ -6,6 +6,7 @@ import {
     LOGIN_START,
     LOGIN_SUCCESS,
     LOGIN_FAILURE,
+    LOGOUT_SUCCESS
 } from '../ReduxActions/ActionTypes/AuthTypes'
 
 export interface AuthState {
@@ -19,7 +20,7 @@ const initialState: AuthState = {
     user: null,
     error: null,
     loading: false,
-    isLoggedIn: true
+    isLoggedIn: false
 };
 
 const authReducer = (state = initialState, action: AuthActionTypes): AuthState => {
@@ -66,6 +67,8 @@ const authReducer = (state = initialState, action: AuthActionTypes): AuthState =
                 loading: false,
                 error: action.payload,
             };
+        case LOGOUT_SUCCESS:
+            return initialState;
         default:
             return state;
     }

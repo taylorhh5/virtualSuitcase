@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, Image, TouchableHighlight, ScrollView, Modal, TouchableOpacity, Button } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Image, TouchableHighlight, ScrollView, Modal, TouchableOpacity, Button, TextInput, Alert } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import colors from '../../themes/Colors';
 import { connect } from 'react-redux';
@@ -18,11 +18,21 @@ type CreateOutfitProps = {
 
 };
 
-const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, route, luggageState, navigation, }) => {
+const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, route, luggageState, navigation, auth }) => {
 
 
     // Initialize the selectedOutfitItems array using useState
     const [selectedOutfitItems, setSelectedOutfitItems] = useState<ClothingItem[]>([]);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [outfitName, setOutfitName] = useState('');
+
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
+
+    const hideModal = () => {
+        setIsModalVisible(false);
+    };
 
     // Create an object to categorize the items
     const categorizedItems: { [category: string]: ClothingItem[] } = {};
@@ -36,7 +46,6 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
     });
 
     const selectedIds = selectedOutfitItems.map(item => item?.id);
-
 
     // Handle item press to add/remove from the outfit
     const handleItemPress = (item: ClothingItem) => {
@@ -56,18 +65,27 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
         setSelectedOutfitItems([])
     }
 
-
     const handleAddOutfit = () => {
-        addOutfit('rBPi3msspFXpCaECKSDfaX8lCEE3', route?.params?.suitcaseId, selectedIds, navigation)
-    }
+        hideModal();
+        if (selectedOutfitItems.length > 0) {
+            addOutfit(auth.uid, route?.params?.suitcaseId, selectedIds, navigation);
+            setOutfitName('');
+        } else {
+            Alert.alert('Error', 'Please add items to the outfit.');
+        }
+    };
 
     const handleEditOutfit = () => {
-        editOutfit(route?.params?.id, selectedIds, navigation)
-    }
+        if (selectedOutfitItems.length > 0) {
+            editOutfit(route?.params?.id, selectedIds, navigation);
+        } else {         
+            Alert.alert('Error', 'Please add items to the outfit.');
+        }
+    };
 
     const handleSubmit = () => {
         if (!route?.params?.edit) {
-            handleAddOutfit()
+            showModal()
         }
         else {
             handleEditOutfit()
@@ -138,12 +156,32 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
                     </View>
                 ))}
             </ScrollView>
+            <Modal visible={isModalVisible} animationType="slide" transparent>
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text>(Optional) Outfit name:</Text>
+                        <TextInput
+                            style={styles.modalTextInput}
+                            onChangeText={text => setOutfitName(text)}
+                            value={outfitName}
+                            placeholder='Add name or submit without'
+                        />
+                        <View style={styles.modalButtonContainer}>
+                            <Button title="Add" onPress={handleAddOutfit} />
+                            <Button title="Cancel" onPress={hideModal} color={colors.primary} />
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+
         </View>
     );
 };
 
 const mapStateToProps = (state: RootState) => ({
     luggageState: state.luggage.luggage,
+    auth: state.auth.user,
+
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
@@ -196,7 +234,7 @@ const styles = StyleSheet.create({
         borderRadius: 40
     },
     categoryScrollView: {
-        paddingTop:8
+        paddingTop: 8
     },
     categoryTitle: {
         fontSize: 16,
@@ -219,5 +257,30 @@ const styles = StyleSheet.create({
         color: colors.primary,
         textAlign: 'center',
     },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 20,
+        width: '80%',
+    },
+    modalTextInput: {
+        borderWidth: 1,
+        borderColor: colors.primary,
+        borderRadius: 5,
+        padding: 8,
+        marginTop: 10,
+    },
+    modalButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginTop: 20,
+    },
+
 });
 
