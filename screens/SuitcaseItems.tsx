@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View, FlatList, ScrollView, Modal, TouchableOpacity, Button, } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, } from 'react';
 import colors from '../themes/Colors';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch, AnyAction } from 'redux';
 import { RootState } from '../Reducers/RootReducer';
 import { Item } from '../ReduxActions/ActionTypes/LuggageActionTypes';
-import { addItem, deleteItem, editItem, fetchItemsInSuitcase } from '../ReduxActions/LuggageActions';
+import { addItem, deleteItem, editItem,  } from '../ReduxActions/LuggageActions';
 import EditLuggageForm from './Components/EditLuggageForm';
 import { categories, CategoryMapper } from './data/CategoryData';
 import LuggageItem from './Components/LuggageItem';
@@ -16,7 +16,6 @@ type SuitcaseItemsProps = {
     luggageState: Item[];
     deleteItem: (id: string) => void;
     editItem: (id: string, updatedItem: Partial<Item>) => (dispatch: Dispatch<AnyAction>) => void,
-    fetchItemsInSuitcase: (id: string) => void;
 };
 
 const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
@@ -45,10 +44,6 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
         setIsDelete(false)
 
     };
-
-    useEffect(() => {
-        props.fetchItemsInSuitcase(props.suitcaseId)
-    }, []);
 
     const handleSave = () => {
         if (selectedItemForEdit) {
@@ -154,7 +149,6 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
             addItem,
             deleteItem,
             editItem,
-            fetchItemsInSuitcase,
         },
         dispatch
     );

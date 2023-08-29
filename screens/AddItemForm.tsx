@@ -52,7 +52,7 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route })
       return;
     }
 
-    setUploading(true); 
+    setUploading(true);
 
     try {
       const storageRef = ref(storage, `images/${Date.now()}`);
@@ -71,7 +71,7 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route })
     } catch (error) {
       console.error('Error uploading image:', error);
     } finally {
-      setUploading(false); 
+      setUploading(false);
     }
   };
 
@@ -80,7 +80,7 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route })
     setCategory(selectedCategory);
   };
 
- 
+
 
   return (
     <View style={styles.container}>
@@ -123,8 +123,8 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route })
           </View>
         </View>
         {/* Name input */}
-        <View style={styles.selectContainer}>
-          <Text style={styles.selectText}>Add Name: (Optional)</Text>
+        <View style={styles.nameContainer}>
+          <Text style={styles.nameText}>Add Name: (Optional)</Text>
           <TextInput
             style={styles.nameInput}
             placeholder="Enter Name"
@@ -217,9 +217,6 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderWidth: 1
   },
-  nameInput: {
-    alignSelf: 'center'
-  },
   selectText: {
     alignSelf: 'center',
     fontSize: 16,
@@ -240,6 +237,20 @@ const styles = StyleSheet.create({
   },
   addButtonText: {
     fontSize: 20
+  },
+  nameContainer: {
+    marginTop: 20,
+  },
+  nameText: {
+    textAlign: 'center',
+    fontSize:16,
+    fontWeight: '500',
+  },
+  nameInput: {
+    alignSelf: 'center',
+    borderWidth: 0.5,
+    backgroundColor:'lightgrey',
+    width:'64%'
   },
 });
 

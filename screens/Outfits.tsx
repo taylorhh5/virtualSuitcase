@@ -1,13 +1,11 @@
 import { StyleSheet, Text, View, FlatList, } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import colors from '../themes/Colors';
 import OutfitBox from './Components/OutfitBox';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
 import { RootState } from '../Reducers/RootReducer';
 import { Outfit } from '../ReduxActions/ActionTypes/OutfitTypes';
-import { fetchOutfits } from '../ReduxActions/OutfitActions';
 
 type OutfitsScreenProps = {
   navigation: NativeStackNavigationProp<LuggageStackParamList, 'Outfits'>;
@@ -16,10 +14,6 @@ type OutfitsScreenProps = {
 }
 
 const Outfits: React.FC<OutfitsScreenProps> = ({ navigation, outfitState, fetchOutfits, suitcaseId }) => {
-
-  useEffect(() => {
-    fetchOutfits(suitcaseId)
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -39,18 +33,7 @@ const mapStateToProps = (state: RootState) => ({
   outfitState: state.outfits.outfits,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(
-    {
-      fetchOutfits,
-      // addSuitcase,
-      // fetchSuitcases,
-    },
-    dispatch
-  );
-
-export default connect(mapStateToProps, mapDispatchToProps)(Outfits);
-
+export default connect(mapStateToProps)(Outfits);
 
 const styles = StyleSheet.create({
   container: {

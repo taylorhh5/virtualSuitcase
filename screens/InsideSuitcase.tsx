@@ -1,9 +1,14 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import colors from '../themes/Colors';
-
 import SuitcaseItems from './SuitcaseItems';
 import Outfits from './Outfits';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch, AnyAction } from 'redux';
+import { fetchItemsInSuitcase } from '../ReduxActions/LuggageActions';
+import { fetchOutfits } from '../ReduxActions/OutfitActions';
+import { RootState } from '../Reducers/RootReducer';
+
 
 enum ActiveScreen {
     Items,
@@ -12,21 +17,29 @@ enum ActiveScreen {
 
 const InsideSuitcase = (props) => {
     const [activeScreen, setActiveScreen] = useState<ActiveScreen>(ActiveScreen.Items);
-    const suitcaseId = props.route.params.suitcaseId 
+    const suitcaseId = props.route.params.suitcaseId
 
+    useEffect(() => {
+        props.fetchItemsInSuitcase(suitcaseId)
+    }, []);
+
+    useEffect(() => {
+        props.fetchOutfits(suitcaseId)
+      }, []);
+    
     const changeScreen = (screen: ActiveScreen) => {
         setActiveScreen(screen);
     };
 
     const navigateToAddOutfit = () => {
         props.navigation.navigate('CreateOutfit', {
-        edit:false,
-        suitcaseId: suitcaseId
-    });
+            edit: false,
+            suitcaseId: suitcaseId
+        });
     };
 
     const navigateToAddItem = () => {
-        props.navigation.navigate('AddItemForm', {        
+        props.navigation.navigate('AddItemForm', {
             suitcaseId: suitcaseId
         })
     };
@@ -56,14 +69,14 @@ const InsideSuitcase = (props) => {
             </View>
             {activeScreen === ActiveScreen.Items ? (
                 <View style={styles.headerContainer}>
-                    <Text style={styles.headerText}>You have 17 items</Text>
+                    <Text style={styles.headerText}>You have {props?.luggageState?.length} items</Text>
                     <TouchableOpacity style={styles.addOutfitContainer} onPress={() => navigateToAddItem()}>
                         <Text style={styles.addOutfitText}>Add item +</Text>
                     </TouchableOpacity>
                 </View>
             ) : (
                 <View style={styles.headerContainer}>
-                    <Text style={styles.headerText}>You have 3 outfits</Text>
+                    <Text style={styles.headerText}>You have {props?.outfitState?.length} outfits</Text>
                     <TouchableOpacity style={styles.addOutfitContainer} onPress={() => navigateToAddOutfit()}>
                         <Text style={styles.addOutfitText}>Add outfit +</Text>
                     </TouchableOpacity>
@@ -71,11 +84,28 @@ const InsideSuitcase = (props) => {
             )}
 
             <View style={styles.screenContentContainer}>
-                {activeScreen === ActiveScreen.Items ? <SuitcaseItems suitcaseId={suitcaseId}/> : <Outfits navigation={props.navigation} suitcaseId={suitcaseId}/>}
+                {activeScreen === ActiveScreen.Items ? <SuitcaseItems suitcaseId={suitcaseId} /> : <Outfits navigation={props.navigation} suitcaseId={suitcaseId} />}
             </View>
         </View>
     );
 };
+
+const mapStateToProps = (state: RootState) => ({
+    luggageState: state.luggage.luggage,
+    outfitState: state.outfits.outfits,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) =>
+    bindActionCreators(
+        {
+            fetchItemsInSuitcase,
+            fetchOutfits,
+        },
+        dispatch
+    );
+
+export default connect(mapStateToProps, mapDispatchToProps)(InsideSuitcase);
+
 
 const styles = StyleSheet.create({
     container: {
@@ -126,10 +156,9 @@ const styles = StyleSheet.create({
         color: colors.button,
         fontWeight: '800'
     },
-    dashboardText:{
+    dashboardText: {
         fontSize: 14,
         fontWeight: '500'
     },
 });
 
-export default InsideSuitcase;
