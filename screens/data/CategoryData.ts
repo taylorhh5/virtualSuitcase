@@ -21,3 +21,17 @@ export const CategoryMapper: { [key: string]: string } = {
   socks: 'Socks',
   makeup: 'Makeup'
 };
+
+
+// Define the category mapping with emojis. May add directly to category objects
+export const categoryEmojis: { [key: string]: string } = {
+  hat: '🧢',
+  shoes: '👟',
+  top: '👕',
+  bottom: '👖',
+  toiletries: '🪥',
+  miscellaneous: '🔧',
+  underwear: '🩲',
+  socks: '🧦',
+  makeup: '💄'
+};

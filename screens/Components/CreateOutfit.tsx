@@ -9,7 +9,7 @@ import { ClothingItem } from '../../ReduxActions/ActionTypes/OutfitTypes';
 import { NavigationProp } from '@react-navigation/native';
 import { RouteProp } from '@react-navigation/native';
 import { LuggageStackParamList } from '../../Navigation/LuggageStackNavigator';
-
+import { CategoryMapper } from '../data/CategoryData';
 type CreateOutfitProps = {
     addOutfit: (userId: string, suitcaseId: string, items: number[], navigation: NavigationProp<LuggageStackParamList, 'CreateOutfit'>) => void;
     editOutfit: (outfitId: string, items: number[], navigation: NavigationProp<LuggageStackParamList, 'CreateOutfit'>) => void;
@@ -81,7 +81,7 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
     }, []);
 
     // Render individual items with 'Added' text if selected
-    const renderItem = ({ item }: { item: ClothingItem }) => {
+    const renderOutfitImage = ({ item }: { item: ClothingItem }) => {
         // Check if the item is already selected
         const isSelected = selectedOutfitItems.some(selectedItem => selectedItem?.id === item?.id);
 
@@ -124,13 +124,13 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
                         />
                     ))}</View>
             </ScrollView>
-            <ScrollView>
+            <ScrollView style={styles.categoryScrollView}>
                 {Object.entries(categorizedItems).map(([category, items]) => (
-                    <View key={category} style={styles.categoryContainer}>
-                        <Text style={styles.categoryTitle}>{category}</Text>
+                    <View key={category}>
+                        <Text style={styles.categoryTitle}>{CategoryMapper[category]} ({items.length} items)</Text>
                         <FlatList
                             data={items}
-                            renderItem={renderItem}
+                            renderItem={renderOutfitImage}
                             keyExtractor={item => item?.id}
                             horizontal
                             showsHorizontalScrollIndicator={false}
@@ -176,10 +176,9 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
     selectedScrollview: {
-        height: '60%',
-        paddingVertical: 1,
+        height: '56%',
+        paddingVertical: 3,
         borderBottomWidth: 1,
-
     },
     selectedItems: {
         flexDirection: 'row',
@@ -188,7 +187,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         alignItems: 'flex-end',
         gap: 4,
-        paddingHorizontal: 40
+        paddingHorizontal: 20,
     },
     selectedItemImage: {
         width: 80,
@@ -196,13 +195,11 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 40
     },
-    categoryContainer: {
-        marginBottom: 20,
-        marginTop: 10
+    categoryScrollView: {
+        paddingTop:8
     },
     categoryTitle: {
         fontSize: 16,
-        marginBottom: 8,
     },
     itemContainer: {
         marginRight: 16,

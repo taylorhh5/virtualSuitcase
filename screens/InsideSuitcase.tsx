@@ -42,7 +42,7 @@ const InsideSuitcase = (props) => {
                     ]}
                     onPress={() => changeScreen(ActiveScreen.Items)}
                 >
-                    <Text>Items</Text>
+                    <Text style={styles.dashboardText}>ITEMS</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[
@@ -51,7 +51,7 @@ const InsideSuitcase = (props) => {
                     ]}
                     onPress={() => changeScreen(ActiveScreen.Outfits)}
                 >
-                    <Text>Outfits</Text>
+                    <Text style={styles.dashboardText}>OUTFITS</Text>
                 </TouchableOpacity>
             </View>
             {activeScreen === ActiveScreen.Items ? (
@@ -125,6 +125,10 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: colors.button,
         fontWeight: '800'
+    },
+    dashboardText:{
+        fontSize: 14,
+        fontWeight: '500'
     },
 });
 

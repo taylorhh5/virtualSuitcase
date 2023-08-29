@@ -12,6 +12,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { LuggageStackParamList } from '../Navigation/LuggageStackNavigator';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../firebase/config';
+import { categories, categoryEmojis } from './data/CategoryData';
 interface AddItemFormProps {
   addItem: (suitcase: Item) => void;
   navigation: NativeStackNavigationProp<LuggageStackParamList, 'AddItemForm'>;
@@ -19,10 +20,11 @@ interface AddItemFormProps {
 }
 
 const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route }) => {
-  const [category, setCategory] = useState<string>(''); //State for category
-  const [selectedImage, setSelectedImage] = useState<string>(''); //State for image selection
-  const [name, setName] = useState<string>(''); // State for the "Name" input
-  
+  const [category, setCategory] = useState<string>('');
+  const [selectedImageData, setSelectedImageData] = useState<Blob | null>(null);
+  const [name, setName] = useState<string>('');
+  const [uploading, setUploading] = useState(false);
+
   const handleImagePicker = async () => {
     try {
       const image = await ImagePicker.openPicker({
@@ -30,70 +32,75 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route })
         height: 200,
         cropping: true,
       });
-  
+
       const response = await fetch(image.path);
       const blob = await response.blob();
-  
-      // Upload the image as bytes
-      const storageRef = ref(storage, `images/${Date.now()}`);
-      await uploadBytes(storageRef, blob);
-  
-      // Get the download URL of the uploaded image
-      const imageUrl = await getDownloadURL(storageRef);
-  
-      setSelectedImage(imageUrl);
+
+      setSelectedImageData(blob);
     } catch (error) {
       console.log('ImagePicker Error: ', error);
     }
   };
-  
+
+  const handleAddItem = async () => {
+    if (uploading) {
+      return;
+    }
+
+    if (!selectedImageData) {
+      console.log('No image selected.');
+      return;
+    }
+
+    setUploading(true); 
+
+    try {
+      const storageRef = ref(storage, `images/${Date.now()}`);
+      await uploadBytes(storageRef, selectedImageData);
+      const imageUrl = await getDownloadURL(storageRef);
+
+      const newItem = {
+        name: name,
+        image: imageUrl,
+        category: category,
+        suitcaseId: route?.params?.suitcaseId,
+        userId: 'rBPi3msspFXpCaECKSDfaX8lCEE3',
+      };
+
+      addItem(newItem, navigation);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    } finally {
+      setUploading(false); 
+    }
+  };
+
 
   const handleCategorySelection = (selectedCategory: string) => {
     setCategory(selectedCategory);
   };
 
-  // Define the category mapping
-  const categories = [
-    { key: 'hat', label: 'Hat' },
-    { key: 'shoes', label: 'Shoes' },
-    { key: 'top', label: 'Top' },
-    { key: 'bottom', label: 'Bottom' },
-    { key: 'toiletries', label: 'Toiletries' },
-    { key: 'miscellaneous', label: 'Misc' },
-    { key: 'underwear', label: 'Underwear' },
-    { key: 'socks', label: 'Socks' },
-    { key: 'makeup', label: 'Makeup' }
-
-
-  ];
-  // Define the category mapping with emojis. May add directly to category objects
-  const categoryEmojis: { [key: string]: string } = {
-    hat: '🧢',
-    shoes: '👟',
-    top: '👕',
-    bottom: '👖',
-    toiletries: '🪥',
-    miscellaneous: '🔧',
-    underwear: '🩲',
-    socks: '🧦',
-    makeup: '💄'
-  };
-
-  const handleAddItem = () => {
-    const newItem = {
-      name: name,
-      image: selectedImage, // Store the Firebase Storage URL
-      category: category,
-      suitcaseId: route?.params?.suitcaseId,
-      userId: 'rBPi3msspFXpCaECKSDfaX8lCEE3',
-    };
-  
-    addItem(newItem, navigation);
-  };
+ 
 
   return (
     <View style={styles.container}>
       <ScrollView>
+        {/* Image Upload */}
+        <View style={styles.selectContainer}>
+          <Text style={styles.selectText}>Select Image</Text>
+          <TouchableOpacity style={styles.imageContainer} onPress={handleImagePicker}>
+            {selectedImageData ? (
+              <Image
+                source={{ uri: URL.createObjectURL(selectedImageData) }}
+                style={styles.image}
+              />
+            ) : (
+              <View style={styles.emptyImageContainer}>
+                <ShirtIconWithPlus />
+              </View>
+            )}
+          </TouchableOpacity>
+        </View>
         {/* Clothing Category Selection */}
         <View style={styles.selectContainer}>
           <Text style={styles.selectText}>Select Category:</Text>
@@ -114,23 +121,6 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route })
               </TouchableOpacity>
             ))}
           </View>
-
-        </View>
-        {/* Image Upload */}
-        <View style={styles.selectContainer}>
-          <Text style={styles.selectText}>Select Image</Text>
-          <TouchableOpacity style={styles.imageContainer} onPress={handleImagePicker}>
-            {selectedImage ? (
-              <Image source={{ uri: selectedImage }} style={styles.image} />
-            ) : (
-              <View style={styles.emptyImageContainer}>
-                {/* <Image
-                    source={require('../Icons/shirtIcon.png')}
-                    style={{ width: 200, height: 200 }} resizeMode="contain"/> */}
-                <ShirtIconWithPlus />
-              </View>
-            )}
-          </TouchableOpacity>
         </View>
         {/* Name input */}
         <View style={styles.selectContainer}>
@@ -142,8 +132,12 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route })
             onChangeText={(text) => setName(text)}
           />
         </View>
-        <TouchableOpacity onPress={handleAddItem}>
-          <View style={styles.addButtonContainer}><Text style={styles.addButtonText}>Add To Suitcase</Text></View>
+        <TouchableOpacity onPress={handleAddItem} disabled={uploading}>
+          <View style={styles.addButtonContainer}>
+            <Text style={styles.addButtonText}>
+              {uploading ? 'Adding...' : 'Add To Suitcase'}
+            </Text>
+          </View>
         </TouchableOpacity>
       </ScrollView>
     </View>
@@ -167,7 +161,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 10,
-    paddingTop: 20,
+    paddingTop: 1,
     backgroundColor: colors.background,
   },
   categoryContainer: {
