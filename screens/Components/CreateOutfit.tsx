@@ -11,6 +11,8 @@ import { RouteProp } from '@react-navigation/native';
 import { LuggageStackParamList } from '../../Navigation/LuggageStackNavigator';
 import { CategoryMapper } from '../data/CategoryData';
 import FastImage from 'react-native-fast-image';
+import LottieView from 'lottie-react-native';
+
 
 type CreateOutfitProps = {
     addOutfit: (userId: string, suitcaseId: string, items: number[], navigation: NavigationProp<LuggageStackParamList, 'CreateOutfit'>) => void;
@@ -137,17 +139,27 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
                 <TouchableOpacity style={styles.buttonContainer} onPress={showModal}><Text style={styles.headerText}>{route.params?.edit ? 'Edit Outfit' : 'Add Outfit'}
                 </Text></TouchableOpacity>
             </View>
-            <ScrollView style={styles.selectedScrollview} >
-                <View style={styles.selectedItems}>
-                    {selectedOutfitItems.map(item => (
-                        <FastImage
-                            key={item?.id}
-                            source={{ uri: item?.image }}
-                            style={styles.selectedItemImage}
-                            resizeMode={FastImage.resizeMode.contain}
-                        />
-                    ))}</View>
-            </ScrollView>
+            {selectedOutfitItems.length > 0 ?
+                <ScrollView style={styles.selectedScrollview} >
+
+                    <View style={styles.selectedItems}>
+                        {selectedOutfitItems.map(item => (
+                            <FastImage
+                                key={item?.id}
+                                source={{ uri: item?.image }}
+                                style={styles.selectedItemImage}
+                                resizeMode={FastImage.resizeMode.contain}
+                            />
+                        ))}</View>
+
+                </ScrollView>
+                :
+                <View style={{ height: '30%', width: '100%', }}>
+                    <LottieView source={require("../../Icons/assets/outfitPick.json")} autoPlay loop />
+                </View>
+            }
+             {selectedOutfitItems.length === 0 ?
+            <View style={{borderBottomWidth: 1}}><Text style={{textAlign:'center', fontSize:18, fontWeight:'500'}}>Add items to your outfit</Text></View> : null}
             <ScrollView style={styles.categoryScrollView}>
                 {Object.entries(categorizedItems).map(([category, items]) => (
                     <View key={category}>
