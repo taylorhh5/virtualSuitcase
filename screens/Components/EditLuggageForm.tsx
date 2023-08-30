@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, TextInput, Button, StyleSheet } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 interface Item {
   id: string;
@@ -41,10 +42,10 @@ const EditLuggageForm: React.FC<EditFormProps> = ({
     <View style={styles.editContainer}>
       {/* ... other edit form components */}
       <Text>Edit Item</Text>
-      <Image
+      <FastImage
         source={{ uri: selectedItemForEdit.image }}
         style={{ width: 100, height: 100 }}
-        onError={(e) => console.log('Error loading image:', e.nativeEvent.error)}
+        resizeMode={FastImage.resizeMode.contain}
       />
       <Text>Category: {selectedCategory ? selectedCategory : selectedItemForEdit.category}</Text>
       <FlatList

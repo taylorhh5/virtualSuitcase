@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight } from 'react-native';
 import React from 'react';
 import { Item } from '../../ReduxActions/ActionTypes/LuggageActionTypes';
+import FastImage from 'react-native-fast-image';
+
 
 interface LuggageItemProps {
     item: Item;
@@ -16,10 +18,10 @@ const LuggageItem: React.FC<LuggageItemProps> = ({ item, handleItemPress }) => {
                     handleItemPress(item);
                 }}>
                 <View>
-                    <Image
+                    <FastImage
                         source={{ uri: item.image }}
                         style={{ width: 100, height: 100 }}
-                        onError={(e) => console.log('Error loading image:', e.nativeEvent.error)}
+                        resizeMode={FastImage.resizeMode.contain}
                     />
                     <Text style={styles.itemName}>
                         {item.name}

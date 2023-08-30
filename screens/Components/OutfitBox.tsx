@@ -6,6 +6,8 @@ import { LuggageStackParamList } from '../../Navigation/LuggageStackNavigator';
 import { Item } from '../../ReduxActions/ActionTypes/LuggageActionTypes';
 import { useDispatch } from 'react-redux';
 import { deleteOutfit } from '../../ReduxActions/OutfitActions';
+import FastImage from 'react-native-fast-image';
+
 
 interface ClothingItem {
   category: string;
@@ -124,7 +126,11 @@ const OutfitBox: React.FC<OutfitBoxProps> = (props) => {
                 selectedItems.includes(item?.image) && styles.selectedImageContainer,
               ]}
             >
-              <Image source={{ uri: item?.image }} style={styles.outfitImage} />
+              <FastImage
+                        source={{ uri: item?.image }}
+                        style={styles.outfitImage}
+                        resizeMode={FastImage.resizeMode.contain}
+                    />
             </TouchableOpacity>
           )}
           numColumns={3}

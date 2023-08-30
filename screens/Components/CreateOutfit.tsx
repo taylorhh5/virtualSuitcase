@@ -10,6 +10,8 @@ import { NavigationProp } from '@react-navigation/native';
 import { RouteProp } from '@react-navigation/native';
 import { LuggageStackParamList } from '../../Navigation/LuggageStackNavigator';
 import { CategoryMapper } from '../data/CategoryData';
+import FastImage from 'react-native-fast-image';
+
 type CreateOutfitProps = {
     addOutfit: (userId: string, suitcaseId: string, items: number[], navigation: NavigationProp<LuggageStackParamList, 'CreateOutfit'>) => void;
     editOutfit: (outfitId: string, items: number[], navigation: NavigationProp<LuggageStackParamList, 'CreateOutfit'>) => void;
@@ -78,7 +80,7 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
     const handleEditOutfit = () => {
         if (selectedOutfitItems.length > 0) {
             editOutfit(route?.params?.id, selectedIds, navigation);
-        } else {         
+        } else {
             Alert.alert('Error', 'Please add items to the outfit.');
         }
     };
@@ -110,11 +112,11 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
                     onPress={() => handleItemPress(item)}
                 >
                     <View>
-                        {isSelected ? <Text style={styles.addedText}>Added</Text> : <Text> </Text>}
-                        <Image
+                        {isSelected ? <Text style={styles.addedText}>Added</Text> : <Text> </Text>}                        
+                        <FastImage
                             source={{ uri: item?.image }}
                             style={{ width: 100, height: 100 }}
-                            onError={(e) => console.log('Error loading image:', e.nativeEvent.error)}
+                            resizeMode={FastImage.resizeMode.contain}
                         />
                         <Text style={styles.itemName}>
                             {item?.name}
@@ -135,10 +137,11 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
             <ScrollView style={styles.selectedScrollview} >
                 <View style={styles.selectedItems}>
                     {selectedOutfitItems.map(item => (
-                        <Image
+                        <FastImage
                             key={item?.id}
                             source={{ uri: item?.image }}
                             style={styles.selectedItemImage}
+                            resizeMode={FastImage.resizeMode.contain}
                         />
                     ))}</View>
             </ScrollView>
