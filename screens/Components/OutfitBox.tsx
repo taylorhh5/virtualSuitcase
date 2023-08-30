@@ -65,7 +65,8 @@ const OutfitBox: React.FC<OutfitBoxProps> = (props) => {
     props.navigation.navigate('CreateOutfit', {
       selectedOutfitItems: luggageItems,
       edit:true,
-      id:props.item.id
+      id:props?.item?.id,
+      outfitName: props?.item?.name
     });
   };
  
@@ -84,7 +85,7 @@ const OutfitBox: React.FC<OutfitBoxProps> = (props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.outfitTitle}>Outfit {props.index + 1}</Text>
+      <Text style={styles.outfitTitle}>{ props?.item?.name ? props?.item?.name  : `Outfit ${props.index + 1}`}</Text>
       <View style={styles.outfitBox}>
         <View>
           <TouchableOpacity onPress={() => handleItemPress(props.item.id)}>

@@ -70,7 +70,7 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
     const handleAddOutfit = () => {
         hideModal();
         if (selectedOutfitItems.length > 0) {
-            addOutfit(auth.uid, route?.params?.suitcaseId, selectedIds, navigation);
+            addOutfit(auth.uid, route?.params?.suitcaseId, selectedIds, outfitName, navigation);
             setOutfitName('');
         } else {
             Alert.alert('Error', 'Please add items to the outfit.');
@@ -79,7 +79,7 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
 
     const handleEditOutfit = () => {
         if (selectedOutfitItems.length > 0) {
-            editOutfit(route?.params?.id, selectedIds, navigation);
+            editOutfit(route?.params?.id, selectedIds, outfitName, navigation);
         } else {
             Alert.alert('Error', 'Please add items to the outfit.');
         }
@@ -87,7 +87,7 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
 
     const handleSubmit = () => {
         if (!route?.params?.edit) {
-            showModal()
+            handleAddOutfit()
         }
         else {
             handleEditOutfit()
@@ -97,6 +97,9 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
     useEffect(() => {
         if (route?.params?.selectedOutfitItems) {
             setSelectedOutfitItems(route.params.selectedOutfitItems);
+        }
+        if (route?.params?.outfitName) {
+            setOutfitName(route.params.outfitName);
         }
     }, []);
 
@@ -112,7 +115,7 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
                     onPress={() => handleItemPress(item)}
                 >
                     <View>
-                        {isSelected ? <Text style={styles.addedText}>Added</Text> : <Text> </Text>}                        
+                        {isSelected ? <Text style={styles.addedText}>Added</Text> : <Text> </Text>}
                         <FastImage
                             source={{ uri: item?.image }}
                             style={{ width: 100, height: 100 }}
@@ -131,7 +134,7 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
         <View style={styles.container}>
             <View style={styles.headerContainer}>
                 <TouchableOpacity style={styles.buttonContainer} onPress={() => clearSelected()}><Text style={styles.headerText}>Clear selected</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.buttonContainer} onPress={handleSubmit}><Text style={styles.headerText}>{route.params?.edit ? 'Edit Outfit' : 'Add Outfit'}
+                <TouchableOpacity style={styles.buttonContainer} onPress={showModal}><Text style={styles.headerText}>{route.params?.edit ? 'Edit Outfit' : 'Add Outfit'}
                 </Text></TouchableOpacity>
             </View>
             <ScrollView style={styles.selectedScrollview} >
@@ -170,8 +173,8 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
                             placeholder='Add name or submit without'
                         />
                         <View style={styles.modalButtonContainer}>
-                            <Button title="Add" onPress={handleAddOutfit} />
                             <Button title="Cancel" onPress={hideModal} color={colors.primary} />
+                            <Button title="Add" onPress={handleSubmit} />
                         </View>
                     </View>
                 </View>

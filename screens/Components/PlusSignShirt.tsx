@@ -25,8 +25,8 @@ const ShirtIconWithPlus: React.FC = () => {
       justifyContent: 'center',
     },
     shirtIcon: {
-      width: 200,
-      height: 200,
+      width: 130,
+      height: 130,
     },
     plusSignContainer: {
       position: 'absolute',

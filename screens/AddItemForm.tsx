@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet, TextInput, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet, TextInput, ScrollView, Modal, Button } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import colors from '../themes/Colors';
 import ShirtIconWithPlus from './Components/PlusSignShirt';
@@ -24,6 +24,16 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route, a
   const [selectedImageData, setSelectedImageData] = useState<Blob | null>(null);
   const [name, setName] = useState<string>('');
   const [uploading, setUploading] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const hideModal = () => {
+    setIsModalVisible(false);
+  };
+
 
   const handleImagePicker = async () => {
     try {
@@ -47,10 +57,10 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route, a
       return;
     }
 
-    if (!selectedImageData) {
-      console.log('No image selected.');
-      return;
-    }
+    // if (!selectedImageData) {
+    //   console.log('No image selected.');
+    //   return;
+    // }
 
     setUploading(true);
 
@@ -123,7 +133,7 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route, a
           </View>
         </View>
         {/* Name input */}
-        <View style={styles.nameContainer}>
+        {/* <View style={styles.nameContainer}>
           <Text style={styles.nameText}>Add Name: (Optional)</Text>
           <TextInput
             style={styles.nameInput}
@@ -131,8 +141,8 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route, a
             value={name}
             onChangeText={(text) => setName(text)}
           />
-        </View>
-        <TouchableOpacity onPress={handleAddItem} disabled={uploading}>
+        </View> */}
+        <TouchableOpacity onPress={showModal} disabled={uploading}>
           <View style={styles.addButtonContainer}>
             <Text style={styles.addButtonText}>
               {uploading ? 'Adding...' : 'Add To Suitcase'}
@@ -140,6 +150,23 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route, a
           </View>
         </TouchableOpacity>
       </ScrollView>
+      <Modal visible={isModalVisible} animationType="slide" transparent>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text>(Optional) Item name:</Text>
+            <TextInput
+              style={styles.modalTextInput}
+              onChangeText={text => setName(text)}
+              value={name}
+              placeholder='Add name or submit without'
+            />
+            <View style={styles.modalButtonContainer}>
+            <Button title="Cancel" onPress={hideModal} color={colors.primary} />
+              <Button title="Add" onPress={handleAddItem} />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -162,7 +189,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 10,
-    paddingTop: 1,
     backgroundColor: colors.background,
   },
   categoryContainer: {
@@ -182,7 +208,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: '31%',
     backgroundColor: colors.primary,
-    marginVertical: 3
+    marginVertical: 3,
   },
   selectedCategory: {
     backgroundColor: colors.secondary,
@@ -207,26 +233,19 @@ const styles = StyleSheet.create({
     borderStyle: 'dashed'
   },
   image: {
-    width: 200,
-    height: 200,
+    width: 130,
+    height: 130,
     resizeMode: 'cover',
-  },
-  imagePlaceholder: {
-    width: 200,
-    height: 200,
-    resizeMode: 'cover',
-    borderColor: 'black',
-    borderWidth: 1
   },
   selectText: {
     alignSelf: 'center',
     fontSize: 16,
     fontWeight: '500',
     marginBottom: 4,
-    marginTop: 30
+    marginTop: 20
   },
   selectContainer: {
-    marginBottom: 2,
+    marginTop: 10
   },
   addButtonContainer: {
     alignItems: 'center',
@@ -234,7 +253,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 40,
     borderRadius: 6,
     backgroundColor: colors.button,
-    marginVertical: 18
+    marginTop: 32,
+    padding:5
   },
   addButtonText: {
     fontSize: 20
@@ -244,14 +264,38 @@ const styles = StyleSheet.create({
   },
   nameText: {
     textAlign: 'center',
-    fontSize:16,
+    fontSize: 16,
     fontWeight: '500',
   },
   nameInput: {
     alignSelf: 'center',
     borderWidth: 0.5,
-    backgroundColor:'lightgrey',
-    width:'64%'
+    backgroundColor: 'lightgrey',
+    width: '64%'
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    width: '80%',
+  },
+  modalTextInput: {
+    borderWidth: 1,
+    borderColor: colors.primary,
+    borderRadius: 5,
+    padding: 8,
+    marginTop: 10,
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 20,
   },
 });
 

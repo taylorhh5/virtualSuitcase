@@ -16,11 +16,12 @@ import { collection, addDoc, doc, query, where, onSnapshot, deleteDoc, updateDoc
 
 import { db } from '../firebase/config';
 
-export const addOutfit = (userId: string, suitcaseId: string, items: number[], navigation: NavigationProp<LuggageStackParamList, 'CreateOutfit'>) => (dispatch: Dispatch) => {
+export const addOutfit = (userId: string, suitcaseId: string, items: number[], name: string, navigation: NavigationProp<LuggageStackParamList, 'CreateOutfit'>) => (dispatch: Dispatch) => {
   const newOutfit = {
     userId,
     suitcaseId,
     items,
+    name,
     timestamp: new Date(),
   };
   addDoc(collection(db, 'outfits'), newOutfit)
@@ -33,10 +34,10 @@ export const addOutfit = (userId: string, suitcaseId: string, items: number[], n
     });
 };
 
-export const editOutfit = (outfitId: string, updatedItems: number[], navigation: NavigationProp<LuggageStackParamList, 'CreateOutfit'>) => (dispatch: Dispatch) => {
-  updateDoc(doc(db, 'outfits', outfitId), { items: updatedItems })
+export const editOutfit = (outfitId: string, updatedItems: number[], name:string, navigation: NavigationProp<LuggageStackParamList, 'CreateOutfit'>) => (dispatch: Dispatch) => {
+  updateDoc(doc(db, 'outfits', outfitId), { name: name, items: updatedItems })
     .then(() => {
-      dispatch({ type: EDIT_OUTFIT, payload: { id: outfitId, updatedData: { items: updatedItems } } });
+      dispatch({ type: EDIT_OUTFIT, payload: { id: outfitId, updatedData: { name: name, items: updatedItems } } });
       navigation.goBack();
     })
     .catch((error) => {
