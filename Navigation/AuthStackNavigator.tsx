@@ -17,14 +17,7 @@ const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 function AuthStackNavigator() {
   return (
     <AuthStack.Navigator initialRouteName="SignUp" screenOptions={{
-      headerStyle: {
-        backgroundColor: colors.dark,
-      },
-      headerTintColor: '#fff',
-      headerTitleStyle: {
-        fontWeight: 'bold',
-      },
-      headerTitle: 'Virtual Suitcase'
+      headerShown: false, 
     }}>
       <AuthStack.Screen name="SignUp" component={SignUp} />
 

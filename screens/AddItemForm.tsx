@@ -13,6 +13,8 @@ import { LuggageStackParamList } from '../Navigation/LuggageStackNavigator';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../firebase/config';
 import { categories, categoryEmojis } from './data/CategoryData';
+import LottieView from 'lottie-react-native';
+
 interface AddItemFormProps {
   addItem: (suitcase: Item) => void;
   navigation: NativeStackNavigationProp<LuggageStackParamList, 'AddItemForm'>;
@@ -105,9 +107,7 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route, a
                 style={styles.image}
               />
             ) : (
-              <View style={styles.emptyImageContainer}>
-                <ShirtIconWithPlus />
-              </View>
+                    <LottieView style={{height: '100%', width: 140, flex:1, marginBottom:-10}} source={require("../Icons/assets/questionItem.json")} autoPlay loop />
             )}
           </TouchableOpacity>
         </View>

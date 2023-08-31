@@ -159,7 +159,7 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
                 </View>
             }
              {selectedOutfitItems.length === 0 ?
-            <View style={{borderBottomWidth: 1}}><Text style={{textAlign:'center', fontSize:18, fontWeight:'500'}}>Add items to your outfit</Text></View> : null}
+            <View style={{borderBottomWidth: 1}}><Text style={{textAlign:'center', fontSize:18, fontWeight:'500'}}>Add items to your outfit below</Text></View> : null}
             <ScrollView style={styles.categoryScrollView}>
                 {Object.entries(categorizedItems).map(([category, items]) => (
                     <View key={category}>
