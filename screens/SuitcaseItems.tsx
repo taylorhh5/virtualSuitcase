@@ -120,15 +120,17 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
                         renderEditForm()
 
                         :
-                        <View>
-                            <Text>Edit or Delete?</Text>
-                            <TouchableOpacity onPress={showEditForm}>
-                                <Text>Edit</Text>
+                        <View style={styles.modalContent}>
+                            {/* <Text style={styles.editDeleteHeaderText}>Edit or Delete?</Text> */}
+                            <TouchableOpacity style={styles.editDeleteTextContainer}onPress={showEditForm}>
+                                <Text style={styles.editDeleteText}>Edit</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => showDeleteForm()} >
-                                <Text>Delete</Text>
+                            <TouchableOpacity style={styles.editDeleteTextContainer}onPress={() => showDeleteForm()} >
+                                <Text style={styles.editDeleteText}>Delete</Text>
                             </TouchableOpacity>
-                            <Button title="Close" onPress={() => setIsModalVisible(false)} />
+                            <TouchableOpacity style={styles.editDeleteTextContdainer}onPress={() => setIsModalVisible(false)}>
+                                <Text style={styles.closeButton}>Close</Text>
+                            </TouchableOpacity>
                         </View>
                     }
                 </View>
@@ -202,20 +204,46 @@ const styles = StyleSheet.create({
     },
     modalContainer: {
         flex: 1,
-        backgroundColor: colors.background,
         justifyContent: 'center',
         alignItems: 'center',
-        marginVertical: 200,
-        marginHorizontal: 70
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        height:'40%'
+    },
+    modalContent: {
+        backgroundColor: colors.background,
+        padding: 40,
+        borderRadius: 10,
+        elevation: 5,
+        height:'20%',
+        width:'50%',
     },
     editContainer: {
-        backgroundColor: 'yellow',
-        alignItems: 'center',
-        borderWidth: 1,
+        backgroundColor: colors.background,
+        padding: 20,
+        borderRadius: 10,
+        elevation: 5,
     },
     noItemsMessage:{
         fontSize:18,
         textAlign:'center',
         marginTop:16
-    }
+    },
+    editDeleteTextContainer:{
+        borderWidth:1,
+        marginBottom:12,
+        backgroundColor:colors.primary
+    },
+    editDeleteHeaderText:{
+        fontSize:20,
+        textAlign:'center'
+    },
+    editDeleteText:{
+        fontSize:18,
+        textAlign:'center'
+    },
+    closeButton:{
+        fontSize:20,
+        textAlign:'center',
+        marginTop:14
+    },
 });

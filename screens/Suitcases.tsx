@@ -9,6 +9,7 @@ import { Suitcase } from '../ReduxActions/ActionTypes/SuitcaseActionTypes';
 import { addSuitcase, fetchSuitcases, editSuitcaseName, deleteSuitcase } from '../ReduxActions/SuitcaseActions';
 import ConfirmDelete from './Components/ConfimDelete';
 import { logout } from '../ReduxActions/AuthActions';
+import GearSVG from '../Icons/GearSVG';
 type SuitcasesProps = {
     navigation: NativeStackNavigationProp<LuggageStackParamList, 'Home'>;
     suitcases: Suitcase[];
@@ -74,15 +75,20 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
 
     const renderSuitcase = ({ item }: { item: Suitcase }) => {
         return (
+            <View style={styles.suitcaseWrapper}>
+                <TouchableOpacity style={{ width:'26%', alignItems:'center',paddingTop:4}} onPress={() => openEditSuitcaseModal(item.name, item.id)}>
+                    {/* <Text style={styles.suitcaseTextDots}>...</Text> */}
+                    {/* <View style={{borderWidth:1, width:'20%', alignItems:'center'}}> */}
+                    <GearSVG style={{ width: 22, height: 24, }}/>
+                    {/* </View> */}
+                </TouchableOpacity>
             <View style={styles.suitcaseContainer}>
-                <TouchableOpacity onPress={() => openEditSuitcaseModal(item.name, item.id)}>
-                    <Text style={styles.suitcaseTextDots}>...</Text>
-                </TouchableOpacity>
+                
                 <TouchableOpacity onPress={() => navigateToInsideSuitcase(item)}>
-                    <Image source={require('../Icons/SuitcaseIcon.png')} style={{ width: 100, height: 100 }} />
-                    <Text style={styles.suitcaseText}>{item.name} 🧳</Text>
+                    <Image source={require('../Icons/suitcaseOrangeDark.png')} style={{ width: 114, height: 100 }} />
+                    <Text style={styles.suitcaseText}>{item.name}</Text>
                 </TouchableOpacity>
-            </View>
+            </View></View>
         );
     };
 
@@ -195,6 +201,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 8,
         backgroundColor: colors.background,
+        
     },
     topContainer: {
         flexDirection: 'row',
@@ -237,17 +244,25 @@ const styles = StyleSheet.create({
         width: '40%',
         alignItems: 'center',
     },
+    suitcaseWrapper:{
+        backgroundColor: colors.primary,
+        borderRadius: 20,
+        borderWidth: 2,
+         marginTop: 16,
+
+    },
     suitcaseContainer: {
         paddingHorizontal: 18,
-        borderWidth: 2,
+        // borderWidth: 2,
         backgroundColor: colors.primary,
-        marginTop: 16,
+        // marginTop: 16,
         borderRadius: 20
     },
     suitcaseText: {
         fontSize: 18,
         textAlign: 'center',
-        marginBottom: 10
+        marginBottom: 10,
+        fontWeight:'500'
     },
     suitcaseTextDots: {
         fontSize: 18,

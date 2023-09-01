@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 0.4,
     borderRadius: 4,
-    backgroundColor: 'lightgrey',
+    backgroundColor: '#D3D3D3',
     justifyContent: 'center',
   },
   outfitImageContainer: {

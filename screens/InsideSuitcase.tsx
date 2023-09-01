@@ -127,14 +127,15 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         paddingVertical: 10,
-        backgroundColor: colors.primary, // Non-active button background color
+        backgroundColor: colors.background, // Non-active button background color
     },
     activeButton: {
-        backgroundColor: colors.button, // Active button background color
+        backgroundColor: colors.primary, // Active button background color
     },
     screenContentContainer: {
         flex: 1,
-        borderTopWidth: 1
+        borderTopWidth: 0.4,
+        marginTop:8
     },
     headerContainer: {
         flexDirection: 'row',
@@ -146,15 +147,15 @@ const styles = StyleSheet.create({
         color: colors.dark
     },
     addOutfitContainer: {
-        // borderWidth: 1,
-        // backgroundColor: colors.button,
-        // padding: 6,
-        // borderRadius: 28
+        borderWidth: 1,
+        backgroundColor: colors.primary,
+        padding: 6,
+        borderRadius: 28
     },
     addOutfitText: {
         fontSize: 18,
-        color: colors.button,
-        fontWeight: '800'
+        color: 'black',
+        fontWeight: '400'
     },
     dashboardText: {
         fontSize: 14,

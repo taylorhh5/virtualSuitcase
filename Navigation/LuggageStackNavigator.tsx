@@ -30,10 +30,12 @@ function LuggageStackNavigator() {
     <LuggageStack.Navigator initialRouteName="Suitcases" screenOptions={{
       headerStyle: {
         backgroundColor: colors.dark,
+        
       },
-      headerTintColor: '#fff',
+      headerTintColor: colors.background,
       headerTitleStyle: {
-        fontWeight: 'bold',
+      fontSize:23      
+        
       },
     }}>
       <LuggageStack.Screen name="Suitcases" component={Suitcases} />

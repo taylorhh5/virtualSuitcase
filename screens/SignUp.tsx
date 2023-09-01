@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Alert, Image, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Alert,
+  Image,
+  TouchableOpacity,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { useDispatch } from 'react-redux';
 import { register, login } from '../ReduxActions/AuthActions';
 import { BottomTabBar } from '@react-navigation/bottom-tabs';
@@ -38,38 +48,44 @@ const SignUp: React.FC = () => {
     dispatch(login(email, password));
   };
 
+  const dismissKeyboard = () => {
+    Keyboard.dismiss();
+  };
+
   return (
-    <View style={styles.container}>
-      <Image source={require('../Icons/AppIcon1024.png')} style={styles.image} />
-      <Text style={styles.header}>Welcome to Virtual Suitcase</Text>
-      <TextInput
-        style={[styles.input, emailStyle]}
-        placeholder="Email"
-        placeholderTextColor={'grey'}
-        value={email}
-        onChangeText={(text) => {
-          setEmail(text);
-          setEmailStyle(styles.validInput);
-        }}
-      />
-      <TextInput
-        style={[styles.input, passwordStyle, styles.bottomInput]}
-        placeholder="Password"
-        placeholderTextColor={'grey'}
-        secureTextEntry
-        value={password}
-        onChangeText={(text) => {
-          setPassword(text);
-          setPasswordStyle(styles.validInput);
-        }}
-      />
-      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-        <Text style={styles.buttonText}>Sign Up</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={[styles.button, styles.loginButton]} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Log In</Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableWithoutFeedback onPress={dismissKeyboard}>
+      <View style={styles.container}>
+        <Image source={require('../Icons/AppIcon1024.png')} style={styles.image} />
+        <Text style={styles.header}>Welcome to Virtual Suitcase</Text>
+        <TextInput
+          style={[styles.input, emailStyle]}
+          placeholder="Email"
+          placeholderTextColor={'grey'}
+          value={email}
+          onChangeText={(text) => {
+            setEmail(text);
+            setEmailStyle(styles.validInput);
+          }}
+        />
+        <TextInput
+          style={[styles.input, passwordStyle, styles.bottomInput]}
+          placeholder="Password"
+          placeholderTextColor={'grey'}
+          secureTextEntry
+          value={password}
+          onChangeText={(text) => {
+            setPassword(text);
+            setPasswordStyle(styles.validInput);
+          }}
+        />
+        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.button, styles.loginButton]} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Log In</Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -83,9 +99,9 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 24,
     marginBottom: 24,
-    fontWeight:'600'
+    fontWeight: '600',
   },
-  
+
   input: {
     width: '80%',
     height: 40,
@@ -96,13 +112,13 @@ const styles = StyleSheet.create({
     borderRadius: 7,
   },
   validInput: {
-    borderColor: 'black', 
+    borderColor: 'black',
   },
   invalidInput: {
-    borderColor: '#FF6060', 
+    borderColor: '#FF6060',
   },
   button: {
-    backgroundColor: '#eb4f34', 
+    backgroundColor: '#eb4f34',
     width: '80%',
     height: 46,
     justifyContent: 'center',
@@ -111,10 +127,10 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   loginButton: {
-    backgroundColor: 'blue', 
+    backgroundColor: 'green',
   },
-  bottomInput:{
-    marginBottom:20
+  bottomInput: {
+    marginBottom: 20,
   },
   buttonText: {
     color: 'white',
@@ -122,12 +138,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   image: {
-    width: 350, 
-    height: 300, 
-    marginTop:'16%',
-    marginRight:5
+    width: 350,
+    height: 300,
+    marginTop: '16%',
+    marginRight: 5,
   },
-
 });
 
 export default SignUp;

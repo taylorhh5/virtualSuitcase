@@ -23,9 +23,9 @@ const LuggageItem: React.FC<LuggageItemProps> = ({ item, handleItemPress }) => {
                         style={{ width: 100, height: 100 }}
                         resizeMode={FastImage.resizeMode.contain}
                     />
-                    <Text style={styles.itemName}>
+                    {/* <Text style={styles.itemName}>
                         {item.name}
-                    </Text>
+                    </Text> */}
                 </View>
             </TouchableHighlight>
         </View>
