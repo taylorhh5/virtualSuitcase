@@ -20,7 +20,8 @@ const LuggageItem: React.FC<LuggageItemProps> = ({ item, handleItemPress }) => {
                 <View>
                     <FastImage
                         source={{ uri: item.image }}
-                        style={{ width: 100, height: 100 }}
+                        style={{ width: 114, height: 114, borderRadius: 8,
+                        }}
                         resizeMode={FastImage.resizeMode.contain}
                     />
                     {/* <Text style={styles.itemName}>
@@ -39,8 +40,12 @@ const styles = StyleSheet.create({
     itemContainer: {
         marginRight: 16,
         alignItems: 'center',
-        borderWidth: 0.3,
-        padding: 1
+        // shadowColor: "#000",
+        // shadowOpacity: 0.2,
+        // shadowRadius: 5,
+        // backgroundColor:'#fefefe',
+        // borderRadius:8,
+        // padding:6,  
     },
     itemName: {
         marginTop: 8,

@@ -245,7 +245,10 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   selectContainer: {
-    marginTop: 10
+    marginTop: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 5,  
   },
   addButtonContainer: {
     alignItems: 'center',
@@ -254,7 +257,10 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     backgroundColor: colors.primary,
     marginTop: 32,
-    padding:5
+    padding:5,
+    shadowColor: "#000",
+    shadowOpacity: 0.4,
+    shadowRadius: 5,   
   },
   addButtonText: {
     fontSize: 20

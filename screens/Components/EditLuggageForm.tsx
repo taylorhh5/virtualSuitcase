@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, TextInput, Button, StyleSheet } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import colors from '../../themes/Colors';
-
+import { CategoryMapper } from '../data/CategoryData';
 interface Item {
   id: string;
   name: string;
@@ -38,17 +38,17 @@ const EditLuggageForm: React.FC<EditFormProps> = ({
   categories,
 }) => {
 
-
   return (
     <View style={styles.editContainer}>
       {/* ... other edit form components */}
-      <Text>Edit Item</Text>
+      <Text style={styles.currentCategoryText}>Edit Item</Text>
       <FastImage
         source={{ uri: selectedItemForEdit.image }}
-        style={{ width: 100, height: 100 }}
+        style={{ width: 160, height: 160 }}
         resizeMode={FastImage.resizeMode.contain}
       />
-      <Text style={styles.currentCategoryText}>Category: {selectedCategory ? selectedCategory : selectedItemForEdit.category}</Text>
+      <Text style={styles.currentCategoryText}>Category: <Text style={styles.selectedCategoryText}>{selectedCategory ? CategoryMapper[selectedCategory] : CategoryMapper[selectedItemForEdit.category]}</Text></Text>
+      <View style={{height:'20%', }}>
       <FlatList
         data={categories}
         horizontal
@@ -56,18 +56,18 @@ const EditLuggageForm: React.FC<EditFormProps> = ({
         renderItem={({ item }) => (
           <TouchableOpacity
             style={[
-              styles.categoryButton,
+              styles.categoryMainContainer,
               selectedCategory === item.key && styles.selectedCategory,
             ]}
             onPress={() => setSelectedCategory(item.key)}
           >
             <View style={styles.categoryTextContainer}>
-            <Text style={styles.categoryText}>{item.label}</Text>
+              <Text style={styles.categoryText}>{item.label}</Text>
             </View>
           </TouchableOpacity>
         )}
         keyExtractor={item => item.key}
-      />
+      /></View>
       <TextInput
         style={styles.input}
         value={selectedItemForEdit.name}
@@ -82,31 +82,30 @@ const EditLuggageForm: React.FC<EditFormProps> = ({
           )
         }
       />
-<View style={styles.buttonContainer}>
-<TouchableOpacity
-    style={[styles.button, styles.cancelButton]} // Style for the Cancel button
-    onPress={() => {
-      setIsEdit(false);
-      setSelectedCategory('');
-      setIsModalVisible(false);
-    }}
-  >
-    <Text style={styles.buttonText}>Cancel</Text>
-  </TouchableOpacity>
-  <TouchableOpacity
-    style={[styles.button, styles.saveButton]} // Style for the Save button
-    onPress={() => {
-      handleSave();
-      setIsEdit(false);
-      setSelectedCategory('');
-      setIsModalVisible(false);
-      editItem(selectedItemForEdit.id, { ...selectedItemForEdit, category: selectedCategory });
-    }}
-  >
-    <Text style={styles.buttonText}>Save</Text>
-  </TouchableOpacity>
-
-</View>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={[styles.button, styles.cancelButton]}
+          onPress={() => {
+            setIsEdit(false);
+            setSelectedCategory('');
+            setIsModalVisible(false);
+          }}
+        >
+          <Text style={styles.buttonText}>Cancel</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, styles.saveButton, { marginLeft: 10 }]} 
+          onPress={() => {
+            handleSave();
+            setIsEdit(false);
+            setSelectedCategory('');
+            setIsModalVisible(false);
+            editItem(selectedItemForEdit.id, { ...selectedItemForEdit, category: selectedCategory });
+          }}
+        >
+          <Text style={styles.buttonText}>Save</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -115,42 +114,81 @@ export default EditLuggageForm;
 
 const styles = StyleSheet.create({
   editContainer: {
-    width: '80%', 
-    height: '30%', // Set your desired height
+    height: '60%',
+    width: '80%',
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
     elevation: 5,
-    padding:3,
-    
+    padding:12,
   },
-  currentCategoryText:{
-    fontSize:16,
+  currentCategoryText: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 4,
   },
-  categoryTextContainer:{
-    borderWidth:1,
-    borderRadius:8,
-    padding:2,
-    marginHorizontal:3,
-    marginTop:4,
-    backgroundColor:colors.primary
+  selectedCategoryText: {
+    fontSize: 16,
+    marginBottom: 2,
   },
-  categoryText:{
-    fontSize:16
+  categoryTextContainer: {
+    padding: 2,
+    marginHorizontal: 3,
+    marginTop: 4,
+    backgroundColor: colors.primary,    
+  },
+  categoryText: {
+    fontSize: 16
   },
   buttonContainer: {
     flexDirection: 'row',
   },
   button: {
-    flex: 1,
     padding: 10,
-    borderRadius: 5,    
+    borderRadius: 5,
   },
   buttonText: {
     fontSize: 20,
-    color: 'black', 
+    color: 'black',
     textAlign: 'center',
   },
-  
+  categoryMainContainer: {
+    marginHorizontal:10,
+    backgroundColor: colors.primary,
+    padding: 4,
+    borderRadius:4,
+    alignSelf:'center',
+    justifyContent:'center',
+    borderWidth:0.5,
+    shadowColor: "#000",
+    shadowOpacity: 1,
+    shadowRadius: 3,
+    shadowOffset: {
+      height: 0,
+      width: 0,
+    },
+  },
+  saveButton: {
+    backgroundColor: colors.primary,
+    width: '40%',
+    shadowColor: "#000",
+    shadowOpacity: 1,
+    shadowRadius: 2,
+    shadowOffset: {
+      height: 0,
+      width: 0,
+    },
+  },
+  cancelButton: {
+    backgroundColor: colors.primary,
+    width: '40%',
+    shadowColor: "#000",
+    shadowOpacity: 1,
+    shadowRadius: 2,
+    shadowOffset: {
+      height: 0,
+      width: 0,
+    },
+  },
 });

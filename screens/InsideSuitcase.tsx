@@ -71,14 +71,14 @@ const InsideSuitcase = (props) => {
                 <View style={styles.headerContainer}>
                     <Text style={styles.headerText}>You have {props?.luggageState?.length} items</Text>
                     <TouchableOpacity style={styles.addOutfitContainer} onPress={() => navigateToAddItem()}>
-                        <Text style={styles.addOutfitText}>Add item +</Text>
+                        <Text style={styles.addOutfitText}>ADD ITEM +</Text>
                     </TouchableOpacity>
                 </View>
             ) : (
                 <View style={styles.headerContainer}>
                     <Text style={styles.headerText}>You have {props?.outfitState?.length} outfits</Text>
                     <TouchableOpacity style={styles.addOutfitContainer} onPress={() => navigateToAddOutfit()}>
-                        <Text style={styles.addOutfitText}>Add outfit +</Text>
+                        <Text style={styles.addOutfitText}>ADD OUTFIT +</Text>
                     </TouchableOpacity>
                 </View>
             )}
@@ -116,10 +116,10 @@ const styles = StyleSheet.create({
     screenButtonContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        borderRadius: 25, // Oval shape
+        borderRadius: 25, 
         borderWidth: 2,
         borderColor: colors.primary,
-        overflow: 'hidden', // Clip child views to the container's rounded corners
+        overflow: 'hidden', 
         marginHorizontal: 40,
         marginBottom: 30
     },
@@ -127,33 +127,36 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         paddingVertical: 10,
-        backgroundColor: colors.background, // Non-active button background color
+        backgroundColor: colors.background, 
     },
     activeButton: {
-        backgroundColor: colors.primary, // Active button background color
+        backgroundColor: colors.primary, 
     },
     screenContentContainer: {
         flex: 1,
         borderTopWidth: 0.4,
-        marginTop:8
+        // marginTop:8
     },
     headerContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingHorizontal: 12
+        paddingHorizontal: 12,
     },
     headerText: {
         alignSelf: 'flex-end',
-        color: colors.dark
+        color: colors.dark,
+        fontSize:16,
+        fontWeight:'500'
     },
     addOutfitContainer: {
-        borderWidth: 1,
         backgroundColor: colors.primary,
-        padding: 6,
-        borderRadius: 28
+        padding: 8,
+        borderRadius: 28,
+        marginBottom:6,
+        
     },
     addOutfitText: {
-        fontSize: 18,
+        fontSize: 14,
         color: 'black',
         fontWeight: '400'
     },

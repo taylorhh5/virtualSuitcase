@@ -120,7 +120,7 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
                         {isSelected ? <Text style={styles.addedText}>Added</Text> : <Text> </Text>}
                         <FastImage
                             source={{ uri: item?.image }}
-                            style={{ width: 100, height: 100 }}
+                            style={{ width: 100, height: 100, borderRadius: 4 }}
                             resizeMode={FastImage.resizeMode.contain}
                         />
                         <Text style={styles.itemName}>
@@ -158,8 +158,8 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
                     <LottieView source={require("../../Icons/assets/outfitPick.json")} autoPlay loop />
                 </View>
             }
-             {selectedOutfitItems.length === 0 ?
-            <View style={{borderBottomWidth: 1}}><Text style={{textAlign:'center', fontSize:18, fontWeight:'500'}}>Add items to your outfit below</Text></View> : null}
+            {selectedOutfitItems.length === 0 ?
+                <View style={{ borderBottomWidth: 1 }}><Text style={{ textAlign: 'center', fontSize: 18, fontWeight: '500' }}>Add items to your outfit below</Text></View> : null}
             <ScrollView style={styles.categoryScrollView}>
                 {Object.entries(categorizedItems).map(([category, items]) => (
                     <View key={category}>
@@ -185,8 +185,14 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
                             placeholder='Add name or submit without'
                         />
                         <View style={styles.modalButtonContainer}>
-                            <Button title="Cancel" onPress={hideModal} color={colors.primary} />
-                            <Button title="Add" onPress={handleSubmit} />
+                      
+                            <TouchableOpacity onPress={hideModal} style={[styles.bottomButtonContainer]}>
+                                <Text style={styles.buttonText}>Cancel</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={handleSubmit} style={[styles.bottomButtonContainer]}>
+                                <Text style={styles.buttonText}>Confirm</Text>
+                            </TouchableOpacity>
+
                         </View>
                     </View>
                 </View>
@@ -299,6 +305,23 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         marginTop: 20,
     },
-
+    button: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+      },
+      cancelButton: {
+        backgroundColor: 'gray',
+      },
+      bottomButtonContainer: {
+        backgroundColor: colors.primary,
+        borderRadius: 20,
+        padding: 10
+      },
+      buttonText: {
+        color: 'white',
+        fontSize:16,
+        fontWeight:'600'
+      },
 });
 

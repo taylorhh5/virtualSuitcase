@@ -5,11 +5,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch, AnyAction } from 'redux';
 import { RootState } from '../Reducers/RootReducer';
 import { Item } from '../ReduxActions/ActionTypes/LuggageActionTypes';
-import { addItem, deleteItem, editItem,  } from '../ReduxActions/LuggageActions';
+import { addItem, deleteItem, editItem, } from '../ReduxActions/LuggageActions';
 import EditLuggageForm from './Components/EditLuggageForm';
 import { categories, CategoryMapper } from './data/CategoryData';
 import LuggageItem from './Components/LuggageItem';
 import ConfirmDelete from './Components/ConfimDelete';
+import FastImage from 'react-native-fast-image';
+
 
 type SuitcaseItemsProps = {
     suitcaseId: string;
@@ -26,7 +28,7 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
     const [isDelete, setIsDelete] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState<string>('');
     const categorizedItems: { [category: string]: Item[] } = {};
-    
+
     props.luggageState.forEach(item => {
         if (!categorizedItems[item.category]) {
             categorizedItems[item.category] = [];
@@ -88,13 +90,13 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
         );
     };
 
-   
+
     const renderDeleteForm = () => {
         return (
             <ConfirmDelete text={selectedItemForEdit.name} onCancel={() => setIsDelete(false)} onConfirm={onDelete} />);
     };
 
-    if (props.luggageState.length === 0) return (<Text style={styles.noItemsMessage}>You haven't added any luggage items.</Text> )
+    if (props.luggageState.length === 0) return (<Text style={styles.noItemsMessage}>You haven't added any luggage items.</Text>)
 
     return (
         <ScrollView style={styles.luggageContainer}>
@@ -122,13 +124,28 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
                         :
                         <View style={styles.modalContent}>
                             {/* <Text style={styles.editDeleteHeaderText}>Edit or Delete?</Text> */}
-                            <TouchableOpacity style={styles.editDeleteTextContainer}onPress={showEditForm}>
+                            <View style={{ height: '58%', width: '58%', marginBottom: 18, }}>
+                                <FastImage
+                                    source={{ uri: selectedItemForEdit?.image }}
+                                    style={{
+                                        width: '100%', height: '100%', shadowColor: "#000",
+                                        shadowOpacity: 1,
+                                        shadowRadius: 3,
+                                        shadowOffset: {
+                                            height: 0,
+                                            width: 0,
+                                        },
+                                    }}
+                                    resizeMode={FastImage.resizeMode.contain}
+                                />
+                            </View>
+                            <TouchableOpacity style={styles.editDeleteTextContainer} onPress={showEditForm}>
                                 <Text style={styles.editDeleteText}>Edit</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.editDeleteTextContainer}onPress={() => showDeleteForm()} >
+                            <TouchableOpacity style={styles.editDeleteTextContainer} onPress={() => showDeleteForm()} >
                                 <Text style={styles.editDeleteText}>Delete</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.editDeleteTextContdainer}onPress={() => setIsModalVisible(false)}>
+                            <TouchableOpacity style={styles.closeContainer} onPress={() => setIsModalVisible(false)}>
                                 <Text style={styles.closeButton}>Close</Text>
                             </TouchableOpacity>
                         </View>
@@ -160,7 +177,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(SuitcaseItems);
 const styles = StyleSheet.create({
     luggageContainer: {
         paddingHorizontal: 10,
-        marginTop: 30
+        marginTop: 30,
+        backgroundColor: colors.background
     },
     headerContainer: {
         flexDirection: 'row',
@@ -207,15 +225,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        height:'40%'
     },
     modalContent: {
         backgroundColor: colors.background,
-        padding: 40,
+        padding: 10,
         borderRadius: 10,
         elevation: 5,
-        height:'20%',
-        width:'50%',
+        width: '80%',
+        height: '60%',
+        borderWidth: 2,
+        alignItems: 'center',
     },
     editContainer: {
         backgroundColor: colors.background,
@@ -223,27 +242,54 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         elevation: 5,
     },
-    noItemsMessage:{
-        fontSize:18,
-        textAlign:'center',
-        marginTop:16
+    noItemsMessage: {
+        fontSize: 18,
+        textAlign: 'center',
+        marginTop: 16
     },
-    editDeleteTextContainer:{
-        borderWidth:1,
-        marginBottom:12,
-        backgroundColor:colors.primary
+    editDeleteTextContainer: {
+        borderWidth: 1,
+        marginBottom: 12,
+        backgroundColor: colors.primary,
+        padding: 4,
+        borderRadius: 4,
+        width: '50%',
+        alignSelf: 'center',
+        shadowColor: "#000",
+        shadowOpacity: 1,
+        shadowRadius: 1,
+        shadowOffset: {
+            height: 0,
+            width: 0,
+        },
     },
-    editDeleteHeaderText:{
-        fontSize:20,
-        textAlign:'center'
+    editDeleteHeaderText: {
+        fontSize: 20,
+        textAlign: 'center'
     },
-    editDeleteText:{
-        fontSize:18,
-        textAlign:'center'
+    editDeleteText: {
+        fontSize: 18,
+        textAlign: 'center'
     },
-    closeButton:{
-        fontSize:20,
-        textAlign:'center',
-        marginTop:14
+    closeContainer: {
+        borderWidth: 1,
+        backgroundColor: colors.primary,
+        padding: 2,
+        borderRadius: 4,
+        shadowColor: "#000",
+        shadowOpacity: 1,
+        shadowRadius: 1,
+        shadowOffset: {
+            height: 0,
+            width: 0,
+        },
+        width: '70%',
+        marginTop:10
+
+    },
+    closeButton: {
+        fontSize: 20,
+        textAlign: 'center',
+
     },
 });

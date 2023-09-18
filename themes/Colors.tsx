@@ -8,21 +8,23 @@
  
 
 //Sky
-//  const colors: Colors = {
-//     background: '#f5f3f5',
-//     primary: '#95d2db',
-//     secondary: '#e7dbbe',
-//     button: '#de6332',
-//     dark:'#f5f3f5'
-//  }
+// background: '#f5f3f5',
 
-const colors: Colors = {
-  background: '#e8eaea',
-  primary: '#468b97',
-  secondary: '#ffa62b',
-  button: '#f06263',
-  dark:'#255c79'
-}
+ const colors: Colors = {
+    background: '#ffffff',
+    primary: '#95d2db',
+    secondary: '#e7dbbe',
+    button: '#de6332',
+    dark:'#a69f96'
+ }
+
+// const colors: Colors = {
+//   background: '#e8eaea',
+//   primary: '#468b97',
+//   secondary: '#ffa62b',
+//   button: '#f06263',
+//   dark:'#255c79'
+// }
 
     //Original
     // const colors: Colors = {

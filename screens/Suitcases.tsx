@@ -10,6 +10,9 @@ import { addSuitcase, fetchSuitcases, editSuitcaseName, deleteSuitcase } from '.
 import ConfirmDelete from './Components/ConfimDelete';
 import { logout } from '../ReduxActions/AuthActions';
 import GearSVG from '../Icons/GearSVG';
+import LottieView from 'lottie-react-native';
+
+
 type SuitcasesProps = {
     navigation: NativeStackNavigationProp<LuggageStackParamList, 'Home'>;
     suitcases: Suitcase[];
@@ -26,6 +29,8 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
     const [suitcaseToEditId, setSuitcaseToEditId] = useState('');
+    const [isEditing, setIsEditing] = useState(false);
+
     const navigateToInsideSuitcase = (item: Suitcase) => {
         navigation.navigate('InsideSuitcase', {
             name: item.name,
@@ -47,6 +52,7 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
         setIsEditModalVisible(false);
         setIsDeleteModalVisible(false);
         setNewSuitcaseName('');
+        setIsEditing(false)
     };
 
     const createNewSuitcase = () => {
@@ -60,6 +66,7 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
         editSuitcaseName(suitcaseToEditId, newSuitcaseName);
         closeModal();
         setSuitcaseToEditId('');
+        setIsEditing(false)
     };
 
     const showDeleteModal = () => {
@@ -76,16 +83,13 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
     const renderSuitcase = ({ item }: { item: Suitcase }) => {
         return (
             <View style={styles.suitcaseWrapper}>
-                <TouchableOpacity style={{ width:'26%', alignItems:'center',paddingTop:4}} onPress={() => openEditSuitcaseModal(item.name, item.id)}>
-                    {/* <Text style={styles.suitcaseTextDots}>...</Text> */}
-                    {/* <View style={{borderWidth:1, width:'20%', alignItems:'center'}}> */}
+                <TouchableOpacity style={{ width:'26%', alignItems:'center',paddingTop:4}} onPress={() => openEditSuitcaseModal(item.name, item.id)}>               
                     <GearSVG style={{ width: 22, height: 24, }}/>
-                    {/* </View> */}
                 </TouchableOpacity>
             <View style={styles.suitcaseContainer}>
                 
                 <TouchableOpacity onPress={() => navigateToInsideSuitcase(item)}>
-                    <Image source={require('../Icons/suitcaseOrangeDark.png')} style={{ width: 114, height: 100 }} />
+                    <Image source={require('../Icons/suitcasePlane.png')} style={{ width: 114, height: 100 }} />
                     <Text style={styles.suitcaseText}>{item.name}</Text>
                 </TouchableOpacity>
             </View></View>
@@ -93,7 +97,6 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
     };
 
     const renderDeleteForm = () => {
-        console.log('this ran')
         return (
             <ConfirmDelete text={newSuitcaseName} onCancel={() => setIsDeleteModalVisible(false)} onConfirm={onDelete} />
         );
@@ -111,8 +114,8 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
         <View style={styles.container}>
             <View style={styles.topContainer}>
                 <TouchableOpacity style={styles.newSuitcaseContainer} onPress={openNewSuitcaseModal}>
-                    <Image source={require('../Icons/BasicSuitcaseIcon.png')} style={{ width: 70, height: 70 }} />
-                    <Text style={styles.suitcaseText}>Create new suitcase</Text>
+                <LottieView style={{}} source={require("../Icons/assets/suitcaseLottie.json")} autoPlay loop />
+                    <Text style={styles.suitcaseText}>Add suitcase</Text>
                 </TouchableOpacity>
                 <View style={styles.topRightSection}>
                     <TouchableOpacity style={styles.logoutContainer} onPress={() => handleLogout()}>
@@ -153,7 +156,7 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
                             <Button title="Cancel" onPress={closeModal} />
                         </View>
                     </View>
-                ) : (
+                ) : isEditing ? (
                     <View style={styles.modalContainer}>
                         <View style={styles.modalContent}>
                             <Text style={styles.modalHeaderText}>Edit Suitcase</Text>
@@ -163,9 +166,19 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
                                 onChangeText={setNewSuitcaseName}
                                 style={styles.input}
                             />
-                            <Button title="Edit Suitcase" onPress={handleEditSuitcase} />
+                            <Button title="Save" onPress={handleEditSuitcase} />
                             <Button title="Cancel" onPress={closeModal} />
+
+                        </View>
+                    </View>
+                )                
+                : (
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Button title="Edit Suitcase" onPress={()=> setIsEditing(true)} />
                             <Button title="Delete Suitcase" onPress={showDeleteModal} />
+                            <Button title="Cancel" onPress={closeModal} />
+
                         </View>
                     </View>
                 )}
@@ -243,13 +256,26 @@ const styles = StyleSheet.create({
         backgroundColor: colors.primary,
         width: '40%',
         alignItems: 'center',
+        shadowColor: "#000",
+        shadowOpacity: 1,
+        shadowRadius: 5,
+        shadowOffset: {
+          height: 0,
+          width: 0,
+        },
     },
     suitcaseWrapper:{
         backgroundColor: colors.primary,
         borderRadius: 20,
-        borderWidth: 2,
+        // borderWidth: 2,
          marginTop: 16,
-
+         shadowColor: "#000",
+         shadowOpacity: 1,
+         shadowRadius: 5,
+         shadowOffset: {
+           height: 0,
+           width: 0,
+         },
     },
     suitcaseContainer: {
         paddingHorizontal: 18,
@@ -271,7 +297,8 @@ const styles = StyleSheet.create({
     },
     suitcaseListContainer: {
         flex: 1,
-        paddingVertical: 8
+        paddingVertical: 8,
+        paddingHorizontal:6,
     },
     welcomeText: {
         fontSize: 16,

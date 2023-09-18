@@ -1,7 +1,7 @@
 export const categories = [
-  { key: 'hat', label: 'Hat' },
-  { key: 'top', label: 'Top' },
-  { key: 'bottom', label: 'Bottom' },
+  { key: 'hat', label: 'Hats' },
+  { key: 'top', label: 'Tops' },
+  { key: 'bottom', label: 'Bottoms' },
   { key: 'underwear', label: 'Underwear' },
   { key: 'socks', label: 'Socks' },
   { key: 'shoes', label: 'Shoes' },

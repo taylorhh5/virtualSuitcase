@@ -29,10 +29,10 @@ function LuggageStackNavigator() {
   return (
     <LuggageStack.Navigator initialRouteName="Suitcases" screenOptions={{
       headerStyle: {
-        backgroundColor: colors.dark,
-        
+        backgroundColor: colors.background,
       },
-      headerTintColor: colors.background,
+      headerTintColor: '#262626',
+      headerShadowVisible: false,
       headerTitleStyle: {
       fontSize:23      
         
