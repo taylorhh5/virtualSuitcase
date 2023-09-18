@@ -12,7 +12,7 @@ import { LuggageStackParamList } from '../../Navigation/LuggageStackNavigator';
 import { CategoryMapper } from '../data/CategoryData';
 import FastImage from 'react-native-fast-image';
 import LottieView from 'lottie-react-native';
-
+import { categoryOrder } from '../data/CategoryData';
 
 type CreateOutfitProps = {
     addOutfit: (userId: string, suitcaseId: string, items: number[], navigation: NavigationProp<LuggageStackParamList, 'CreateOutfit'>) => void;
@@ -48,6 +48,13 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
         }
         categorizedItems[item.category].push(item);
     });
+
+     const sortedCategories = categoryOrder
+        .filter(category => categorizedItems.hasOwnProperty(category))
+        .map(category => ({
+            category,
+            items: categorizedItems[category],
+        }));
 
     const selectedIds = selectedOutfitItems.map(item => item?.id);
 
@@ -161,11 +168,11 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
             {selectedOutfitItems.length === 0 ?
                 <View style={{ borderBottomWidth: 1 }}><Text style={{ textAlign: 'center', fontSize: 18, fontWeight: '500' }}>Add items to your outfit below</Text></View> : null}
             <ScrollView style={styles.categoryScrollView}>
-                {Object.entries(categorizedItems).map(([category, items]) => (
-                    <View key={category}>
-                        <Text style={styles.categoryTitle}>{CategoryMapper[category]} ({items.length} items)</Text>
+            {sortedCategories.map(categoryObj => (
+                    <View key={categoryObj.category}>
+                        <Text style={styles.categoryTitle}>{CategoryMapper[categoryObj.category]} ({categoryObj.items.length} items)</Text>
                         <FlatList
-                            data={items}
+                            data={categoryObj.items}
                             renderItem={renderOutfitImage}
                             keyExtractor={item => item?.id}
                             horizontal

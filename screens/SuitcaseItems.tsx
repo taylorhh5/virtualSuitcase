@@ -11,6 +11,7 @@ import { categories, CategoryMapper } from './data/CategoryData';
 import LuggageItem from './Components/LuggageItem';
 import ConfirmDelete from './Components/ConfimDelete';
 import FastImage from 'react-native-fast-image';
+import { categoryOrder } from './data/CategoryData';
 
 
 type SuitcaseItemsProps = {
@@ -35,6 +36,14 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
         }
         categorizedItems[item.category].push(item);
     });
+
+    const sortedCategories = categoryOrder
+        .filter(category => categorizedItems.hasOwnProperty(category))
+        .map(category => ({
+            category,
+            items: categorizedItems[category],
+        }));
+
 
     const handleItemPress = (item: Item) => {
         setSelectedItemForEdit(item);
@@ -100,15 +109,18 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
 
     return (
         <ScrollView style={styles.luggageContainer}>
-            {Object.entries(categorizedItems).map(([category, items]) => (
-                <View key={category} style={styles.categoryContainer}>
-                    <Text style={styles.categoryTitle}>{CategoryMapper[category]} ({items.length} items)</Text>
+            {sortedCategories.map(categoryObj => (
+                <View key={categoryObj.category} style={styles.categoryContainer}>
+                    <Text style={styles.categoryTitle}>
+                        {CategoryMapper[categoryObj.category]} ({categoryObj.items.length} items)
+                    </Text>
                     <View style={styles.flatListContainer}>
                         <FlatList
-                            data={items}
+                            data={categoryObj.items}
                             renderItem={({ item }) => (
                                 <LuggageItem item={item} handleItemPress={handleItemPress} />
-                            )} keyExtractor={item => item?.id}
+                            )}
+                            keyExtractor={item => item?.id}
                             horizontal
                             showsHorizontalScrollIndicator={false}
                         />

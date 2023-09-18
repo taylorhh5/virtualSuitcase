@@ -35,3 +35,15 @@ export const categoryEmojis: { [key: string]: string } = {
   socks: '🧦',
   electronics: '🎧'
 };
+
+export const categoryOrder = [
+  'top',
+  'bottom',
+  'underwear',
+  'socks',
+  'shoes',
+  'hat',
+  'toiletries',
+  'electronics',
+  'miscellaneous',
+];
