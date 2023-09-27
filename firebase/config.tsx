@@ -1,27 +1,25 @@
-import { initializeApp } from 'firebase/app'
-import { getAuth } from "firebase/auth";
-import { getFirestore, } from 'firebase/firestore'
+import { initializeApp } from 'firebase/app';
+import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
-
 const firebaseConfig = {
-    apiKey: "AIzaSyBF5bSxy_R-JTcGkpR-yxPWgtwlhC0b0ZQ",
-    authDomain: "virtual-suitcase-backend.firebaseapp.com",
-    projectId: "virtual-suitcase-backend",
-    storageBucket: "virtual-suitcase-backend.appspot.com",
-    messagingSenderId: "135950245140",
-    appId: "1:135950245140:web:ff1a660c8e491bdafa7601"
-  };
+  apiKey: "AIzaSyBF5bSxy_R-JTcGkpR-yxPWgtwlhC0b0ZQ",
+  authDomain: "virtual-suitcase-backend.firebaseapp.com",
+  projectId: "virtual-suitcase-backend",
+  storageBucket: "virtual-suitcase-backend.appspot.com",
+  messagingSenderId: "135950245140",
+  appId: "1:135950245140:web:ff1a660c8e491bdafa7601"
+};
 
+const app = initializeApp(firebaseConfig);
 
-//init firebase app
-initializeApp(firebaseConfig)
+const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(ReactNativeAsyncStorage)
+});
 
-//init service
-export const db = getFirestore()
+export { app, auth };
 
-//auth
-export const auth = getAuth();
-
-//storage
+export const db = getFirestore();
 export const storage = getStorage();

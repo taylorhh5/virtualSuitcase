@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         color: colors.dark,
         fontSize:16,
-        fontWeight:'500'
+        fontWeight:'600'
     },
     addOutfitContainer: {
         backgroundColor: colors.primary,

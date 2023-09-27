@@ -143,7 +143,7 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
         <View style={styles.container}>
             <View style={styles.headerContainer}>
                 <TouchableOpacity style={styles.buttonContainer} onPress={() => clearSelected()}><Text style={styles.headerText}>Clear selected</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.buttonContainer} onPress={showModal}><Text style={styles.headerText}>{route.params?.edit ? 'Edit Outfit' : 'Add Outfit'}
+                <TouchableOpacity style={styles.buttonContainer} onPress={showModal}><Text style={styles.headerText}>{route.params?.edit ? 'Save' : 'Add Outfit'}
                 </Text></TouchableOpacity>
             </View>
             {selectedOutfitItems.length > 0 ?
