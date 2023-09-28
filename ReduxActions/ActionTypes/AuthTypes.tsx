@@ -12,6 +12,11 @@ export const LOGOUT_START = "LOGOUT_START";
 export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 export const LOGOUT_FAILURE = "LOGOUT_FAILURE";
 
+export const PASSWORD_RESET_START = 'PASSWORD_RESET_START';
+export const PASSWORD_RESET_SUCCESS = 'PASSWORD_RESET_SUCCESS';
+export const PASSWORD_RESET_FAILURE = 'PASSWORD_RESET_FAILURE';
+
+
 interface RegisterStartAction {
     type: typeof REGISTER_START;
 }
@@ -52,6 +57,22 @@ interface LogoutSuccessAction {
 interface LogoutFailureAction {
     type: typeof LOGOUT_FAILURE;
 }
+
+
+
+interface PasswordResetStartAction {
+    type: typeof PASSWORD_RESET_START;
+}
+
+interface PasswordResetSuccessAction {
+    type: typeof PASSWORD_RESET_SUCCESS;
+    payload: any;
+}
+
+interface PasswordResetFailureAction {
+    type: typeof PASSWORD_RESET_FAILURE;
+}
+
     
 
 export type AuthActionTypes =
@@ -63,4 +84,7 @@ export type AuthActionTypes =
     | LoginFailureAction
     | LogoutStartAction
     | LogoutSuccessAction
-    | LogoutFailureAction;
+    | LogoutFailureAction
+    | PasswordResetStartAction
+    | PasswordResetSuccessAction
+    | PasswordResetFailureAction;

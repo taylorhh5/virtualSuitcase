@@ -10,11 +10,14 @@ import {
     LOGOUT_START,
     LOGOUT_SUCCESS,
     LOGOUT_FAILURE,
+    PASSWORD_RESET_START,
+    PASSWORD_RESET_SUCCESS,
+    PASSWORD_RESET_FAILURE,
 } from './ActionTypes/AuthTypes';
 // import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { Alert } from 'react-native';
 import localDeviceStorage from '../utils/LocalDeviceStorage';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, } from "firebase/auth";
 import { auth } from '../firebase/config';
 import clearStorage from '../utils/ClearStorage';
 
@@ -50,23 +53,39 @@ export const register = (
 };
 
 export const login = (email: string, password: string) => (dispatch: Dispatch) => {
-    dispatch({ type: LOGIN_START });
-  
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential: UserCredential) => {
-        const user = userCredential.user;
-        dispatch({ type: LOGIN_SUCCESS, payload: user });
-  
-        localDeviceStorage.saveItem('token', user.accessToken);
-        localDeviceStorage.saveItem('user_id', user.uid);
-        localDeviceStorage.saveItem('email', user.email);
-      })
-      .catch((error: FirebaseError) => {
-        dispatch({ type: LOGIN_FAILURE, payload: error });
-        Alert.alert(error.message);
-      });
-  };
+  dispatch({ type: LOGIN_START });
 
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential: UserCredential) => {
+      const user = userCredential.user;
+      dispatch({ type: LOGIN_SUCCESS, payload: user });
+
+      localDeviceStorage.saveItem('token', user.accessToken);
+      localDeviceStorage.saveItem('user_id', user.uid);
+      localDeviceStorage.saveItem('email', user.email);
+    })
+    .catch((error: FirebaseError) => {
+      dispatch({ type: LOGIN_FAILURE, payload: error });
+      Alert.alert(
+        'Login Error',
+        error.message,
+        [
+          {
+            text: 'Send Reset Password Email',
+            onPress: () => {
+              console.log(email)
+              dispatch(resetPassword(email));
+            },
+          },
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+        ],
+        { cancelable: false }
+      );
+    });
+};
   export const logout = () => (dispatch: Dispatch) => {
     signOut(auth)
       .then(() => {
@@ -79,3 +98,17 @@ export const login = (email: string, password: string) => (dispatch: Dispatch) =
         dispatch({ type: LOGOUT_FAILURE, payload: error });
       });
   };
+
+export const resetPassword = (email: string) => (dispatch: Dispatch) => {
+  dispatch({ type: PASSWORD_RESET_START });
+  sendPasswordResetEmail(auth, email)
+    .then(() => {
+      Alert.alert("Please check your email for instructions to reset your password");
+      dispatch({ type: PASSWORD_RESET_SUCCESS });
+    })
+    .catch((error) => {
+      console.error("Password reset error:", error);
+      dispatch({ type: PASSWORD_RESET_FAILURE, payload: error });
+      Alert.alert("Password reset failed", error.message);
+    });
+};
