@@ -12,13 +12,14 @@ import LuggageItem from './Components/LuggageItem';
 import ConfirmDelete from './Components/ConfimDelete';
 import FastImage from 'react-native-fast-image';
 import { categoryOrder } from './data/CategoryData';
-
+import LottieView from 'lottie-react-native';
 
 type SuitcaseItemsProps = {
     suitcaseId: string;
     luggageState: Item[];
     deleteItem: (id: string) => void;
     editItem: (id: string, updatedItem: Partial<Item>) => (dispatch: Dispatch<AnyAction>) => void,
+    loadingItems: boolean;
 };
 
 const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
@@ -107,6 +108,15 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
 
     if (props.luggageState.length === 0) return (<Text style={styles.noItemsMessage}>You haven't added any luggage items.</Text>)
 
+    if (props.loadingItems) {
+        return (
+          <View style={{ flex: 1 }}>
+            <LottieView source={require("../Icons/assets/paperPlaneLottie.json")} autoPlay loop />
+            <Text style={{ fontWeight: '500', marginTop: 12, alignSelf: 'center', fontSize: 16 }}>Loading luggage...</Text>
+          </View>
+        )
+      }
+
     return (
         <ScrollView style={styles.luggageContainer}>
             {sortedCategories.map(categoryObj => (
@@ -172,6 +182,8 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
 
 const mapStateToProps = (state: RootState) => ({
     luggageState: state.luggage.luggage,
+    loadingItems: state.luggage.loading,
+
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) =>

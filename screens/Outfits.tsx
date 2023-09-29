@@ -6,18 +6,27 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { connect } from 'react-redux';
 import { RootState } from '../Reducers/RootReducer';
 import { Outfit } from '../ReduxActions/ActionTypes/OutfitTypes';
+import LottieView from 'lottie-react-native';
 
 type OutfitsScreenProps = {
   navigation: NativeStackNavigationProp<LuggageStackParamList, 'Outfits'>;
   outfitState: Outfit[];
-  fetchOutfits: () => void;
+  loadingOutfits: boolean;
 }
 
-const Outfits: React.FC<OutfitsScreenProps> = ({ navigation, outfitState, fetchOutfits, suitcaseId }) => {
+const Outfits: React.FC<OutfitsScreenProps> = ({ navigation, outfitState, loadingOutfits }) => {
 
+  if (loadingOutfits) {
+    return (
+      <View style={{ flex: 1 }}>
+        <LottieView source={require("../Icons/assets/paperPlaneLottie.json")} autoPlay loop />
+        <Text style={{ fontWeight: '500', marginTop: 12, alignSelf: 'center', fontSize: 16 }}>Loading outfits...</Text>
+      </View>
+    )
+  }
   return (
     <View style={styles.container}>
-      {!outfitState ? <Text style={styles.outfitHeader}>You have haven't added any outfits.</Text> :
+      {!outfitState ? <Text style={styles.outfitHeader}>You haven't added any outfits.</Text> :
         <FlatList
           data={outfitState}
           renderItem={({ item, index }) => (
@@ -31,6 +40,8 @@ const Outfits: React.FC<OutfitsScreenProps> = ({ navigation, outfitState, fetchO
 
 const mapStateToProps = (state: RootState) => ({
   outfitState: state.outfits.outfits,
+  loadingOutfits: state.outfits.loading,
+
 });
 
 export default connect(mapStateToProps)(Outfits);

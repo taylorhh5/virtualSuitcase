@@ -34,6 +34,12 @@ const luggageReducer = (state = initialState, action: ItemActionTypes): LuggageS
         loading: false,
         luggage: action.payload,
       };
+      case FETCH_LUGGAGE_ITEMS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        luggage: [],
+      };
     case ADD_ITEM:
       return state;
     case EDIT_ITEM:

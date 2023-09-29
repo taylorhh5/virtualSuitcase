@@ -57,13 +57,18 @@ const outfitsReducer = (state = initialState, action: OutfitActionTypes): Outfit
       return {
         ...state,
         loading: true,
-        outfits: action.payload,
       };
     case FETCH_OUTFITS_SUCCESS:
       return {
         ...state,
         loading: false,
         outfits: action.payload,
+      };
+      case FETCH_OUTFITS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        outfits: [],
       };
     default:
       return state

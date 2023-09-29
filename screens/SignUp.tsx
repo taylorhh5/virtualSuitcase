@@ -10,12 +10,14 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { register, login } from '../ReduxActions/AuthActions';
-import { BottomTabBar } from '@react-navigation/bottom-tabs';
+import { RootState } from '../Reducers/RootReducer';
 
 const SignUp: React.FC = () => {
   const dispatch = useDispatch();
+  const loading = useSelector((state: RootState) => state.auth.loading);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -56,7 +58,11 @@ const SignUp: React.FC = () => {
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
       <View style={styles.container}>
         <Image source={require('../Icons/AppIcon1024.png')} style={styles.image} />
-        <Text style={styles.header}>Welcome to Virtual Suitcase</Text>
+        {!loading ?
+          <Text style={styles.header}>Welcome to Virtual Suitcase</Text>
+          :
+          <Text style={styles.header}>Signing in...</Text>
+        }
         <TextInput
           style={[styles.input, emailStyle]}
           placeholder="Email"

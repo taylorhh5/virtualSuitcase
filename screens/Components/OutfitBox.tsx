@@ -165,18 +165,24 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 14,
     paddingTop: 8,
-
   },
 
   outfitBox: {
     padding: 10,
-    borderWidth: 0.4,
-    borderRadius: 4,
+    borderWidth: 1,
+    borderRadius: 8,
   },
   outfitImageContainer: {
     margin: 3,
     borderWidth: 2,
     borderColor: 'transparent',
+    shadowColor: "#000",
+    shadowOpacity: 1,
+    shadowRadius: 1,
+    shadowOffset: {
+      height: 0,
+      width: 0,
+    },
 
   },
   selectedImageContainer: {

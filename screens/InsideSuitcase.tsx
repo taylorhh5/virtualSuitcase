@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     },
     headerText: {
         alignSelf: 'flex-end',
-        color: colors.dark,
+        color: 'grey',
         fontSize:16,
         fontWeight:'600'
     },

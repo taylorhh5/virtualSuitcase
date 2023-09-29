@@ -11,6 +11,7 @@ import ConfirmDelete from './Components/ConfimDelete';
 import { logout } from '../ReduxActions/AuthActions';
 import GearSVG from '../Icons/GearSVG';
 import LottieView from 'lottie-react-native';
+import { AuthState } from '../Reducers/AuthReducer';
 
 
 type SuitcasesProps = {
@@ -18,12 +19,15 @@ type SuitcasesProps = {
     suitcases: Suitcase[];
     addSuitcase: (suitcase: Suitcase) => void;
     loading: boolean;
-    fetchSuitcases: () => void;
+    fetchSuitcases: (id: string) => void;
     editSuitcaseName: (id: string, name: string) => void;
     deleteSuitcase: (id: string) => void;
+    logout: () => void;
+    auth: AuthState;
+    suitcasesLoading: boolean;
 }
 
-const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcase, logout, auth, fetchSuitcases, editSuitcaseName, deleteSuitcase }) => {
+const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcase, logout, auth, fetchSuitcases, editSuitcaseName, deleteSuitcase, suitcasesLoading }) => {
     const [isNewSuitcaseModalVisible, setNewSuitcaseModalVisible] = useState(false);
     const [newSuitcaseName, setNewSuitcaseName] = useState('');
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
@@ -131,16 +135,23 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
                     )}
                 </View>
             </View>
-            <View style={styles.suitcaseListContainer}>
-                <FlatList
-                    data={suitcases}
-                    renderItem={renderSuitcase}
-                    keyExtractor={(item) => item.id}
-                    numColumns={2}
-                    columnWrapperStyle={styles.row}
-                    contentContainerStyle={styles.contentContainer}
-                />
-            </View>
+            {!suitcasesLoading ?
+                <View style={styles.suitcaseListContainer}>
+                    <FlatList
+                        data={suitcases}
+                        renderItem={renderSuitcase}
+                        keyExtractor={(item) => item.id}
+                        numColumns={2}
+                        columnWrapperStyle={styles.row}
+                        contentContainerStyle={styles.contentContainer}
+                    />
+                </View>
+                :
+                <View style={{ flex: 1 }}>
+                    <LottieView source={require("../Icons/assets/fishingLottie.json")} autoPlay loop />
+                    <Text style={{ fontWeight: '500', marginTop: 12, alignSelf: 'center', fontSize: 16 }}>Getting your suitcases...</Text>
+                </View>
+            }
             <Modal visible={isNewSuitcaseModalVisible || isEditModalVisible} animationType="slide" transparent={true}>
                 {!isEditModalVisible ? (
                     <View style={styles.modalContainer}>
@@ -191,6 +202,8 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
 const mapStateToProps = (state: RootState) => ({
     suitcases: state.suitcases.suitcases,
     auth: state.auth.user,
+    suitcasesLoading: state.suitcases.loading,
+
 
 });
 
