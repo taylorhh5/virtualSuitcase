@@ -41,6 +41,10 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
             suitcaseId: item.id
         });
     };
+
+    const navigateToSettings = () => {
+        navigation.navigate('SettingsScreen');
+    };
     const openNewSuitcaseModal = () => {
         setNewSuitcaseModalVisible(true);
     };
@@ -87,16 +91,16 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
     const renderSuitcase = ({ item }: { item: Suitcase }) => {
         return (
             <View style={styles.suitcaseWrapper}>
-                <TouchableOpacity style={{ width:'26%', alignItems:'center',paddingTop:4}} onPress={() => openEditSuitcaseModal(item.name, item.id)}>               
-                    <GearSVG style={{ width: 22, height: 24, }}/>
+                <TouchableOpacity style={{ width: '26%', alignItems: 'center', paddingTop: 4 }} onPress={() => openEditSuitcaseModal(item.name, item.id)}>
+                    <GearSVG style={{ width: 22, height: 24, }} />
                 </TouchableOpacity>
-            <View style={styles.suitcaseContainer}>
-                
-                <TouchableOpacity onPress={() => navigateToInsideSuitcase(item)}>
-                    <Image source={require('../Icons/suitcasePlane.png')} style={{ width: 114, height: 100 }} />
-                    <Text style={styles.suitcaseText}>{item.name}</Text>
-                </TouchableOpacity>
-            </View></View>
+                <View style={styles.suitcaseContainer}>
+
+                    <TouchableOpacity onPress={() => navigateToInsideSuitcase(item)}>
+                        <Image source={require('../Icons/suitcasePlane.png')} style={{ width: 114, height: 100 }} />
+                        <Text style={styles.suitcaseText}>{item.name}</Text>
+                    </TouchableOpacity>
+                </View></View>
         );
     };
 
@@ -118,13 +122,28 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
         <View style={styles.container}>
             <View style={styles.topContainer}>
                 <TouchableOpacity style={styles.newSuitcaseContainer} onPress={openNewSuitcaseModal}>
-                <LottieView style={{}} source={require("../Icons/assets/suitcaseLottie.json")} autoPlay loop />
+                    <LottieView style={{}} source={require("../Icons/assets/suitcaseLottie.json")} autoPlay loop />
                     <Text style={styles.suitcaseText}>Add suitcase</Text>
                 </TouchableOpacity>
                 <View style={styles.topRightSection}>
-                    <TouchableOpacity style={styles.logoutContainer} onPress={() => handleLogout()}>
-                        <Text style={styles.logoutText}>Logout 👋</Text>
+                    <TouchableOpacity style={styles.gearContainer} onPress={() => navigateToSettings()}>
+                        <Text style={styles.settingsText}>Settings</Text>
+                        <GearSVG style={{ width: 22, height: 24, }} />
                     </TouchableOpacity>
+                    {/* {isLogoutVisible && (
+            <View>
+            <TouchableOpacity style={styles.logoutContainer} onPress={handleLogout}>
+              <Text style={styles.logoutText}>Logout 👋</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.logoutContainer} onPress={handleLogout}>
+            <Text style={styles.logoutText}>Logout 👋</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.logoutContainer} onPress={handleLogout}>
+          <Text style={styles.logoutText}>Logout 👋</Text>
+        </TouchableOpacity>
+        </View>
+             )
+             } */}
                     <Text style={styles.welcomeText}>Hello, <Text style={styles.emailText}>{auth.email}.</Text></Text>
                     {!suitcases.length ? (
                         <Text style={styles.topRightSectionText}>Add a suitcase to get started!</Text>
@@ -227,8 +246,6 @@ const mapStateToProps = (state: RootState) => ({
     suitcases: state.suitcases.suitcases,
     auth: state.auth.user,
     suitcasesLoading: state.suitcases.loading,
-
-
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
@@ -251,7 +268,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 8,
         backgroundColor: colors.background,
-        
     },
     topContainer: {
         flexDirection: 'row',
@@ -274,7 +290,26 @@ const styles = StyleSheet.create({
     },
     logoutText: {
         fontSize: 16,
-        fontWeight:'500'
+        fontWeight: '500'
+    },
+    gearContainer: {
+        backgroundColor: colors.primary,
+        alignSelf: 'flex-end',
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10,
+        borderRadius: 6,
+        shadowColor: "#000",
+        shadowOpacity: 1,
+        shadowRadius: 2,
+        shadowOffset: {
+            height: 0,
+            width: 0,
+        },
+    },
+    settingsText: {
+        marginRight: 4,
+        fontSize: 15
     },
     topRightSectionText: {
         fontSize: 16,
@@ -297,22 +332,22 @@ const styles = StyleSheet.create({
         shadowOpacity: 1,
         shadowRadius: 5,
         shadowOffset: {
-          height: 0,
-          width: 0,
+            height: 0,
+            width: 0,
         },
     },
-    suitcaseWrapper:{
+    suitcaseWrapper: {
         backgroundColor: colors.primary,
         borderRadius: 20,
         // borderWidth: 2,
-         marginTop: 16,
-         shadowColor: "#000",
-         shadowOpacity: 1,
-         shadowRadius: 5,
-         shadowOffset: {
-           height: 0,
-           width: 0,
-         },
+        marginTop: 16,
+        shadowColor: "#000",
+        shadowOpacity: 1,
+        shadowRadius: 5,
+        shadowOffset: {
+            height: 0,
+            width: 0,
+        },
     },
     suitcaseContainer: {
         paddingHorizontal: 18,
@@ -325,7 +360,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         textAlign: 'center',
         marginBottom: 10,
-        fontWeight:'500'
+        fontWeight: '500'
     },
     suitcaseTextDots: {
         fontSize: 18,
@@ -335,7 +370,7 @@ const styles = StyleSheet.create({
     suitcaseListContainer: {
         flex: 1,
         paddingVertical: 8,
-        paddingHorizontal:6,
+        paddingHorizontal: 6,
     },
     welcomeText: {
         fontSize: 16,
@@ -359,15 +394,15 @@ const styles = StyleSheet.create({
         padding: 20,
         borderRadius: 10,
         elevation: 5,
-        width:'70%',
-        height:'40%',
-        flexDirection:'column',
-        justifyContent:'space-evenly',
-        alignItems:'center'
+        width: '70%',
+        height: '40%',
+        flexDirection: 'column',
+        justifyContent: 'space-evenly',
+        alignItems: 'center'
     },
     modalHeaderText: {
         fontSize: 20,
-        fontWeight: '400'
+        fontWeight: '600'
     },
     input: {
         borderWidth: 1,
@@ -376,25 +411,26 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         marginTop: 16,
         borderRadius: 5,
-        width:'90%'
+        width: '90%'
     },
-    modalHeader:{
-        fontSize:24,
-        fontWeight:'500',
-        marginBottom:20
+    modalHeader: {
+        fontSize: 24,
+        fontWeight: '500',
+        marginBottom: 20
     },
     button: {
         backgroundColor: colors.primary,
         padding: 14,
         borderRadius: 28,
-        marginBottom:6,
-        width:'70%',
-        alignItems:'center'
-        
+        marginBottom: 6,
+        width: '70%',
+        alignItems: 'center'
+
     },
     buttonText: {
         fontSize: 16,
         color: 'black',
         fontWeight: '500'
     },
+
 })

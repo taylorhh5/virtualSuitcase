@@ -11,6 +11,7 @@ import Outfits from '../screens/Outfits';
 import CreateOutfit from '../screens/Components/CreateOutfit';
 import colors from '../themes/Colors';
 import AddItemForm from '../screens/AddItemForm';
+import SettingsScreen from '../screens/SettingsScreen';
 
 export type LuggageStackParamList = {
   Suitcases: undefined;
@@ -20,7 +21,8 @@ export type LuggageStackParamList = {
     selectedOutfitItems: string[];
     edit: boolean; 
   };  AddItemForm: undefined;
-  OutfitBox: undefined
+  OutfitBox: undefined,
+  SettingsScreen: undefined
 };
 
 const LuggageStack = createNativeStackNavigator<LuggageStackParamList>();
@@ -46,9 +48,7 @@ function LuggageStackNavigator() {
       <LuggageStack.Screen name="Outfits" component={Outfits} />
       <LuggageStack.Screen name="CreateOutfit" component={CreateOutfit} />
       <LuggageStack.Screen name="AddItemForm" component={AddItemForm} />
-
-
-
+      <LuggageStack.Screen name="SettingsScreen" component={SettingsScreen}  options={{ headerTitle: 'Settings', headerBackTitle:'Back' }} />
     </LuggageStack.Navigator>
   );
 }
