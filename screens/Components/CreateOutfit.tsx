@@ -142,7 +142,7 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
-                <TouchableOpacity style={styles.buttonContainer} onPress={() => clearSelected()}><Text style={styles.headerText}>Clear selected</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.buttonContainer} onPress={() => clearSelected()}><Text style={styles.headerText}>Clear Selected</Text></TouchableOpacity>
                 <TouchableOpacity style={styles.buttonContainer} onPress={showModal}><Text style={styles.headerText}>{route.params?.edit ? 'Save' : 'Add Outfit'}
                 </Text></TouchableOpacity>
             </View>
@@ -162,7 +162,7 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
                 </ScrollView>
                 :
                 <View style={{ height: '30%', width: '100%', }}>
-                    <LottieView source={require("../../Icons/assets/outfitPick.json")} autoPlay loop />
+                    <LottieView source={require("../../Icons/assets/outfitHoldingLottie.json")} autoPlay  />
                 </View>
             }
             {selectedOutfitItems.length === 0 ?

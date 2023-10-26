@@ -78,7 +78,7 @@ export const login = (email: string, password: string) => (dispatch: Dispatch) =
             },
           },
           {
-            text: 'Cancel',
+            text: 'Try Again',
             style: 'cancel',
           },
         ],

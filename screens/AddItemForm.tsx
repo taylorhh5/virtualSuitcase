@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet, TextInput, ScrollView, Modal, Button } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet, TextInput, ScrollView, Modal, Button, Alert, } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import colors from '../themes/Colors';
 import ShirtIconWithPlus from './Components/PlusSignShirt';
@@ -59,10 +59,15 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route, a
       return;
     }
 
-    // if (!selectedImageData) {
-    //   console.log('No image selected.');
-    //   return;
-    // }
+    if (!selectedImageData) {
+      Alert.alert('Please select an image.', 'You must select an image to add an item.');
+      return;
+    }
+  
+    if (!category) {
+      Alert.alert('Please select a category.', 'You must select a category to add an item.');
+      return;
+    }
 
     setUploading(true);
 
@@ -132,16 +137,6 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route, a
             ))}
           </View>
         </View>
-        {/* Name input */}
-        {/* <View style={styles.nameContainer}>
-          <Text style={styles.nameText}>Add Name: (Optional)</Text>
-          <TextInput
-            style={styles.nameInput}
-            placeholder="Enter Name"
-            value={name}
-            onChangeText={(text) => setName(text)}
-          />
-        </View> */}
         <TouchableOpacity onPress={showModal} disabled={uploading}>
           <View style={styles.addButtonContainer}>
             <Text style={styles.addButtonText}>
@@ -205,7 +200,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 1,
     borderColor: '#000',
-    borderRadius: 5,
+    borderRadius:20,
     width: '31%',
     backgroundColor: colors.primary,
     marginVertical: 3,
@@ -254,10 +249,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     marginHorizontal: 40,
-    borderRadius: 6,
+    borderRadius: 10,
     backgroundColor: colors.primary,
     marginTop: 32,
-    padding:5,
+    padding:10,
     shadowColor: "#000",
     shadowOpacity: 0.4,
     shadowRadius: 5,   

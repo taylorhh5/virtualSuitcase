@@ -135,22 +135,28 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
                     )}
                 </View>
             </View>
-            {!suitcasesLoading ?
-                <View style={styles.suitcaseListContainer}>
-                    <FlatList
-                        data={suitcases}
-                        renderItem={renderSuitcase}
-                        keyExtractor={(item) => item.id}
-                        numColumns={2}
-                        columnWrapperStyle={styles.row}
-                        contentContainerStyle={styles.contentContainer}
-                    />
-                </View>
-                :
+            {suitcasesLoading ?
                 <View style={{ flex: 1 }}>
                     <LottieView source={require("../Icons/assets/fishingLottie.json")} autoPlay loop />
                     <Text style={{ fontWeight: '500', marginTop: 12, alignSelf: 'center', fontSize: 16 }}>Getting your suitcases...</Text>
                 </View>
+                :
+                !suitcasesLoading && !suitcases.length ?
+                    <View style={{ flex: 1 }}>
+                        <LottieView source={require("../Icons/assets/ghostLottie.json")} autoPlay loop />
+                        <Text style={{ fontWeight: '500', marginTop: 12, alignSelf: 'center', fontSize: 16 }}>No suitcases added.</Text>
+                    </View>
+                    :
+                    <View style={styles.suitcaseListContainer}>
+                        <FlatList
+                            data={suitcases}
+                            renderItem={renderSuitcase}
+                            keyExtractor={(item) => item.id}
+                            numColumns={2}
+                            columnWrapperStyle={styles.row}
+                            contentContainerStyle={styles.contentContainer}
+                        />
+                    </View>
             }
             <Modal visible={isNewSuitcaseModalVisible || isEditModalVisible} animationType="slide" transparent={true}>
                 {!isEditModalVisible ? (
@@ -163,8 +169,14 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
                                 onChangeText={setNewSuitcaseName}
                                 style={styles.input}
                             />
-                            <Button title="Create Suitcase" onPress={createNewSuitcase} />
-                            <Button title="Cancel" onPress={closeModal} />
+                            <TouchableOpacity style={styles.button} onPress={createNewSuitcase}>
+                                <Text style={styles.buttonText}>Create Suitcase</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.button} onPress={closeModal}>
+                                <Text style={styles.buttonText}>Cancel</Text>
+                            </TouchableOpacity>
+
                         </View>
                     </View>
                 ) : isEditing ? (
@@ -177,22 +189,34 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
                                 onChangeText={setNewSuitcaseName}
                                 style={styles.input}
                             />
-                            <Button title="Save" onPress={handleEditSuitcase} />
-                            <Button title="Cancel" onPress={closeModal} />
+                            <TouchableOpacity style={styles.button} onPress={handleEditSuitcase}>
+                                <Text style={styles.buttonText}>Save</Text>
+                            </TouchableOpacity>
 
+                            <TouchableOpacity style={styles.button} onPress={closeModal}>
+                                <Text style={styles.buttonText}>Cancel</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
-                )                
-                : (
-                    <View style={styles.modalContainer}>
-                        <View style={styles.modalContent}>
-                            <Button title="Edit Suitcase" onPress={()=> setIsEditing(true)} />
-                            <Button title="Delete Suitcase" onPress={showDeleteModal} />
-                            <Button title="Cancel" onPress={closeModal} />
+                )
+                    : (
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalContent}>
+                                <Text style={styles.modalHeader}>{newSuitcaseName}</Text>
+                                <TouchableOpacity style={styles.button} onPress={() => setIsEditing(true)}>
+                                    <Text style={styles.buttonText}>Edit Suitcase</Text>
+                                </TouchableOpacity>
 
+                                <TouchableOpacity style={styles.button} onPress={showDeleteModal}>
+                                    <Text style={styles.buttonText}>Delete Suitcase</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.button} onPress={closeModal}>
+                                    <Text style={styles.buttonText}>Cancel</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
-                )}
+                    )}
             </Modal>
             {isDeleteModalVisible && renderDeleteForm()}
         </View>
@@ -327,12 +351,19 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        // width:'50%',
+        // alignSelf:'center'
     },
     modalContent: {
         backgroundColor: colors.background,
         padding: 20,
         borderRadius: 10,
         elevation: 5,
+        width:'70%',
+        height:'40%',
+        flexDirection:'column',
+        justifyContent:'space-evenly',
+        alignItems:'center'
     },
     modalHeaderText: {
         fontSize: 20,
@@ -345,5 +376,25 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         marginTop: 16,
         borderRadius: 5,
+        width:'90%'
+    },
+    modalHeader:{
+        fontSize:24,
+        fontWeight:'500',
+        marginBottom:20
+    },
+    button: {
+        backgroundColor: colors.primary,
+        padding: 14,
+        borderRadius: 28,
+        marginBottom:6,
+        width:'70%',
+        alignItems:'center'
+        
+    },
+    buttonText: {
+        fontSize: 16,
+        color: 'black',
+        fontWeight: '500'
     },
 })

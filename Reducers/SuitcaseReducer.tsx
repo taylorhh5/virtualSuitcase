@@ -12,7 +12,7 @@ const defaultSuitcase: Suitcase = {
 
 const initialState: SuitcasesState = {
   suitcases: [],
-  loading: false
+  loading: true
 };
 
 const suitcasesReducer = (state = initialState, action: SuitcaseActionTypes): SuitcasesState => {

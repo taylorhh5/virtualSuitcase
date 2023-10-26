@@ -40,7 +40,6 @@ const EditLuggageForm: React.FC<EditFormProps> = ({
 
   return (
     <View style={styles.editContainer}>
-      {/* ... other edit form components */}
       <Text style={styles.currentCategoryText}>Edit Item</Text>
       <FastImage
         source={{ uri: selectedItemForEdit.image }}
@@ -48,26 +47,26 @@ const EditLuggageForm: React.FC<EditFormProps> = ({
         resizeMode={FastImage.resizeMode.contain}
       />
       <Text style={styles.currentCategoryText}>Category: <Text style={styles.selectedCategoryText}>{selectedCategory ? CategoryMapper[selectedCategory] : CategoryMapper[selectedItemForEdit.category]}</Text></Text>
-      <View style={{height:'20%', }}>
-      <FlatList
-        data={categories}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={[
-              styles.categoryMainContainer,
-              selectedCategory === item.key && styles.selectedCategory,
-            ]}
-            onPress={() => setSelectedCategory(item.key)}
-          >
-            <View style={styles.categoryTextContainer}>
-              <Text style={styles.categoryText}>{item.label}</Text>
-            </View>
-          </TouchableOpacity>
-        )}
-        keyExtractor={item => item.key}
-      /></View>
+      <View style={{ height: '20%', }}>
+        <FlatList
+          data={categories}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={[
+                styles.categoryMainContainer,
+                selectedCategory === item.key && styles.selectedCategory,
+              ]}
+              onPress={() => setSelectedCategory(item.key)}
+            >
+              <View>
+                <Text style={styles.categoryText}>{item.label}</Text>
+              </View>
+            </TouchableOpacity>
+          )}
+          keyExtractor={item => item.key}
+        /></View>
       <TextInput
         style={styles.input}
         value={selectedItemForEdit.name}
@@ -94,7 +93,7 @@ const EditLuggageForm: React.FC<EditFormProps> = ({
           <Text style={styles.buttonText}>Cancel</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.button, styles.saveButton, { marginLeft: 10 }]} 
+          style={[styles.button, styles.saveButton, { marginLeft: 10 }]}
           onPress={() => {
             handleSave();
             setIsEdit(false);
@@ -121,7 +120,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
     elevation: 5,
-    padding:12,
+    padding: 12,
+
   },
   currentCategoryText: {
     fontSize: 18,
@@ -129,17 +129,20 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   selectedCategoryText: {
-    fontSize: 16,
+    fontSize: 17,
+    fontWeight:'600',
     marginBottom: 2,
+    color:'grey'
+
   },
   categoryTextContainer: {
     padding: 2,
     marginHorizontal: 3,
     marginTop: 4,
-    backgroundColor: colors.primary,    
+    backgroundColor: colors.primary,
   },
   categoryText: {
-    fontSize: 16
+    fontSize: 16,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -154,20 +157,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   categoryMainContainer: {
-    marginHorizontal:10,
-    backgroundColor: colors.primary,
-    padding: 4,
-    borderRadius:4,
-    alignSelf:'center',
-    justifyContent:'center',
-    borderWidth:0.5,
-    shadowColor: "#000",
-    shadowOpacity: 1,
-    shadowRadius: 3,
-    shadowOffset: {
-      height: 0,
-      width: 0,
-    },
+    marginHorizontal: 10,
+    padding: 10,
+    borderRadius: 20,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    borderWidth: 0.5,
   },
   saveButton: {
     backgroundColor: colors.primary,
@@ -190,5 +185,9 @@ const styles = StyleSheet.create({
       height: 0,
       width: 0,
     },
+  },
+  selectedCategory: {
+    backgroundColor: colors.primary,
+
   },
 });
