@@ -4,17 +4,20 @@ import colors from '../themes/Colors';
 import { connect } from 'react-redux';
 import { logout } from '../ReduxActions/AuthActions';
 import { AuthState } from '../Reducers/AuthReducer';
+import { resetPassword } from '../ReduxActions/AuthActions';
+import { bindActionCreators, Dispatch } from 'redux';
 
 type SettingsScreenProps = {
     logout: () => void;
+    resetPassword: (email: String) => void;
     auth: AuthState;
 }
 
-const SettingsScreen: React.FC<SettingsScreenProps> = ({ logout }) => {
+const SettingsScreen: React.FC<SettingsScreenProps> = ({ logout, auth, resetPassword }) => {
     const handleLogout = () => {
         logout();
     };
-
+console.log(auth.email, 'auth')
     const handleDeleteAccount = () => {
         Alert.alert(
             'Are you sure you want to delete your account?',
@@ -49,10 +52,30 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ logout }) => {
         );
     };
 
+    const handleResetPassword = () => {
+        Alert.alert(
+            'Reset Password',
+            'Send reset password email?',
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Send',
+                    onPress: () => {
+                        resetPassword(auth.email)
+                    },
+                },
+            ]
+        );
+    };
+
+
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.button} onPress={() => console.log('test')}>
-                <Text style={styles.buttonText}>Change Password</Text>
+            <TouchableOpacity style={styles.button} onPress={() => handleResetPassword()}>
+                <Text style={styles.buttonText}>Reset Password</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={() => console.log('test')}>
                 <Text style={styles.buttonText}>Change Email</Text>
@@ -114,8 +137,13 @@ const mapStateToProps = (state) => ({
     auth: state.auth.user,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-    logout: () => dispatch(logout()),
-});
+const mapDispatchToProps = (dispatch: Dispatch) =>
+    bindActionCreators(
+        {
+            logout,
+            resetPassword,
+        },
+        dispatch
+    );
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsScreen);
