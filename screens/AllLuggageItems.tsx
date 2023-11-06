@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, ScrollView, Modal, TouchableOpacity, Button, } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ScrollView, Modal, TouchableOpacity, } from 'react-native';
 import React, { useState, } from 'react';
 import colors from '../themes/Colors';
 import { connect } from 'react-redux';
@@ -6,10 +6,8 @@ import { bindActionCreators, Dispatch, AnyAction } from 'redux';
 import { RootState } from '../Reducers/RootReducer';
 import { Item } from '../ReduxActions/ActionTypes/LuggageActionTypes';
 import { addItem, deleteItem, editItem, } from '../ReduxActions/LuggageActions';
-import EditLuggageForm from './Components/EditLuggageForm';
 import { categories, CategoryMapper } from './data/CategoryData';
 import LuggageItem from './Components/LuggageItem';
-import ConfirmDelete from './Components/ConfimDelete';
 import FastImage from 'react-native-fast-image';
 import { categoryOrder } from './data/CategoryData';
 import LottieView from 'lottie-react-native';
@@ -51,74 +49,43 @@ const AllLuggageItems: React.FC<AllLuggageItemsProps> = (props) => {
         setIsModalVisible(true);
     };
 
-    const onDelete = (id: string) => {
-        props.deleteItem(selectedItemForEdit.id)
-        setIsDelete(false)
 
-    };
 
     const handleSave = () => {
         if (selectedItemForEdit) {
             // Update the category of the selected item
             const updatedItem = { ...selectedItemForEdit, category: selectedCategory };
             // Update the luggage array with the updated item
-            setLuggage(prevluggage =>
-                prevluggage.map(item =>
-                    item === selectedItemForEdit ? updatedItem : item
-                )
-            );
+    
         }
-        setIsEdit(false);
-        setIsModalVisible(false);
+        setIsModalVisible(false);        
+        setSelectedItemForEdit(null);
+
     };
 
-    const showEditForm = () => {
-        setIsEdit(true);
-        setSelectedCategory(selectedItemForEdit.category)
-    };
-
-    const showDeleteForm = () => {
-        setIsModalVisible(false)
-        setIsDelete(true);
-    };
-
-    const renderEditForm = () => {
-        if (!selectedItemForEdit) return null;
-
-        return (
-            <EditLuggageForm
-                selectedItemForEdit={selectedItemForEdit}
-                setSelectedItemForEdit={setSelectedItemForEdit}
-                selectedCategory={selectedCategory}
-                handleSave={handleSave}
-                setIsEdit={setIsEdit}
-                setSelectedCategory={setSelectedCategory}
-                setIsModalVisible={setIsModalVisible}
-                editItem={props.editItem}
-                categories={categories}
-            />
-        );
+    const addItemToSuitcase = () => {
+        if (selectedItemForEdit) {
+       props.editItem(selectedItemForEdit.id, { ...selectedItemForEdit, suitcaseId: [...selectedItemForEdit.suitcaseId, props.suitcaseId] })
+        setIsModalVisible(false);        
+        setSelectedItemForEdit(null);
+        }
     };
 
 
-    const renderDeleteForm = () => {
-        return (
-            <ConfirmDelete text={selectedItemForEdit.name} onCancel={() => setIsDelete(false)} onConfirm={onDelete} />);
-    };
 
 
     if (props.loadingItems) {
         return (
           <View style={{ flex: 1 }}>
             <LottieView source={require("../Icons/assets/telescopeLottie.json")} autoPlay loop />
-            <Text style={{ fontWeight: '500', marginTop: 12, alignSelf: 'center', fontSize: 16 }}>Finding your luggage...</Text>
+            <Text style={{ fontWeight: '500', marginTop: 12, alignSelf: 'center', fontSize: 16 }}>Finding all your luggage...</Text>
           </View>
         )
       }
 
           if (!props.loadingItems && props.allLuggageItems.length === 0) return (<View style={{ flex: 1 }}>
             <LottieView source={require("../Icons/assets/windLottie.json")} autoPlay loop />
-            <Text style={styles.noItemsMessage}>Add luggage items to see them here.</Text>
+            <Text style={styles.noItemsMessage}>Luggage items from all your suitcases will show here.</Text>
           </View>)
 
 
@@ -145,10 +112,7 @@ const AllLuggageItems: React.FC<AllLuggageItemsProps> = (props) => {
             <Modal visible={isModalVisible} animationType="slide" transparent={true}
             >
                 <View style={styles.modalContainer}>
-                    {isEdit ?
-                        renderEditForm()
-
-                        :
+                    
                         <View style={styles.modalContent}>
                             {/* <Text style={styles.editDeleteHeaderText}>Edit or Delete?</Text> */}
                             <View style={{ height: '58%', width: '58%', marginBottom: 18, }}>
@@ -166,21 +130,18 @@ const AllLuggageItems: React.FC<AllLuggageItemsProps> = (props) => {
                                     resizeMode={FastImage.resizeMode.contain}
                                 />
                             </View>
-                            <TouchableOpacity style={styles.editDeleteTextContainer} onPress={showEditForm}>
-                                <Text style={styles.editDeleteText}>Edit</Text>
+                            <TouchableOpacity style={styles.editDeleteTextContainer} onPress={addItemToSuitcase}>
+                                <Text style={styles.closeButton}>Add Item To Suitcase</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.editDeleteTextContainer} onPress={() => showDeleteForm()} >
-                                <Text style={styles.editDeleteText}>Delete</Text>
-                            </TouchableOpacity>
+                         
                             <TouchableOpacity style={styles.closeContainer} onPress={() => setIsModalVisible(false)}>
-                                <Text style={styles.closeButton}>Close</Text>
+                                <Text style={styles.closeButton}>Cancel</Text>
                             </TouchableOpacity>
                         </View>
-                    }
+                    
                 </View>
 
             </Modal>
-            {isDelete && renderDeleteForm()}
         </ScrollView>
     );
 };

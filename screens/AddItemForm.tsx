@@ -17,7 +17,7 @@ import LottieView from 'lottie-react-native';
 import { AuthState } from '../Reducers/AuthReducer';
 
 interface AddItemFormProps {
-  addItem: (suitcase: Item) => void;
+  addItem: (suitcase: Item, suitcaseId: string[], navigation: NativeStackNavigationProp<LuggageStackParamList, 'AddItemForm'>) => void;
   navigation: NativeStackNavigationProp<LuggageStackParamList, 'AddItemForm'>;
   suitcaseId: string
   auth: AuthState
@@ -77,16 +77,15 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, auth, su
       const storageRef = ref(storage, `images/${Date.now()}`);
       await uploadBytes(storageRef, selectedImageData);
       const imageUrl = await getDownloadURL(storageRef);
-
       const newItem = {
         name: name,
         image: imageUrl,
         category: category,
-        suitcaseId: suitcaseId,
+        suitcaseId: [suitcaseId], 
         userId: auth.uid,
       };
-
-      addItem(newItem, navigation);
+  
+      addItem(newItem, [suitcaseId], navigation);
     } catch (error) {
       console.error('Error uploading image:', error);
     } finally {

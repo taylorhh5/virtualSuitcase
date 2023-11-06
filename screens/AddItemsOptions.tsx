@@ -63,13 +63,13 @@ const AddItemsOptions: React.FC<Props> = (props) => {
                 null
             ) : (
                 <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>Items below are from your other suitcases</Text>
+            <Text style={styles.headerText}>Items below are from your other suitcases, but not in this suitcase.</Text>
 
                 </View>
             )}
 
             <View style={styles.screenContentContainer}>
-                {activeScreen === ActiveScreen.AddNew ? <AddItemForm navigation={props.navigation}  suitcaseId={suitcaseId} /> : <AllLuggageItems />}
+                {activeScreen === ActiveScreen.AddNew ? <AddItemForm navigation={props.navigation}  suitcaseId={suitcaseId} /> : <AllLuggageItems suitcaseId={suitcaseId}/>}
             </View>
         </View>
     );

@@ -9,14 +9,36 @@ import { db } from '../firebase/config';
 import { LuggageStackParamList } from '../Navigation/LuggageStackNavigator';
 
 
+// export const fetchItemsInSuitcase = (suitcaseId) => {
+//   return (dispatch: Dispatch) => {
+//     dispatch({ type: FETCH_LUGGAGE_ITEMS_START });
+
+//     const luggageItemsRef = query(
+//       collection(db, 'luggageItems'),
+//       where('suitcaseId', '==', suitcaseId),
+//       orderBy('timestamp', 'desc')  
+//     );
+//     onSnapshot(
+//       luggageItemsRef,
+//       snapshot => {
+//         const luggageItems = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+//         dispatch({ type: FETCH_LUGGAGE_ITEMS_SUCCESS, payload: luggageItems });
+//       },
+//       error => {
+//         console.error('Error fetching luggageItems:', error); 
+//         dispatch({ type: FETCH_LUGGAGE_ITEMS_FAILURE, payload: error });
+//       }
+//     );
+//   };
+// };
 export const fetchItemsInSuitcase = (suitcaseId) => {
   return (dispatch: Dispatch) => {
     dispatch({ type: FETCH_LUGGAGE_ITEMS_START });
 
     const luggageItemsRef = query(
       collection(db, 'luggageItems'),
-      where('suitcaseId', '==', suitcaseId),
-      orderBy('timestamp', 'desc')  
+      where('suitcaseId', 'array-contains', suitcaseId),
+      // orderBy('timestamp', 'desc')
     );
     onSnapshot(
       luggageItemsRef,
@@ -25,18 +47,40 @@ export const fetchItemsInSuitcase = (suitcaseId) => {
         dispatch({ type: FETCH_LUGGAGE_ITEMS_SUCCESS, payload: luggageItems });
       },
       error => {
-        console.error('Error fetching luggageItems:', error); 
+        console.error('Error fetching luggageItems:', error);
         dispatch({ type: FETCH_LUGGAGE_ITEMS_FAILURE, payload: error });
       }
     );
   };
 };
 
-export const addItem = (item: Item, navigation: NavigationProp<LuggageStackParamList, 'AddItemForm'>) => {
+
+
+// export const addItem = (item: Item, navigation: NavigationProp<LuggageStackParamList, 'AddItemForm'>) => {
+//   return (dispatch: Dispatch) => {
+
+//     const itemWithTimestamp = {
+//       ...item,
+//       timestamp: new Date(),
+//     };
+
+//     addDoc(collection(db, 'luggageItems'), itemWithTimestamp)
+//       .then((itemDocRef) => {
+//         dispatch({ type: ADD_ITEM, payload: { item } });
+//         navigation.goBack();
+//       })
+//       .catch((error) => {
+//         console.error('Error adding item:', error);
+//       });
+//   };
+// };
+
+export const addItem = (item: Item, suitcaseId: string[], navigation: NavigationProp<LuggageStackParamList, 'AddItemForm'>) => {
   return (dispatch: Dispatch) => {
 
     const itemWithTimestamp = {
       ...item,
+      suitcaseId: suitcaseId, 
       timestamp: new Date(),
     };
 
@@ -50,6 +94,34 @@ export const addItem = (item: Item, navigation: NavigationProp<LuggageStackParam
       });
   };
 };
+
+export const addSuitcaseIdToItem = (itemId: string, newSuitcaseId: string) => {
+  return (dispatch: Dispatch) => {
+    const itemRef = doc(db, 'luggageItems', itemId);
+
+    getDoc(itemRef)
+      .then((itemDoc) => {
+        if (itemDoc.exists()) {
+          const itemData = itemDoc.data();
+          const updatedSuitcaseId = [...itemData.suitcaseId, newSuitcaseId];
+
+          updateDoc(itemRef, { suitcaseId: updatedSuitcaseId })
+            .then(() => {
+              dispatch({ type: UPDATE_ITEM, payload: { itemId, suitcaseId: updatedSuitcaseId } });
+            })
+            .catch((error) => {
+              console.error('Error updating item:', error);
+            });
+        } else {
+          console.error('Item not found.');
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching item:', error);
+      });
+  };
+};
+
 
 export const editItem = (itemId: string, updatedItem: Partial<Item>) => {
   return (dispatch: Dispatch) => {
@@ -98,6 +170,33 @@ export const fetchItemById = (itemId: string) => {
 };
 
 
+// export const fetchAllUserLuggageItems = (userId: string, suitcaseId: string | null = null) => {
+//   return (dispatch: Dispatch) => {
+//     dispatch({ type: FETCH_ALL_LUGGAGE_ITEMS_START });
+
+//     const luggageItemsRef = query(
+//       collection(db, 'luggageItems'),
+//       where('userId', '==', userId),
+//       orderBy('timestamp', 'desc')
+//     );
+
+//     onSnapshot(
+//       luggageItemsRef,
+//       (snapshot) => {
+//         const luggageItems = snapshot.docs
+//           .map((doc) => ({ id: doc.id, ...doc.data() }))
+//           .filter((item) => (suitcaseId ? item.suitcaseId !== suitcaseId : true));
+
+//         dispatch({ type: FETCH_ALL_LUGGAGE_ITEMS_SUCCESS, payload: luggageItems });
+//       },
+//       (error) => {
+//         console.error('Error fetching user luggage items:', error);
+//         dispatch({ type: FETCH_ALL_LUGGAGE_ITEMS_FAILURE, payload: error });
+//       }
+//     );
+//   };
+// };
+
 export const fetchAllUserLuggageItems = (userId: string, suitcaseId: string | null = null) => {
   return (dispatch: Dispatch) => {
     dispatch({ type: FETCH_ALL_LUGGAGE_ITEMS_START });
@@ -113,7 +212,15 @@ export const fetchAllUserLuggageItems = (userId: string, suitcaseId: string | nu
       (snapshot) => {
         const luggageItems = snapshot.docs
           .map((doc) => ({ id: doc.id, ...doc.data() }))
-          .filter((item) => (suitcaseId ? item.suitcaseId !== suitcaseId : true));
+          .filter((item) => {
+            if (suitcaseId) {
+              if (Array.isArray(item.suitcaseId)) {
+                return !item.suitcaseId.includes(suitcaseId);
+              }
+              return true;
+            }
+            return true; 
+          });
 
         dispatch({ type: FETCH_ALL_LUGGAGE_ITEMS_SUCCESS, payload: luggageItems });
       },
@@ -124,4 +231,5 @@ export const fetchAllUserLuggageItems = (userId: string, suitcaseId: string | nu
     );
   };
 };
+
 

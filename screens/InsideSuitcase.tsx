@@ -18,7 +18,6 @@ enum ActiveScreen {
 const InsideSuitcase = (props) => {
     const [activeScreen, setActiveScreen] = useState<ActiveScreen>(ActiveScreen.Items);
     const suitcaseId = props.route.params.suitcaseId
-
     useEffect(() => {
         props.fetchItemsInSuitcase(suitcaseId)
     }, []);

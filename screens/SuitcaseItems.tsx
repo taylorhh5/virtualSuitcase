@@ -58,16 +58,7 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
     };
 
     const handleSave = () => {
-        if (selectedItemForEdit) {
-            // Update the category of the selected item
-            const updatedItem = { ...selectedItemForEdit, category: selectedCategory };
-            // Update the luggage array with the updated item
-            setLuggage(prevluggage =>
-                prevluggage.map(item =>
-                    item === selectedItemForEdit ? updatedItem : item
-                )
-            );
-        }
+        
         setIsEdit(false);
         setIsModalVisible(false);
     };
@@ -82,6 +73,17 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
         setIsDelete(true);
     };
 
+    const removeItemFromSuitcase = () => {
+        if (selectedItemForEdit) {
+          const updatedSuitcaseId = selectedItemForEdit.suitcaseId.filter(suitcaseId => suitcaseId !== props.suitcaseId);
+          
+          props.editItem(selectedItemForEdit.id, { ...selectedItemForEdit, suitcaseId: updatedSuitcaseId });
+          
+          setIsModalVisible(false);
+          setSelectedItemForEdit(null);
+        }
+      };
+      
     const renderEditForm = () => {
         if (!selectedItemForEdit) return null;
 
@@ -168,6 +170,9 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
                             </View>
                             <TouchableOpacity style={styles.editDeleteTextContainer} onPress={showEditForm}>
                                 <Text style={styles.editDeleteText}>Edit</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.editDeleteTextContainer} onPress={() => removeItemFromSuitcase()} >
+                                <Text style={styles.editDeleteText}>Unpack</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.editDeleteTextContainer} onPress={() => showDeleteForm()} >
                                 <Text style={styles.editDeleteText}>Delete</Text>
@@ -261,7 +266,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         elevation: 5,
         width: '80%',
-        height: '60%',
+        height: '70%',
         borderWidth: 2,
         alignItems: 'center',
     },
