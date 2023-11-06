@@ -8,9 +8,15 @@ export interface Item {
 export const ADD_ITEM = 'ADD_ITEM';
 export const EDIT_ITEM = 'EDIT_ITEM';
 export const DELETE_ITEM = 'DELETE_ITEM';
+
 export const FETCH_LUGGAGE_ITEMS_SUCCESS = 'FETCH_LUGGAGE_ITEMS_SUCCESS';
 export const FETCH_LUGGAGE_ITEMS_FAILURE = 'FETCH_LUGGAGE_ITEMS_FAILURE';
 export const FETCH_LUGGAGE_ITEMS_START = 'FETCH_LUGGAGE_ITEMS_START';
+
+export const FETCH_ALL_LUGGAGE_ITEMS_SUCCESS = 'FETCH_ALL_LUGGAGE_ITEMS_SUCCESS';
+export const FETCH_ALL_LUGGAGE_ITEMS_FAILURE = 'FETCH_ALL_LUGGAGE_ITEMS_FAILURE';
+export const FETCH_ALL_LUGGAGE_ITEMS_START = 'FETCH_ALL_LUGGAGE_ITEMS_START';
+
 export const FETCH_ITEM_BY_ID_SUCCESS = 'FETCH_ITEM_BY_ID_SUCCESS'
 export const FETCH_ITEM_BY_ID_START = 'FETCH_ITEM_BY_ID_START'
 export const FETCH_ITEM_BY_ID_FAILURE = 'FETCH_ITEM_BY_ID_FAILURE'
@@ -59,6 +65,21 @@ interface DeleteItemAction {
   payload: string;
 }
 
+interface FetchAllLuggageItemsSuccessAction {
+  type: typeof FETCH_ALL_LUGGAGE_ITEMS_SUCCESS;
+  payload: Item[];
+}
+
+interface FetchAllLuggageItemsFailureAction {
+  type: typeof FETCH_ALL_LUGGAGE_ITEMS_FAILURE;
+  payload: Error;
+}
+
+interface FetchAllLuggageItemsStartAction {
+  type: typeof FETCH_ALL_LUGGAGE_ITEMS_START;
+  payload: Error;
+}
+
 export type ItemActionTypes =
   | AddItemAction
   | EditItemAction
@@ -69,4 +90,7 @@ export type ItemActionTypes =
   | FetchLuggageItemsStartAction
   | FetchLuggageByIdSuccessAction
   | FetchLuggageByIdFailAction
+  | FetchAllLuggageItemsSuccessAction
+  | FetchAllLuggageItemsFailureAction
+  | FetchAllLuggageItemsStartAction
 

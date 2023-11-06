@@ -1,49 +1,41 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import colors from '../themes/Colors';
-import SuitcaseItems from './SuitcaseItems';
-import Outfits from './Outfits';
 import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch, AnyAction } from 'redux';
-import { fetchItemsInSuitcase } from '../ReduxActions/LuggageActions';
-import { fetchOutfits } from '../ReduxActions/OutfitActions';
+import { bindActionCreators, Dispatch, } from 'redux';
 import { RootState } from '../Reducers/RootReducer';
-
+import AddItemForm from './AddItemForm';
+import AllLuggageItems from './AllLuggageItems';
+import { fetchAllUserLuggageItems } from '../ReduxActions/LuggageActions';
 
 enum ActiveScreen {
-    Items,
-    Outfits,
+    AddNew,
+    Inventory,
+}
+interface Props {
+    route: {
+        params: {
+            suitcaseId: string; 
+        };
+    };
+    auth: {
+        uid: string; 
+    };
+    fetchAllUserLuggageItems: (userId: string, suitcaseId: string) => void;
 }
 
-const InsideSuitcase = (props) => {
-    const [activeScreen, setActiveScreen] = useState<ActiveScreen>(ActiveScreen.Items);
+const AddItemsOptions: React.FC<Props> = (props) => {    
+    const [activeScreen, setActiveScreen] = useState<ActiveScreen>(ActiveScreen.AddNew);
     const suitcaseId = props.route.params.suitcaseId
 
     useEffect(() => {
-        props.fetchItemsInSuitcase(suitcaseId)
+        props.fetchAllUserLuggageItems(props.auth.uid, suitcaseId)
     }, []);
 
-    useEffect(() => {
-        props.fetchOutfits(suitcaseId)
-      }, []);
     
     const changeScreen = (screen: ActiveScreen) => {
         setActiveScreen(screen);
     };
-
-    const navigateToAddOutfit = () => {
-        props.navigation.navigate('CreateOutfit', {
-            edit: false,
-            suitcaseId: suitcaseId
-        });
-    };
-
-    const navigateToAddItem = () => {
-        props.navigation.navigate('AddItemsOptions', {
-            suitcaseId: suitcaseId
-        })
-    };
-    console.log(props.route, 'params')
 
     return (
         <View style={styles.container}>
@@ -51,60 +43,52 @@ const InsideSuitcase = (props) => {
                 <TouchableOpacity
                     style={[
                         styles.button,
-                        activeScreen === ActiveScreen.Items && styles.activeButton,
+                        activeScreen === ActiveScreen.AddNew && styles.activeButton,
                     ]}
-                    onPress={() => changeScreen(ActiveScreen.Items)}
+                    onPress={() => changeScreen(ActiveScreen.AddNew)}
                 >
-                    <Text style={styles.dashboardText}>ITEMS</Text>
+                    <Text style={styles.dashboardText}>Add New</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[
                         styles.button,
-                        activeScreen === ActiveScreen.Outfits && styles.activeButton,
+                        activeScreen === ActiveScreen.Inventory && styles.activeButton,
                     ]}
-                    onPress={() => changeScreen(ActiveScreen.Outfits)}
+                    onPress={() => changeScreen(ActiveScreen.Inventory)}
                 >
-                    <Text style={styles.dashboardText}>OUTFITS</Text>
+                    <Text style={styles.dashboardText}>Add From Inventory</Text>
                 </TouchableOpacity>
             </View>
-            {activeScreen === ActiveScreen.Items ? (
-                <View style={styles.headerContainer}>
-                    <Text style={styles.headerText}>You have {props?.luggageState?.length} items</Text>
-                    <TouchableOpacity style={styles.addOutfitContainer} onPress={() => navigateToAddItem()}>
-                        <Text style={styles.addOutfitText}>ADD ITEM +</Text>
-                    </TouchableOpacity>
-                </View>
+            {activeScreen === ActiveScreen.AddNew ? (
+                null
             ) : (
                 <View style={styles.headerContainer}>
-                    <Text style={styles.headerText}>You have {props?.outfitState?.length} outfits</Text>
-                    <TouchableOpacity style={styles.addOutfitContainer} onPress={() => navigateToAddOutfit()}>
-                        <Text style={styles.addOutfitText}>ADD OUTFIT +</Text>
-                    </TouchableOpacity>
+            <Text style={styles.headerText}>Items below are from your other suitcases</Text>
+
                 </View>
             )}
 
             <View style={styles.screenContentContainer}>
-                {activeScreen === ActiveScreen.Items ? <SuitcaseItems suitcaseId={suitcaseId} /> : <Outfits navigation={props.navigation} suitcaseId={suitcaseId} />}
+                {activeScreen === ActiveScreen.AddNew ? <AddItemForm navigation={props.navigation}  suitcaseId={suitcaseId} /> : <AllLuggageItems />}
             </View>
         </View>
     );
 };
 
 const mapStateToProps = (state: RootState) => ({
-    luggageState: state.luggage.luggage,
-    outfitState: state.outfits.outfits,
+    auth: state.auth.user,
+
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
     bindActionCreators(
         {
-            fetchItemsInSuitcase,
-            fetchOutfits,
+            fetchAllUserLuggageItems
         },
         dispatch
     );
 
-export default connect(mapStateToProps, mapDispatchToProps)(InsideSuitcase);
+export default connect(mapStateToProps, mapDispatchToProps)(AddItemsOptions);
 
 
 const styles = StyleSheet.create({

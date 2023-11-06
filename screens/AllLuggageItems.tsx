@@ -14,15 +14,15 @@ import FastImage from 'react-native-fast-image';
 import { categoryOrder } from './data/CategoryData';
 import LottieView from 'lottie-react-native';
 
-type SuitcaseItemsProps = {
+type AllLuggageItemsProps = {
     suitcaseId: string;
-    luggageState: Item[];
+    allLuggageItems: Item[];
     deleteItem: (id: string) => void;
     editItem: (id: string, updatedItem: Partial<Item>) => (dispatch: Dispatch<AnyAction>) => void,
     loadingItems: boolean;
 };
 
-const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
+const AllLuggageItems: React.FC<AllLuggageItemsProps> = (props) => {
     const [luggage, setLuggage] = useState<Item[]>([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedItemForEdit, setSelectedItemForEdit] = useState<Item | null>(null);
@@ -31,7 +31,7 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
     const [selectedCategory, setSelectedCategory] = useState<string>('');
     const categorizedItems: { [category: string]: Item[] } = {};
 
-    props.luggageState.forEach(item => {
+    props.allLuggageItems.forEach(item => {
         if (!categorizedItems[item.category]) {
             categorizedItems[item.category] = [];
         }
@@ -116,7 +116,7 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
         )
       }
 
-          if (!props.loadingItems && props.luggageState.length === 0) return (<View style={{ flex: 1 }}>
+          if (!props.loadingItems && props.allLuggageItems.length === 0) return (<View style={{ flex: 1 }}>
             <LottieView source={require("../Icons/assets/windLottie.json")} autoPlay loop />
             <Text style={styles.noItemsMessage}>Add luggage items to see them here.</Text>
           </View>)
@@ -186,8 +186,8 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
 };
 
 const mapStateToProps = (state: RootState) => ({
-    luggageState: state.luggage.luggage,
-    loadingItems: state.luggage.loading,
+    allLuggageItems: state.luggage.allLuggage,
+    loadingItems: state.luggage.allLuggageLoading,
 
 });
 
@@ -201,7 +201,7 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
         dispatch
     );
 
-export default connect(mapStateToProps, mapDispatchToProps)(SuitcaseItems);
+export default connect(mapStateToProps, mapDispatchToProps)(AllLuggageItems);
 
 const styles = StyleSheet.create({
     luggageContainer: {

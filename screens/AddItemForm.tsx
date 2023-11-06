@@ -14,14 +14,16 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../firebase/config';
 import { categories, categoryEmojis } from './data/CategoryData';
 import LottieView from 'lottie-react-native';
+import { AuthState } from '../Reducers/AuthReducer';
 
 interface AddItemFormProps {
   addItem: (suitcase: Item) => void;
   navigation: NativeStackNavigationProp<LuggageStackParamList, 'AddItemForm'>;
-
+  suitcaseId: string
+  auth: AuthState
 }
 
-const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route, auth }) => {
+const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, auth, suitcaseId }) => {
   const [category, setCategory] = useState<string>('');
   const [selectedImageData, setSelectedImageData] = useState<Blob | null>(null);
   const [name, setName] = useState<string>('');
@@ -80,7 +82,7 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, route, a
         name: name,
         image: imageUrl,
         category: category,
-        suitcaseId: route?.params?.suitcaseId,
+        suitcaseId: suitcaseId,
         userId: auth.uid,
       };
 

@@ -123,28 +123,13 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
             <View style={styles.topContainer}>
                 <TouchableOpacity style={styles.newSuitcaseContainer} onPress={openNewSuitcaseModal}>
                     <LottieView style={{}} source={require("../Icons/assets/suitcaseLottie.json")} autoPlay loop />
-                    <Text style={styles.suitcaseText}>Add suitcase</Text>
+                    <Text style={styles.suitcaseText}>Add Suitcase</Text>
                 </TouchableOpacity>
                 <View style={styles.topRightSection}>
                     <TouchableOpacity style={styles.gearContainer} onPress={() => navigateToSettings()}>
                         <Text style={styles.settingsText}>Settings</Text>
                         <GearSVG style={{ width: 22, height: 24, }} />
                     </TouchableOpacity>
-                    {/* {isLogoutVisible && (
-            <View>
-            <TouchableOpacity style={styles.logoutContainer} onPress={handleLogout}>
-              <Text style={styles.logoutText}>Logout 👋</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.logoutContainer} onPress={handleLogout}>
-            <Text style={styles.logoutText}>Logout 👋</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.logoutContainer} onPress={handleLogout}>
-          <Text style={styles.logoutText}>Logout 👋</Text>
-        </TouchableOpacity>
-        </View>
-             )
-             } */}
-                    <Text style={styles.welcomeText}>Hello, <Text style={styles.emailText}>{auth.email}.</Text></Text>
                     {!suitcases.length ? (
                         <Text style={styles.topRightSectionText}>Add a suitcase to get started!</Text>
                     ) : (
@@ -157,7 +142,7 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
             {suitcasesLoading ?
                 <View style={{ flex: 1 }}>
                     <LottieView source={require("../Icons/assets/fishingLottie.json")} autoPlay loop />
-                    <Text style={{ fontWeight: '500', marginTop: 12, alignSelf: 'center', fontSize: 16 }}>Getting your suitcases...</Text>
+                    <Text style={{ fontWeight: '500', marginTop: 12, alignSelf: 'center', fontSize: 18 }}>Grabbing your suitcases...</Text>
                 </View>
                 :
                 !suitcasesLoading && !suitcases.length ?
@@ -315,6 +300,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginHorizontal: 4,
         textAlign: 'center',
+        marginTop:'24%'
     },
     contentContainer: {
         padding: 6,
@@ -371,15 +357,6 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingVertical: 8,
         paddingHorizontal: 6,
-    },
-    welcomeText: {
-        fontSize: 16,
-        marginBottom: 2,
-        marginTop: 30,
-        textAlign: 'center'
-    },
-    emailText: {
-        fontWeight: '600'
     },
     modalContainer: {
         flex: 1,

@@ -1,6 +1,6 @@
 // itemActions.ts
 import { Dispatch } from 'redux';
-import { ADD_ITEM, EDIT_ITEM, DELETE_ITEM, FETCH_LUGGAGE_ITEMS_SUCCESS, FETCH_LUGGAGE_ITEMS_FAILURE, FETCH_LUGGAGE_ITEMS_START, FETCH_ITEM_BY_ID_START, FETCH_ITEM_BY_ID_SUCCESS, FETCH_ITEM_BY_ID_FAILURE } from './ActionTypes/LuggageActionTypes';
+import { ADD_ITEM, EDIT_ITEM, DELETE_ITEM, FETCH_LUGGAGE_ITEMS_SUCCESS, FETCH_LUGGAGE_ITEMS_FAILURE, FETCH_LUGGAGE_ITEMS_START, FETCH_ITEM_BY_ID_START, FETCH_ITEM_BY_ID_SUCCESS, FETCH_ITEM_BY_ID_FAILURE, FETCH_ALL_LUGGAGE_ITEMS_START, FETCH_ALL_LUGGAGE_ITEMS_SUCCESS, FETCH_ALL_LUGGAGE_ITEMS_FAILURE } from './ActionTypes/LuggageActionTypes';
 import { Item } from './ActionTypes/LuggageActionTypes';
 import { NavigationProp } from '@react-navigation/native';
 //firebase
@@ -96,3 +96,32 @@ export const fetchItemById = (itemId: string) => {
       });
   };
 };
+
+
+export const fetchAllUserLuggageItems = (userId: string, suitcaseId: string | null = null) => {
+  return (dispatch: Dispatch) => {
+    dispatch({ type: FETCH_ALL_LUGGAGE_ITEMS_START });
+
+    const luggageItemsRef = query(
+      collection(db, 'luggageItems'),
+      where('userId', '==', userId),
+      orderBy('timestamp', 'desc')
+    );
+
+    onSnapshot(
+      luggageItemsRef,
+      (snapshot) => {
+        const luggageItems = snapshot.docs
+          .map((doc) => ({ id: doc.id, ...doc.data() }))
+          .filter((item) => (suitcaseId ? item.suitcaseId !== suitcaseId : true));
+
+        dispatch({ type: FETCH_ALL_LUGGAGE_ITEMS_SUCCESS, payload: luggageItems });
+      },
+      (error) => {
+        console.error('Error fetching user luggage items:', error);
+        dispatch({ type: FETCH_ALL_LUGGAGE_ITEMS_FAILURE, payload: error });
+      }
+    );
+  };
+};
+

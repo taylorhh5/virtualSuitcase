@@ -24,16 +24,20 @@ const Outfits: React.FC<OutfitsScreenProps> = ({ navigation, outfitState, loadin
       </View>
     )
   }
+
+  if (!loadingOutfits && outfitState.length === 0) return (<View style={{ flex: 1 }}>
+    <LottieView source={require("../Icons/assets/mopLottie.json")} autoPlay loop />
+    <Text style={styles.noItemsMessage}>Add outfits to see them here.</Text>
+  </View>)
+
   return (
     <View style={styles.container}>
-      {!outfitState ? <Text style={styles.outfitHeader}>You haven't added any outfits.</Text> :
         <FlatList
           data={outfitState}
           renderItem={({ item, index }) => (
             <OutfitBox item={item} index={index} navigation={navigation} />
           )} keyExtractor={(item, index) => index.toString()}
         />
-      }
     </View>
   );
 };
@@ -83,12 +87,11 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     borderRadius: 10,
   },
-  outfitHeader: {
+  noItemsMessage: {
     fontSize: 18,
     textAlign: 'center',
-    marginTop: 4
+    marginTop: 16
   },
-
   modalContainer: {
     flex: 1,
     backgroundColor: colors.background,

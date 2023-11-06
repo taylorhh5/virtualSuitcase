@@ -74,6 +74,9 @@ console.log(auth.email, 'auth')
 
     return (
         <View style={styles.container}>
+
+    <Text style={styles.welcomeText}>Hello, <Text style={styles.emailText}>{auth.email}.</Text></Text>
+
             <TouchableOpacity style={styles.button} onPress={() => handleResetPassword()}>
                 <Text style={styles.buttonText}>Reset Password</Text>
             </TouchableOpacity>
@@ -97,7 +100,15 @@ const styles = StyleSheet.create({
         backgroundColor: colors.background,
         padding: 38,
         justifyContent: 'space-between',
-        
+    },
+    welcomeText: {
+        fontSize: 18,
+        marginBottom:24,
+        marginTop: 18,
+        textAlign: 'center',
+    },
+    emailText: {
+        fontWeight: '600'
     },
     button: {
         backgroundColor: colors.primary,
@@ -131,6 +142,7 @@ const styles = StyleSheet.create({
             width: 0,
         },
     },
+ 
 });
 
 const mapStateToProps = (state) => ({
