@@ -11,6 +11,7 @@ import LuggageItem from './Components/LuggageItem';
 import FastImage from 'react-native-fast-image';
 import { categoryOrder } from './data/CategoryData';
 import LottieView from 'lottie-react-native';
+import Toast from 'react-native-toast-message';
 
 type AllLuggageItemsProps = {
     suitcaseId: string;
@@ -68,7 +69,14 @@ const AllLuggageItems: React.FC<AllLuggageItemsProps> = (props) => {
        props.editItem(selectedItemForEdit.id, { ...selectedItemForEdit, suitcaseId: [...selectedItemForEdit.suitcaseId, props.suitcaseId] })
         setIsModalVisible(false);        
         setSelectedItemForEdit(null);
+        Toast.show({
+            visibilityTime: 3000,
+            autoHide: true,
+            type: "success",
+            text1: "Item added to suitcase",
+          });
         }
+
     };
 
 

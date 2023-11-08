@@ -13,6 +13,7 @@ import ConfirmDelete from './Components/ConfimDelete';
 import FastImage from 'react-native-fast-image';
 import { categoryOrder } from './data/CategoryData';
 import LottieView from 'lottie-react-native';
+import Toast from 'react-native-toast-message';
 
 type SuitcaseItemsProps = {
     suitcaseId: string;
@@ -81,6 +82,13 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
           
           setIsModalVisible(false);
           setSelectedItemForEdit(null);
+
+          Toast.show({
+            visibilityTime: 3000,
+            autoHide: true,
+            type: "success",
+            text1: "Item removed from suitcase",
+          });
         }
       };
       

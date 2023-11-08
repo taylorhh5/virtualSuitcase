@@ -18,19 +18,19 @@ const Navigation: React.FC = () => {
 
   const [demo, setDemo] = useState(false);
 
-  React.useEffect(() => {
+  // React.useEffect(() => {
     
-    if (demoRequested) {
+  //   if (demoRequested) {
 
-      setDemo(true)
-    }
-  }, [demoRequested]);
+  //     setDemo(true)
+  //   }
+  // }, [demoRequested]);
 
-  if (!demo) {
-    return (
-      <Demo setDemo={setDemo} />
-    )
-  }
+  // if (!demo) {
+  //   return (
+  //     <Demo setDemo={setDemo} />
+  //   )
+  // }
   return (
     <NavigationContainer>
       <Stack.Navigator>

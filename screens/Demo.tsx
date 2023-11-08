@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
-import React from 'react';
+import React, {useRef} from 'react';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import LottieView from 'lottie-react-native';
 import colors from '../themes/Colors';
@@ -17,7 +17,8 @@ interface Slide {
     backgroundColor: string;
 }
 
-export default function Demo({ setDemo }: DemoProps) {
+export default function Demo({ setDemo, navigation }: DemoProps) {
+    let slider = useRef()
 
    const slides: Slide[] = [
   {
@@ -69,6 +70,7 @@ export default function Demo({ setDemo }: DemoProps) {
     width: 90,
   },
 ];
+
 
 
     const _renderNextButton = () => {
@@ -128,7 +130,10 @@ export default function Demo({ setDemo }: DemoProps) {
     };
 
     const _onDone = () => {
-        setDemo(true);
+        // setDemo(false);
+        // navigation.navigate("WelcomeScreen")
+        slider.current.goToSlide(0, true)
+
     };
 
     return (
@@ -138,12 +143,14 @@ export default function Demo({ setDemo }: DemoProps) {
             onDone={_onDone}
             renderDoneButton={_renderDoneButton}
             renderNextButton={_renderNextButton}
-            renderSkipButton={_renderSkipButton}
+            // renderSkipButton={_renderSkipButton}
             renderPrevButton={_renderBackButton}
             // bottomButton={true}
-            showSkipButton
+            // showSkipButton
             activeDotStyle={{ backgroundColor: 'blue' }}
             showPrevButton
+            ref={(ref) => (slider.current = ref)} 
+
         />
     );
 }

@@ -11,48 +11,34 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { register, login } from '../ReduxActions/AuthActions';
+import { login } from '../ReduxActions/AuthActions';
 import { RootState } from '../Reducers/RootReducer';
 import { NavigationProp } from '@react-navigation/native';
 
-interface SignUpProps {
-  navigation: NavigationProp<any>;
-}
+interface LoginProps {
+    navigation: NavigationProp<any>;
+  }
 
-const SignUp: React.FC<SignUpProps> = ({ navigation }) => {
-  const dispatch = useDispatch();
+  const Login: React.FC<LoginProps> = ({ navigation }) => {
+    const dispatch = useDispatch();
   const loading = useSelector((state: RootState) => state.auth.loading);
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
   const [emailStyle, setEmailStyle] = useState(styles.validInput);
   const [passwordStyle, setPasswordStyle] = useState(styles.validInput);
 
-  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const isPasswordValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(password);
-
-  const handleSignUp = () => {
-    if (!isEmailValid) {
-      setEmailStyle(styles.invalidInput);
-      Alert.alert('Invalid Email', 'Please enter a valid email address.');
-      return;
-    }
-
-    if (!isPasswordValid) {
-      setPasswordStyle(styles.invalidInput);
-      Alert.alert(
-        'Invalid Password',
-        'Password must contain at least 6 characters, including at least one uppercase letter, one lowercase letter, one digit, and one special symbol.'
-      );
-      return;
-    }
-
-    dispatch(register(email, password));
-  };
-
   const navigateToWelcome = () => {
     navigation.navigate('WelcomeScreen');
+  };
+
+  const handleLogin = (): void => {
+    if (email === '' || password === '') {
+      Alert.alert('Invalid Input', 'Please enter both email and password.');
+      return;
+    }
+    dispatch(login(email, password));
   };
 
   const dismissKeyboard = () => {
@@ -66,7 +52,7 @@ const SignUp: React.FC<SignUpProps> = ({ navigation }) => {
         {!loading ?
           <Text style={styles.header}>Welcome to Virtual Suitcase</Text>
           :
-          <Text style={styles.header}>Signing in...</Text>
+          <Text style={styles.header}>Logging in...</Text>
         }
         <TextInput
           style={[styles.input, emailStyle]}
@@ -89,12 +75,13 @@ const SignUp: React.FC<SignUpProps> = ({ navigation }) => {
             setPasswordStyle(styles.validInput);
           }}
         />
-        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-          <Text style={styles.buttonText}>Sign Up</Text>
+        <TouchableOpacity style={[styles.button, styles.loginButton]} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Log In</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, styles.loginButton]} onPress={navigateToWelcome}>
+        <TouchableOpacity style={styles.button} onPress={navigateToWelcome}>
           <Text style={styles.buttonText}>Back To Welcome Screen</Text>
         </TouchableOpacity>
+    
       </View>
     </TouchableWithoutFeedback>
   );
@@ -156,4 +143,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUp;
+export default Login;

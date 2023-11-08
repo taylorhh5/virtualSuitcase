@@ -7,6 +7,7 @@ import { NavigationProp } from '@react-navigation/native';
 import { collection, addDoc, doc, query, where, onSnapshot, deleteDoc, updateDoc, getDoc, orderBy } from 'firebase/firestore'         
 import { db } from '../firebase/config';
 import { LuggageStackParamList } from '../Navigation/LuggageStackNavigator';
+import Toast from 'react-native-toast-message'
 
 
 // export const fetchItemsInSuitcase = (suitcaseId) => {
@@ -88,6 +89,13 @@ export const addItem = (item: Item, suitcaseId: string[], navigation: Navigation
       .then((itemDocRef) => {
         dispatch({ type: ADD_ITEM, payload: { item } });
         navigation.goBack();
+        Toast.show({
+          visibilityTime: 3000,
+          autoHide: true,
+          type: "success",
+          text1: "Item added to suitcase",
+          
+        });
       })
       .catch((error) => {
         console.error('Error adding item:', error);
@@ -108,6 +116,13 @@ export const addSuitcaseIdToItem = (itemId: string, newSuitcaseId: string) => {
           updateDoc(itemRef, { suitcaseId: updatedSuitcaseId })
             .then(() => {
               dispatch({ type: UPDATE_ITEM, payload: { itemId, suitcaseId: updatedSuitcaseId } });
+              Toast.show({
+                visibilityTime: 3000,
+                autoHide: true,
+                type: "success",
+                text1: "Item added to suitcase",
+                
+              });
             })
             .catch((error) => {
               console.error('Error updating item:', error);
@@ -140,6 +155,13 @@ export const deleteItem = (itemId: string) => {
     deleteDoc(doc(db, 'luggageItems', itemId))
       .then(() => {
         dispatch({ type: DELETE_ITEM, payload: itemId });
+        Toast.show({
+          visibilityTime: 3000,
+          autoHide: true,
+          type: "success",
+          text1: "Item deleted",
+          
+        });
       })
       .catch((error) => {
         console.error('Error deleting item:', error);
