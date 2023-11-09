@@ -15,10 +15,11 @@ interface Slide {
     text2?: string;
     image: number;
     backgroundColor: string;
+    width: number,
 }
 
-export default function Demo({ setDemo, navigation }: DemoProps) {
-    let slider = useRef()
+export default function Demo({}: DemoProps) {
+    let slider = useRef<any>(undefined);
 
    const slides: Slide[] = [
   {
@@ -43,7 +44,7 @@ export default function Demo({ setDemo, navigation }: DemoProps) {
     text: 'Easily plan your outfits and create stunning combinations with a few taps and swipes.',
     image: require('../Icons/assets/outfitPhone.json'),
     backgroundColor: '#22bcb5',
-    width: 54,
+    width: 46,
   },
   {
     key: 'four',
@@ -115,9 +116,9 @@ export default function Demo({ setDemo, navigation }: DemoProps) {
                     {item.text2 && <Text style={style.textSecondary}>{item.text2}</Text>}
                 </View>
                 {item.key === 'four' ? (
-                    <View style={{ flex: 1, justifyContent: 'center', marginBottom: '20%' }}>
-                        <View style={{ backgroundColor: colors.primary, width: '90%', height: '90%', alignSelf: 'center', padding: 30, borderRadius: 500 }}>
-                            <LottieView style={{ width: widthPercentage, alignSelf: 'center' }} source={item.image} autoPlay loop />
+                    <View style={{ flex: 1, justifyContent: 'center', marginBottom: '2%', }}>
+                        <View style={{ backgroundColor: colors.primary, width: '90%', height: '90%', alignSelf: 'center', padding: 30, borderRadius: 500,  }}>
+                            <LottieView style={{ width: widthPercentage, alignSelf: 'center', }} source={item.image} autoPlay loop />
                         </View>
                     </View>
                 ) : (
@@ -130,10 +131,10 @@ export default function Demo({ setDemo, navigation }: DemoProps) {
     };
 
     const _onDone = () => {
+        // Will leave for now to explore other possibilties for this screen
         // setDemo(false);
         // navigation.navigate("WelcomeScreen")
-        slider.current.goToSlide(0, true)
-
+        (slider.current as any)?.goToSlide(0, true);
     };
 
     return (

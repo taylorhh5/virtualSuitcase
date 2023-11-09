@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     // backgroundColor: '#95d2db',
     // paddingTop: 20,
-    paddingBottom:'12%'
+    paddingBottom:'8%'
   },
   header: {
     fontSize: 24,

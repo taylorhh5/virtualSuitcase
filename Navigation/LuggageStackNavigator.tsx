@@ -25,7 +25,7 @@ export type LuggageStackParamList = {
   OutfitBox: undefined,
   SettingsScreen: undefined
   AddItemsOptions: undefined
-
+  Home: undefined;
 };
 
 const LuggageStack = createNativeStackNavigator<LuggageStackParamList>();

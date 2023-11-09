@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Modal, TextI
 import React, { useState, useEffect } from 'react';
 import colors from '../themes/Colors';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { LuggageStackParamList } from '../Navigation/LuggageStackNavigator';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { RootState } from '../Reducers/RootReducer';
@@ -15,7 +16,7 @@ import { AuthState } from '../Reducers/AuthReducer';
 
 
 type SuitcasesProps = {
-    navigation: NativeStackNavigationProp<LuggageStackParamList, 'Home'>;
+    navigation: NativeStackNavigationProp<LuggageStackParamList, 'Suitcases'>;
     suitcases: Suitcase[];
     addSuitcase: (suitcase: Suitcase) => void;
     loading: boolean;
@@ -86,6 +87,7 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
         deleteSuitcase(suitcaseToEditId)
         setSuitcaseToEditId('');
         setIsDeleteModalVisible(false);
+        setNewSuitcaseName('')
     }
 
     const renderSuitcase = ({ item }: { item: Suitcase }) => {

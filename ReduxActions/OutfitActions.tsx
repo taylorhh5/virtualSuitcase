@@ -13,7 +13,7 @@ import { Outfit } from './ActionTypes/OutfitTypes';
 import { NavigationProp } from '@react-navigation/native';
 import { LuggageStackParamList } from '../Navigation/LuggageStackNavigator';
 import { collection, addDoc, doc, query, where, onSnapshot, deleteDoc, updateDoc, getDoc, getDocs, orderBy } from 'firebase/firestore'
-
+import Toast from 'react-native-toast-message';
 import { db } from '../firebase/config';
 
 export const addOutfit = (userId: string, suitcaseId: string, items: number[], name: string, navigation: NavigationProp<LuggageStackParamList, 'CreateOutfit'>) => (dispatch: Dispatch) => {
@@ -28,9 +28,21 @@ export const addOutfit = (userId: string, suitcaseId: string, items: number[], n
     .then(() => {
       dispatch({ type: ADD_OUTFIT, payload: newOutfit });
       navigation.goBack();
+      Toast.show({
+        visibilityTime: 3000,
+        autoHide: true,
+        type: "success",
+        text1: "Outift added ✨",
+      });
     })
     .catch((error) => {
       console.error('Error adding new outfit:', error);
+      Toast.show({
+        visibilityTime: 3000,
+        autoHide: true,
+        type: "error",
+        text1: "Error. Please try again.",
+      });
     });
 };
 
@@ -39,9 +51,21 @@ export const editOutfit = (outfitId: string, updatedItems: number[], name:string
     .then(() => {
       dispatch({ type: EDIT_OUTFIT, payload: { id: outfitId, updatedData: { name: name, items: updatedItems } } });
       navigation.goBack();
+      Toast.show({
+        visibilityTime: 3000,
+        autoHide: true,
+        type: "success",
+        text1: "Outfit edited 👍",
+      });
     })
     .catch((error) => {
       console.error('Error editing outfit:', error);
+      Toast.show({
+        visibilityTime: 3000,
+        autoHide: true,
+        type: "error",
+        text1: "Error. Please try again.",
+      });
     });
 };
 
@@ -201,9 +225,21 @@ export const deleteOutfit = (outfitId) => (dispatch) => {
   deleteDoc(doc(db, 'outfits', outfitId))
     .then(() => {
       dispatch({ type: DELETE_OUTFIT, payload: outfitId });
+      Toast.show({
+        visibilityTime: 3000,
+        autoHide: true,
+        type: "success",
+        text1: "Outifit deleted ❌",
+      });
     })
     .catch((error) => {
       console.error('Error deleting outfit:', error);
+      Toast.show({
+        visibilityTime: 3000,
+        autoHide: true,
+        type: "error",
+        text1: "Error. Please try again.",
+      });
     });
 };
 

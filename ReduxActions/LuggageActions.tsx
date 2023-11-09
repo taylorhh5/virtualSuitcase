@@ -93,12 +93,18 @@ export const addItem = (item: Item, suitcaseId: string[], navigation: Navigation
           visibilityTime: 3000,
           autoHide: true,
           type: "success",
-          text1: "Item added to suitcase",
+          text1: "Item added to suitcase ✨",
           
         });
       })
       .catch((error) => {
         console.error('Error adding item:', error);
+        Toast.show({
+          visibilityTime: 3000,
+          autoHide: true,
+          type: "error",
+          text1: "Error. Please try again.",
+        });
       });
   };
 };
@@ -120,7 +126,7 @@ export const addSuitcaseIdToItem = (itemId: string, newSuitcaseId: string) => {
                 visibilityTime: 3000,
                 autoHide: true,
                 type: "success",
-                text1: "Item added to suitcase",
+                text1: "Item added to suitcase ✨",
                 
               });
             })
@@ -138,17 +144,60 @@ export const addSuitcaseIdToItem = (itemId: string, newSuitcaseId: string) => {
 };
 
 
-export const editItem = (itemId: string, updatedItem: Partial<Item>) => {
+// export const editItem = (itemId: string, updatedItem: Partial<Item>) => {
+//   return (dispatch: Dispatch) => {
+//     updateDoc(doc(db, 'luggageItems', itemId), updatedItem)
+//       .then(() => {
+//         dispatch({ type: EDIT_ITEM, payload: { id: itemId, updatedData: updatedItem } });
+//       })
+//       .catch((error) => {
+//         console.error('Error editing item:', error);
+//       });
+//   };
+// };
+
+// Modify your editItem function
+export const editItem = (itemId: string, updatedItem: Partial<Item>, action: string) => {
   return (dispatch: Dispatch) => {
     updateDoc(doc(db, 'luggageItems', itemId), updatedItem)
       .then(() => {
         dispatch({ type: EDIT_ITEM, payload: { id: itemId, updatedData: updatedItem } });
+
+        let toastMessage = "";
+        switch (action) {
+          case "add":
+            toastMessage = "Item added to suitcase ✨";
+            break;
+          case "remove":
+            toastMessage = "Item removed from suitcase ❌";
+            break;
+          case "edit":
+            toastMessage = "Item edited 👍";
+            break;
+          default:
+            toastMessage = "Action completed";
+        }
+
+        Toast.show({
+          visibilityTime: 3000,
+          autoHide: true,
+          type: "success",
+          text1: toastMessage,
+        });
       })
       .catch((error) => {
         console.error('Error editing item:', error);
+
+        Toast.show({
+          visibilityTime: 3000,
+          autoHide: true,
+          type: "error",
+          text1: "Error. Please try again.",
+        });
       });
   };
 };
+
 
 export const deleteItem = (itemId: string) => {
   return (dispatch: Dispatch) => {
@@ -159,12 +208,18 @@ export const deleteItem = (itemId: string) => {
           visibilityTime: 3000,
           autoHide: true,
           type: "success",
-          text1: "Item deleted",
+          text1: "Item deleted ❌",
           
         });
       })
       .catch((error) => {
         console.error('Error deleting item:', error);
+        Toast.show({
+          visibilityTime: 3000,
+          autoHide: true,
+          type: "error",
+          text1: "Error. Please try again.",
+        });
       });
   };
 };

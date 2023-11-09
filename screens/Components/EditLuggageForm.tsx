@@ -3,6 +3,7 @@ import { View, Text, Image, FlatList, TouchableOpacity, TextInput, Button, Style
 import FastImage from 'react-native-fast-image';
 import colors from '../../themes/Colors';
 import { CategoryMapper } from '../data/CategoryData';
+
 interface Item {
   id: string;
   name: string;
@@ -21,7 +22,7 @@ type EditFormProps = {
   setSelectedCategory: (category: string) => void;
   setIsEdit: (isEdit: boolean) => void;
   setIsModalVisible: (isVisible: boolean) => void;
-  editItem: (id: string, item: Item) => void;
+  editItem: (id: string, item: Item, action: string) => void;
   handleSave: () => void;
   categories: Category[];
 };
@@ -99,7 +100,8 @@ const EditLuggageForm: React.FC<EditFormProps> = ({
             setIsEdit(false);
             setSelectedCategory('');
             setIsModalVisible(false);
-            editItem(selectedItemForEdit.id, { ...selectedItemForEdit, category: selectedCategory });
+            editItem(selectedItemForEdit.id, { ...selectedItemForEdit, category: selectedCategory }, "edit");
+   
           }}
         >
           <Text style={styles.buttonText}>Save</Text>

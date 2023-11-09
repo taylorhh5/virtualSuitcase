@@ -15,17 +15,26 @@ import LottieView from 'lottie-react-native';
 import { categoryOrder } from '../data/CategoryData';
 
 type CreateOutfitProps = {
-    addOutfit: (userId: string, suitcaseId: string, items: number[], navigation: NavigationProp<LuggageStackParamList, 'CreateOutfit'>) => void;
-    editOutfit: (outfitId: string, items: number[], navigation: NavigationProp<LuggageStackParamList, 'CreateOutfit'>) => void;
-    route: RouteProp<LuggageStackParamList, 'CreateOutfit'>;
-
+    addOutfit: (
+        userId: string,
+        suitcaseId: string,
+        items: string[],
+        name: string,
+        navigation: NavigationProp<LuggageStackParamList, 'CreateOutfit'>,
+    ) => void;
+    editOutfit: (
+        id: string,
+        outfitIds: string[],
+        name: string,
+        navigation: NavigationProp<LuggageStackParamList, 'CreateOutfit'>,
+    ) => void; route: RouteProp<LuggageStackParamList, 'CreateOutfit'>;
+    luggageState: ClothingItem[];
+    auth: { uid: string };
+    navigation: NavigationProp<LuggageStackParamList, 'CreateOutfit'>;
 
 };
 
 const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, route, luggageState, navigation, auth }) => {
-
-
-    // Initialize the selectedOutfitItems array using useState
     const [selectedOutfitItems, setSelectedOutfitItems] = useState<ClothingItem[]>([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [outfitName, setOutfitName] = useState('');
@@ -49,7 +58,7 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
         categorizedItems[item.category].push(item);
     });
 
-     const sortedCategories = categoryOrder
+    const sortedCategories = categoryOrder
         .filter(category => categorizedItems.hasOwnProperty(category))
         .map(category => ({
             category,
@@ -162,13 +171,13 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
                 </ScrollView>
                 :
                 <View style={{ height: '30%', width: '100%', }}>
-                    <LottieView source={require("../../Icons/assets/outfitHoldingLottie.json")} autoPlay  />
+                    <LottieView source={require("../../Icons/assets/outfitHoldingLottie.json")} autoPlay />
                 </View>
             }
             {selectedOutfitItems.length === 0 ?
                 <View style={{ borderBottomWidth: 1 }}><Text style={{ textAlign: 'center', fontSize: 18, fontWeight: '500' }}>Add items to your outfit below</Text></View> : null}
             <ScrollView style={styles.categoryScrollView}>
-            {sortedCategories.map(categoryObj => (
+                {sortedCategories.map(categoryObj => (
                     <View key={categoryObj.category}>
                         <Text style={styles.categoryTitle}>{CategoryMapper[categoryObj.category]} ({categoryObj.items.length} items)</Text>
                         <FlatList
@@ -192,7 +201,7 @@ const CreateOutfit: React.FC<CreateOutfitProps> = ({ addOutfit, editOutfit, rout
                             placeholder='Add name or submit without'
                         />
                         <View style={styles.modalButtonContainer}>
-                      
+
                             <TouchableOpacity onPress={hideModal} style={[styles.bottomButtonContainer]}>
                                 <Text style={styles.buttonText}>Cancel</Text>
                             </TouchableOpacity>
@@ -316,19 +325,19 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 5,
-      },
-      cancelButton: {
+    },
+    cancelButton: {
         backgroundColor: 'gray',
-      },
-      bottomButtonContainer: {
+    },
+    bottomButtonContainer: {
         backgroundColor: colors.primary,
         borderRadius: 20,
         padding: 10
-      },
-      buttonText: {
+    },
+    buttonText: {
         color: 'white',
-        fontSize:16,
-        fontWeight:'600'
-      },
+        fontSize: 16,
+        fontWeight: '600'
+    },
 });
 

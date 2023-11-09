@@ -12,7 +12,7 @@ import {
 //firebase
 import { collection, addDoc, doc, query, where, onSnapshot, deleteDoc, updateDoc, getDoc, orderBy } from 'firebase/firestore'
 import { db } from '../firebase/config';
-
+import Toast from 'react-native-toast-message';
 
 export const addSuitcase = (name: string, userId: string) => {
   return (dispatch: Dispatch) => {
@@ -24,10 +24,22 @@ export const addSuitcase = (name: string, userId: string) => {
     })
       .then((suitcaseDocRef) => {
         dispatch({ type: ADD_SUITCASE, payload: suitcaseDocRef.id });
+        Toast.show({
+          visibilityTime: 3000,
+          autoHide: true,
+          type: "success",
+          text1: "Suitcase added ✨",
+        });
       })
       .catch((error) => {
         console.error('Error adding suitcase:', error);
         // dispatch({ type: ADD_SUITCASE_FAILURE, payload: error });
+        Toast.show({
+          visibilityTime: 3000,
+          autoHide: true,
+          type: "error",
+          text1: "Error. Please try again.",
+        });
       });
   };
 };
@@ -41,9 +53,21 @@ export const editSuitcaseName = (suitcaseId: string, newName: string) => {
       });
 
       dispatch({ type: EDIT_SUITCASE, payload: { id: suitcaseId, newName } });
+      Toast.show({
+        visibilityTime: 3000,
+        autoHide: true,
+        type: "success",
+        text1: "Suitcase edited 👍",
+      });
     } catch (error) {
       console.error('Error editing suitcase name:', error);
       // dispatch({ type: EDIT_SUITCASE_NAME_FAILURE, payload: error });
+      Toast.show({
+        visibilityTime: 3000,
+        autoHide: true,
+        type: "error",
+        text1: "Error. Please try again.",
+      });
     }
   };
 };
@@ -54,9 +78,21 @@ export const deleteSuitcase = (suitcaseId: string) => {
       // dispatch({ type: DELETE_SUITCASE_START });
       await deleteDoc(doc(db, 'suitcases', suitcaseId));
       dispatch({ type: DELETE_SUITCASE, payload: suitcaseId });
+      Toast.show({
+        visibilityTime: 3000,
+        autoHide: true,
+        type: "success",
+        text1: "Suitcase deleted ❌",
+      });
     } catch (error) {
       console.error('Error deleting suitcase:', error);
       // dispatch({ type: DELETE_SUITCASE_FAILURE, payload: error });
+      Toast.show({
+        visibilityTime: 3000,
+        autoHide: true,
+        type: "error",
+        text1: "Error. Please try again.",
+      });
     }
   };
 };

@@ -19,7 +19,7 @@ type SuitcaseItemsProps = {
     suitcaseId: string;
     luggageState: Item[];
     deleteItem: (id: string) => void;
-    editItem: (id: string, updatedItem: Partial<Item>) => (dispatch: Dispatch<AnyAction>) => void,
+    editItem: (id: string, updatedItem: Partial<Item>, action: string) => (dispatch: Dispatch<AnyAction>) => void,
     loadingItems: boolean;
 };
 
@@ -78,7 +78,7 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
         if (selectedItemForEdit) {
           const updatedSuitcaseId = selectedItemForEdit.suitcaseId.filter(suitcaseId => suitcaseId !== props.suitcaseId);
           
-          props.editItem(selectedItemForEdit.id, { ...selectedItemForEdit, suitcaseId: updatedSuitcaseId });
+          props.editItem(selectedItemForEdit.id, { ...selectedItemForEdit, suitcaseId: updatedSuitcaseId }, "remove");
           
           setIsModalVisible(false);
           setSelectedItemForEdit(null);

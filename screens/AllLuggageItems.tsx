@@ -17,7 +17,7 @@ type AllLuggageItemsProps = {
     suitcaseId: string;
     allLuggageItems: Item[];
     deleteItem: (id: string) => void;
-    editItem: (id: string, updatedItem: Partial<Item>) => (dispatch: Dispatch<AnyAction>) => void,
+    editItem: (id: string, updatedItem: Partial<Item>, action: string) => (dispatch: Dispatch<AnyAction>) => void,
     loadingItems: boolean;
 };
 
@@ -66,15 +66,9 @@ const AllLuggageItems: React.FC<AllLuggageItemsProps> = (props) => {
 
     const addItemToSuitcase = () => {
         if (selectedItemForEdit) {
-       props.editItem(selectedItemForEdit.id, { ...selectedItemForEdit, suitcaseId: [...selectedItemForEdit.suitcaseId, props.suitcaseId] })
+       props.editItem(selectedItemForEdit.id, { ...selectedItemForEdit, suitcaseId: [...selectedItemForEdit.suitcaseId, props.suitcaseId] }, "add")
         setIsModalVisible(false);        
         setSelectedItemForEdit(null);
-        Toast.show({
-            visibilityTime: 3000,
-            autoHide: true,
-            type: "success",
-            text1: "Item added to suitcase",
-          });
         }
 
     };
