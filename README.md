@@ -8,6 +8,11 @@ Welcome to Virtual Suitcase, a mobile app designed to simplify your travel exper
 
 https://github.com/taylorhh5/virtualSuitcase/assets/52665999/72ad35e0-f67c-4a04-a613-3f36369243f9
 
+
+**Create Outfits:**
+
+https://github.com/taylorhh5/virtualSuitcase/assets/52665999/d955cc1a-11bd-4790-a1e9-02c60a594e65
+
 ## Overview
 
 Virtual Suitcase allows users to:
