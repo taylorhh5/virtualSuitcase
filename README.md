@@ -6,17 +6,18 @@ Welcome to Virtual Suitcase, a mobile app designed to simplify your travel exper
 
 **Welcome Demo with Lottie Animations:**
 
-
-
 https://github.com/taylorhh5/virtualSuitcase/assets/52665999/13e921ac-9934-45e7-a5b4-acfc5b5d40db
 
+**Add Luggage Items:**
+
+
+https://github.com/taylorhh5/virtualSuitcase/assets/52665999/3e7f392a-e834-478e-b31e-0130181f97eb
 
 
 **Create Outfits:**
 
 
 https://github.com/taylorhh5/virtualSuitcase/assets/52665999/9cdae7e6-8daf-49a5-9b83-c3baa968b181
-
 
 
 ## Overview
