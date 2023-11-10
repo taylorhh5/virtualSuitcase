@@ -17,7 +17,7 @@ https://github.com/taylorhh5/virtualSuitcase/assets/52665999/3e7f392a-e834-478e-
 **Create Outfits:**
 
 
-https://github.com/taylorhh5/virtualSuitcase/assets/52665999/9cdae7e6-8daf-49a5-9b83-c3baa968b181
+https://github.com/taylorhh5/virtualSuitcase/assets/52665999/2e986a0b-7b3e-4289-9aa6-bf3850619a92
 
 
 ## Overview
