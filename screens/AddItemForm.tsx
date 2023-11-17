@@ -44,7 +44,6 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ addItem, navigation, auth, su
       const image = await ImagePicker.openPicker({
         width: 200,
         height: 200,
-        cropping: true,
       });
 
       const response = await fetch(image.path);
