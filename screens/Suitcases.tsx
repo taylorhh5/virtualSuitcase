@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Modal, TextInput, Button } from 'react-native'
+import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Modal, TextInput, Button, Alert } from 'react-native'
 import React, { useState, useEffect } from 'react';
 import colors from '../themes/Colors';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -68,6 +68,8 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
         if (newSuitcaseName.trim() !== '') {
             addSuitcase(newSuitcaseName, auth.uid);
             closeModal();
+        }else{
+            Alert.alert('Please add a name.')
         }
     };
 
@@ -150,7 +152,7 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
                 !suitcasesLoading && !suitcases.length ?
                     <View style={{ flex: 1 }}>
                         <LottieView source={require("../Icons/assets/ghostLottie.json")} autoPlay loop />
-                        <Text style={{ fontWeight: '500', marginTop: 12, alignSelf: 'center', fontSize: 16 }}>No suitcases added.</Text>
+                        <Text style={{ fontWeight: '500', marginTop: 12, alignSelf: 'center', fontSize: 16 }}>You haven't added any suitcases.</Text>
                     </View>
                     :
                     <View style={styles.suitcaseListContainer}>
@@ -176,7 +178,7 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
                                 style={styles.input}
                             />
                             <TouchableOpacity style={styles.button} onPress={createNewSuitcase}>
-                                <Text style={styles.buttonText}>Create Suitcase</Text>
+                                <Text style={styles.buttonText}>Add Suitcase</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity style={styles.button} onPress={closeModal}>
@@ -210,11 +212,11 @@ const Suitcases: React.FC<SuitcasesProps> = ({ navigation, suitcases, addSuitcas
                             <View style={styles.modalContent}>
                                 <Text style={styles.modalHeader}>{newSuitcaseName}</Text>
                                 <TouchableOpacity style={styles.button} onPress={() => setIsEditing(true)}>
-                                    <Text style={styles.buttonText}>Edit Suitcase</Text>
+                                    <Text style={styles.buttonText}>✏️  Edit Suitcase</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={styles.button} onPress={showDeleteModal}>
-                                    <Text style={styles.buttonText}>Delete Suitcase</Text>
+                                    <Text style={styles.buttonText}>🗑️  Delete Suitcase</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={styles.button} onPress={closeModal}>
@@ -254,8 +256,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 20,
         paddingVertical: 8,
-        backgroundColor: colors.background,
-    },
+        backgroundColor: 'linear-gradient(to bottom, #4A148C, #880E4F)'    },
     topContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -365,7 +366,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        // width:'50%',
+        // width:'100%',
         // alignSelf:'center'
     },
     modalContent: {
@@ -373,7 +374,7 @@ const styles = StyleSheet.create({
         padding: 20,
         borderRadius: 10,
         elevation: 5,
-        width: '70%',
+        width: '80%',
         height: '40%',
         flexDirection: 'column',
         justifyContent: 'space-evenly',
@@ -400,9 +401,9 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: colors.primary,
         padding: 14,
-        borderRadius: 28,
+        borderRadius: 14,
         marginBottom: 6,
-        width: '70%',
+        width: '90%',
         alignItems: 'center'
 
     },

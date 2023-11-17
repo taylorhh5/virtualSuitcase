@@ -29,16 +29,16 @@ export const addOutfit = (userId: string, suitcaseId: string, items: number[], n
       dispatch({ type: ADD_OUTFIT, payload: newOutfit });
       navigation.goBack();
       Toast.show({
-        visibilityTime: 3000,
+        visibilityTime: 2000,
         autoHide: true,
         type: "success",
-        text1: "Outift added ✨",
+        text1: "Outfit added ✨",
       });
     })
     .catch((error) => {
       console.error('Error adding new outfit:', error);
       Toast.show({
-        visibilityTime: 3000,
+        visibilityTime: 2000,
         autoHide: true,
         type: "error",
         text1: "Error. Please try again.",
@@ -52,7 +52,7 @@ export const editOutfit = (outfitId: string, updatedItems: number[], name:string
       dispatch({ type: EDIT_OUTFIT, payload: { id: outfitId, updatedData: { name: name, items: updatedItems } } });
       navigation.goBack();
       Toast.show({
-        visibilityTime: 3000,
+        visibilityTime: 2000,
         autoHide: true,
         type: "success",
         text1: "Outfit edited 👍",
@@ -61,7 +61,7 @@ export const editOutfit = (outfitId: string, updatedItems: number[], name:string
     .catch((error) => {
       console.error('Error editing outfit:', error);
       Toast.show({
-        visibilityTime: 3000,
+        visibilityTime: 2000,
         autoHide: true,
         type: "error",
         text1: "Error. Please try again.",
@@ -226,7 +226,7 @@ export const deleteOutfit = (outfitId) => (dispatch) => {
     .then(() => {
       dispatch({ type: DELETE_OUTFIT, payload: outfitId });
       Toast.show({
-        visibilityTime: 3000,
+        visibilityTime: 2000,
         autoHide: true,
         type: "success",
         text1: "Outifit deleted ❌",
@@ -235,7 +235,7 @@ export const deleteOutfit = (outfitId) => (dispatch) => {
     .catch((error) => {
       console.error('Error deleting outfit:', error);
       Toast.show({
-        visibilityTime: 3000,
+        visibilityTime: 2000,
         autoHide: true,
         type: "error",
         text1: "Error. Please try again.",

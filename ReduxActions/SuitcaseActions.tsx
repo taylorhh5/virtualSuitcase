@@ -25,7 +25,7 @@ export const addSuitcase = (name: string, userId: string) => {
       .then((suitcaseDocRef) => {
         dispatch({ type: ADD_SUITCASE, payload: suitcaseDocRef.id });
         Toast.show({
-          visibilityTime: 3000,
+          visibilityTime: 2000,
           autoHide: true,
           type: "success",
           text1: "Suitcase added ✨",
@@ -35,7 +35,7 @@ export const addSuitcase = (name: string, userId: string) => {
         console.error('Error adding suitcase:', error);
         // dispatch({ type: ADD_SUITCASE_FAILURE, payload: error });
         Toast.show({
-          visibilityTime: 3000,
+          visibilityTime: 2000,
           autoHide: true,
           type: "error",
           text1: "Error. Please try again.",
@@ -54,7 +54,7 @@ export const editSuitcaseName = (suitcaseId: string, newName: string) => {
 
       dispatch({ type: EDIT_SUITCASE, payload: { id: suitcaseId, newName } });
       Toast.show({
-        visibilityTime: 3000,
+        visibilityTime: 2000,
         autoHide: true,
         type: "success",
         text1: "Suitcase edited 👍",
@@ -63,7 +63,7 @@ export const editSuitcaseName = (suitcaseId: string, newName: string) => {
       console.error('Error editing suitcase name:', error);
       // dispatch({ type: EDIT_SUITCASE_NAME_FAILURE, payload: error });
       Toast.show({
-        visibilityTime: 3000,
+        visibilityTime: 2000,
         autoHide: true,
         type: "error",
         text1: "Error. Please try again.",
@@ -79,7 +79,7 @@ export const deleteSuitcase = (suitcaseId: string) => {
       await deleteDoc(doc(db, 'suitcases', suitcaseId));
       dispatch({ type: DELETE_SUITCASE, payload: suitcaseId });
       Toast.show({
-        visibilityTime: 3000,
+        visibilityTime: 2000,
         autoHide: true,
         type: "success",
         text1: "Suitcase deleted ❌",
@@ -88,7 +88,7 @@ export const deleteSuitcase = (suitcaseId: string) => {
       console.error('Error deleting suitcase:', error);
       // dispatch({ type: DELETE_SUITCASE_FAILURE, payload: error });
       Toast.show({
-        visibilityTime: 3000,
+        visibilityTime: 2000,
         autoHide: true,
         type: "error",
         text1: "Error. Please try again.",

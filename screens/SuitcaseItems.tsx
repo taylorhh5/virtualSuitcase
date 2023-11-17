@@ -84,7 +84,7 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
           setSelectedItemForEdit(null);
 
           Toast.show({
-            visibilityTime: 3000,
+            visibilityTime: 2000,
             autoHide: true,
             type: "success",
             text1: "Item removed from suitcase",
@@ -177,13 +177,13 @@ const SuitcaseItems: React.FC<SuitcaseItemsProps> = (props) => {
                                 />
                             </View>
                             <TouchableOpacity style={styles.editDeleteTextContainer} onPress={showEditForm}>
-                                <Text style={styles.editDeleteText}>Edit</Text>
+                                <Text style={styles.editDeleteText}>✏️ Edit</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.editDeleteTextContainer} onPress={() => removeItemFromSuitcase()} >
-                                <Text style={styles.editDeleteText}>Unpack</Text>
+                                <Text style={styles.editDeleteText}>❌  Unpack</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.editDeleteTextContainer} onPress={() => showDeleteForm()} >
-                                <Text style={styles.editDeleteText}>Delete</Text>
+                                <Text style={styles.editDeleteText}>🗑️  Delete</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.closeContainer} onPress={() => setIsModalVisible(false)}>
                                 <Text style={styles.closeButton}>Close</Text>

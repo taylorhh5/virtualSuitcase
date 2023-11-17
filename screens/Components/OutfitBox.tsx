@@ -104,10 +104,10 @@ const OutfitBox: React.FC<OutfitBoxProps> = (props) => {
             {isModalVisible ? (
               <View style={{ flexDirection: 'row', }}>
                 <TouchableOpacity style={{ ...styles.editButtonsContainer }} onPress={() => handleNavigateToEditOutfit()}>
-                  <Text style={styles.optionText}>Edit Outfit</Text>
+                  <Text style={styles.optionText}>✏️ Edit Outfit</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.editButtonsContainer} onPress={() => setIsDelete(true)}>
-                  <Text style={styles.optionText}>Delete Outfit</Text>
+                  <Text style={styles.optionText}>🗑️ Delete Outfit</Text>
                 </TouchableOpacity>
               </View>
             ) : (

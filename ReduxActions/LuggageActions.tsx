@@ -90,7 +90,7 @@ export const addItem = (item: Item, suitcaseId: string[], navigation: Navigation
         dispatch({ type: ADD_ITEM, payload: { item } });
         navigation.goBack();
         Toast.show({
-          visibilityTime: 3000,
+          visibilityTime: 2000,
           autoHide: true,
           type: "success",
           text1: "Item added to suitcase ✨",
@@ -100,7 +100,7 @@ export const addItem = (item: Item, suitcaseId: string[], navigation: Navigation
       .catch((error) => {
         console.error('Error adding item:', error);
         Toast.show({
-          visibilityTime: 3000,
+          visibilityTime: 2000,
           autoHide: true,
           type: "error",
           text1: "Error. Please try again.",
@@ -123,7 +123,7 @@ export const addSuitcaseIdToItem = (itemId: string, newSuitcaseId: string) => {
             .then(() => {
               dispatch({ type: UPDATE_ITEM, payload: { itemId, suitcaseId: updatedSuitcaseId } });
               Toast.show({
-                visibilityTime: 3000,
+                visibilityTime: 2000,
                 autoHide: true,
                 type: "success",
                 text1: "Item added to suitcase ✨",
@@ -179,7 +179,7 @@ export const editItem = (itemId: string, updatedItem: Partial<Item>, action: str
         }
 
         Toast.show({
-          visibilityTime: 3000,
+          visibilityTime: 2000,
           autoHide: true,
           type: "success",
           text1: toastMessage,
@@ -189,7 +189,7 @@ export const editItem = (itemId: string, updatedItem: Partial<Item>, action: str
         console.error('Error editing item:', error);
 
         Toast.show({
-          visibilityTime: 3000,
+          visibilityTime: 2000,
           autoHide: true,
           type: "error",
           text1: "Error. Please try again.",
@@ -205,7 +205,7 @@ export const deleteItem = (itemId: string) => {
       .then(() => {
         dispatch({ type: DELETE_ITEM, payload: itemId });
         Toast.show({
-          visibilityTime: 3000,
+          visibilityTime: 2000,
           autoHide: true,
           type: "success",
           text1: "Item deleted ❌",
@@ -215,7 +215,7 @@ export const deleteItem = (itemId: string) => {
       .catch((error) => {
         console.error('Error deleting item:', error);
         Toast.show({
-          visibilityTime: 3000,
+          visibilityTime: 2000,
           autoHide: true,
           type: "error",
           text1: "Error. Please try again.",
