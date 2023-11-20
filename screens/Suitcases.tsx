@@ -254,9 +254,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(Suitcases);
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingHorizontal: 20,
+        paddingHorizontal: 18,
         paddingVertical: 8,
-        backgroundColor: 'linear-gradient(to bottom, #4A148C, #880E4F)'    },
+        backgroundColor: colors.background,
+    },
     topContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -329,7 +330,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.primary,
         borderRadius: 20,
         // borderWidth: 2,
-        marginTop: 16,
+        marginVertical: 16,
         shadowColor: "#000",
         shadowOpacity: 1,
         shadowRadius: 5,

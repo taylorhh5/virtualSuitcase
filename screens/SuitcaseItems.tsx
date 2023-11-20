@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     luggageContainer: {
         paddingHorizontal: 10,
         marginTop: 30,
-        backgroundColor: colors.background
+        backgroundColor: colors.background,
     },
     headerContainer: {
         flexDirection: 'row',
